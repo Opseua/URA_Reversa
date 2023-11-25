@@ -3,7 +3,7 @@
 *.vscode*
 *.z_tempCodeRunner*
 *.z_CR*
-*config*.json*
+*.json*
 *log/*
 *teste*
 *Teste*
