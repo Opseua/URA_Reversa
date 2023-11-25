@@ -4,6 +4,7 @@
 *.z_tempCodeRunner*
 *.z_CR*
 *.json*
+!*package.json*
 *log/*
 *teste*
 *Teste*
