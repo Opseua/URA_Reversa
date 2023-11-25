@@ -1,0 +1,15 @@
+*node_modules*
+*__pycache__*
+*.vscode*
+*.z_tempCodeRunner*
+*.z_CR*
+*config*.json*
+*log/*
+*teste*
+*Teste*
+*TESTE*
+*exe
+*bat
+*blueStacks*
+*googleOAuth*
+*package-lock.json*
