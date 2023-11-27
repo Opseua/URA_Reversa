@@ -4,7 +4,6 @@
 // console.log(retLogin)
 
 async function login(inf) {
-    await import('./@export');
     let ret = { 'ret': false };
     try {
         let infApi, retApi, infRegex, retRegex, infConfigStorage, retConfigStorage;
