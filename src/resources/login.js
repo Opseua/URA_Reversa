@@ -4,14 +4,20 @@
 // console.log(retLogin)
 
 async function login(inf) {
-    await import('../../../Chrome_Extension/src/resources/@functions.js')
+    await import('./@export');
     let ret = { 'ret': false };
     try {
         let infApi, retApi, infRegex, retRegex, infConfigStorage, retConfigStorage;
 
         // PEGAR A LOGIN E AUT DO CONFIG
         infConfigStorage = { 'action': 'get', 'functionLocal': false, 'key': 'telein' } // 'functionLocal' SOMENTE NO NODEJS
-        retConfigStorage = await configStorage(infConfigStorage); if (!retConfigStorage.ret) { return retConfigStorage } else { retConfigStorage = retConfigStorage.res }
+        retConfigStorage = await configStorage(infConfigStorage);
+        if (!retConfigStorage.ret) {
+            console.log('[login] FALSE: retConfigStorage');
+            return retConfigStorage
+        } else {
+            retConfigStorage = retConfigStorage.res
+        }
         let login = inf && inf.login ? inf.login : retConfigStorage.login
         login = encodeURIComponent(login)
         let senha = inf && inf.senha ? inf.senha : retConfigStorage.senha
@@ -27,12 +33,20 @@ async function login(inf) {
             },
             'body': `login=${login}&senha=${senha}`
         };
-        retApi = await api(infApi); if (!retApi.ret || !retApi.res.body.includes('escolher.php')) {
+        retApi = await api(infApi);
+        if (!retApi.ret || !retApi.res.body.includes('escolher.php')) {
+            console.log('[login] FALSE: retApi');
             let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `login_1_api_FALSE.txt`, 'text': retApi }
             let retLog = await log(infLog);
             ret['msg'] = `Erro ao fazer login`;
-            return ret
-        } else { retApi = retApi.res.body }
+            return {
+                ...({ ret: ret.ret }),
+                ...(ret.msg && { msg: ret.msg }),
+                ...(ret.res && { res: ret.res }),
+            };
+        } else {
+            retApi = retApi.res.body
+        }
 
         // [2] LISTAR USUÁRIOS
         infApi = {
@@ -41,21 +55,34 @@ async function login(inf) {
                 'Cookie': aut,
             }
         };
-        retApi = await api(infApi); if (!retApi.ret || !retApi.res.body.includes('id_interface')) {
+        retApi = await api(infApi);
+        if (!retApi.ret || !retApi.res.body.includes('id_interface')) {
+            console.log('[login] FALSE: retApi');
             let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `login_2_api_FALSE.txt`, 'text': retApi }
             let retLog = await log(infLog);
             ret['msg'] = `Erro ao pegar usuários`;
-            return ret
-        } else { retApi = retApi.res.body }
+            return {
+                ...({ ret: ret.ret }),
+                ...(ret.msg && { msg: ret.msg }),
+                ...(ret.res && { res: ret.res }),
+            };
+        } else {
+            retApi = retApi.res.body
+        }
 
         // PEGAR A INTERFACE
         infRegex = { 'pattern': `name="interface" value="(.*?)">`, 'text': retApi }
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['1']) {
+            console.log('[login] FALSE: retRegex');
             let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `login_NAO_ACHOU_A_INTERFACE.txt`, 'text': retApi }
             let retLog = await log(infLog);
             ret['msg'] = `Não achou a interface`;
-            return ret
+            return {
+                ...({ ret: ret.ret }),
+                ...(ret.msg && { msg: ret.msg }),
+                ...(ret.res && { res: ret.res }),
+            };
         }
         let uraInterface = retRegex.res['1']
 
@@ -64,10 +91,15 @@ async function login(inf) {
         // infRegex = { 'pattern': `name="subatual" value="(.*?)">`, 'text': retApi }
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['1']) {
+            console.log('[login] FALSE: retRegex');
             let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `login_NAO_ACHOU_A_INTERFACE_ID.txt`, 'text': retApi }
             let retLog = await log(infLog);
             ret['msg'] = `Não achou a interface id`;
-            return ret
+            return {
+                ...({ ret: ret.ret }),
+                ...(ret.msg && { msg: ret.msg }),
+                ...(ret.res && { res: ret.res }),
+            };
         }
         let uraInterfaceId = retRegex.res['1']
 
@@ -75,10 +107,15 @@ async function login(inf) {
         infRegex = { 'pattern': `name="subatual" value="(.*?)">`, 'text': retApi }
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['1']) {
+            console.log('[login] FALSE: retRegex');
             let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `login_NAO_ACHOU_O_SUBATUAL.txt`, 'text': retApi }
             let retLog = await log(infLog);
             ret['msg'] = `Não achou o subatual`;
-            return ret
+            return {
+                ...({ ret: ret.ret }),
+                ...(ret.msg && { msg: ret.msg }),
+                ...(ret.res && { res: ret.res }),
+            };
         }
         let uraSubatual = retRegex.res['1']
 
@@ -94,17 +131,15 @@ async function login(inf) {
         ret['msg'] = m.res
     };
     return {
-        ...(ret.ret && { ret: ret.ret }),
+        ...({ ret: ret.ret }),
         ...(ret.msg && { msg: ret.msg }),
         ...(ret.res && { res: ret.res }),
     };
 }
-login()
 
-if (typeof eng === 'boolean') {
-    if (eng) { // CHROME
-        window['login'] = login;
-    } else { // NODEJS
-        global['login'] = login;
-    }
+if (eng) { // CHROME
+    window['login'] = login;
+} else { // NODEJS
+    global['login'] = login;
 }
+

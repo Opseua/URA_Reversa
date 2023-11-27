@@ -1,9 +1,8 @@
-await import('../../Chrome_Extension/src/resources/@functions.js');
-
+await import('./resources/@export.js');
 async function server(inf) {
     let ret = { 'ret': false };
     try {
-        let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, 'server');
+        let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, `server [URA_Reversa]`, '\n');
 
         let qtd = 0, stop = false
         while (!stop) {
@@ -11,8 +10,13 @@ async function server(inf) {
             // PEGAR NOVOS LEADS
             let infLeads, retLeads
             infLeads = { 'aut': false }
-            retLeads = await leads(infLeads); if (!retLeads.ret) { console.log('FALSE: retLeads'); return retLeads } else { retLeads = retLeads.res }
-            // console.log(retLeads)
+            retLeads = await leads(infLeads);
+            if (!retLeads.ret) {
+                console.log('[server] FALSE retLeads');
+                return retLeads
+            } else {
+                retLeads = retLeads.res
+            }
 
             // PEGAR OS DADOS GLOBAIS E FAZER O PARSE DO JSON
             let infGoogleSheet, retGoogleSheet
@@ -24,7 +28,13 @@ async function server(inf) {
                 'tab': tab,
                 'range': `A2`,
             }
-            retGoogleSheet = await googleSheet(infGoogleSheet); if (!retGoogleSheet.ret) { console.log('FALSE: googleSheet'); return retGoogleSheet } else { retGoogleSheet = retGoogleSheet.res[0][0] }
+            retGoogleSheet = await googleSheet(infGoogleSheet);
+            if (!retGoogleSheet.ret) {
+                console.log('[server] FALSE retGoogleSheet');
+                return retGoogleSheet
+            } else {
+                retGoogleSheet = retGoogleSheet.res[0][0]
+            }
             let json = JSON.parse(retGoogleSheet);
             let range = inf && inf.range ? inf.range : json['range'];
             let status1Range = inf && inf.status1Range ? inf.status1Range : range["status1"];
@@ -38,26 +48,36 @@ async function server(inf) {
             for (let [index, value] of retLeads.entries()) {
                 // PEGAR INF DO LEAD
                 let infLeadGet, retLeadGet
-                infLeadGet = { 'aut': false, 'leadId': value.id }
-                // retLeadGet = await leadGet(infLeadGet); if (!retLeadGet.ret) { console.log('FALSE: retLeadGet'); return retLeadGet } else { retLeadGet = retLeadGet.res }
-                // console.log(retLeads)
+                infLeadGet = { 'aut': false, 'leadId': value.leadId }
+                retLeadGet = await leadGet(infLeadGet);
+                if (!retLeadGet.ret) {
+                    console.log('[server] FALSE retLeadGet');
+                    return retLeadGet
+                } else {
+                    retLeadGet = retLeadGet.res
+                }
 
                 // ALTERAR STATUS DO LEAD
                 let infLeadChangeStatus, retLeadChangeStatus
-                infLeadChangeStatus = { 'aut': false, 'leadId': value.id }
-                retLeadChangeStatus = await leadChangeStatus(infLeadChangeStatus); if (!retLeadChangeStatus.ret) { console.log('FALSE: retLeadChangeStatus'); return retLeadChangeStatus } else { retLeadChangeStatus = retLeadChangeStatus.res }
-                console.log(retLeads)
-
-                retLeadGet = {
-                    'id': value.id,
-                    'date': value.date,
-                    'tel': '21988776655',
-                    'status': value.status,
+                infLeadChangeStatus = { 'aut': false, 'leadId': value.leadId }
+                retLeadChangeStatus = await leadChangeStatus(infLeadChangeStatus);
+                if (!retLeadChangeStatus.ret) {
+                    console.log('[server] FALSE retLeadChangeStatus');
+                    return retLeadChangeStatus
+                } else {
+                    retLeadChangeStatus = retLeadChangeStatus.res
                 }
 
                 time = dateHour().res
-                time = `${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`
-                let sheetSend = `${retLeadGet.id}${conSplInf}${time}${conSplInf}${retLeadGet.date}${conSplInf}${retLeadGet.tel}${conSplInf}${retLeadGet.status}`
+                let sheetSend = [[
+                    value.leadId, // LEAD ID
+                    `${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, // DATA DA CONSULTA
+                    value.date, // DATA URA
+                    retLeadGet.tel,
+                    retLeadChangeStatus.status,
+                ]]
+                sheetSend = sheetSend[0].join(conSplInf)
+
                 infGoogleSheet = {
                     'action': 'send',
                     'id': id,
@@ -65,9 +85,12 @@ async function server(inf) {
                     'range': `D*`,
                     'values': [[`${sheetSend}`]]
                 }
-                retGoogleSheet = await googleSheet(infGoogleSheet); if (!retGoogleSheet.ret) { console.log('FALSE: googleSheet'); return retGoogleSheet }
+                retGoogleSheet = await googleSheet(infGoogleSheet);
+                if (!retGoogleSheet.ret) {
+                    console.log('[server] FALSE retGoogleSheet');
+                    return retGoogleSheet
+                }
             }
-
             ret['ret'] = true
             ret['msg'] = `SERVER: OK`
             console.log('LOOP:', qtd)
