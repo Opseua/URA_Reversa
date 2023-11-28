@@ -1,7 +1,12 @@
+// let infLeadChangeStatus, retLeadChangeStatus // 'logFun': true,
+// infLeadChangeStatus = { 'aut': false, 'leadId': value.leadId, 'status': '1' } // '4' → Inapto | '1' → Venda Realizada
+// retLeadChangeStatus = await leadChangeStatus(infLeadChangeStatus);
+// console.log(retLeadChangeStatus)
+
 async function leadChangeStatus(inf) {
     let ret = { 'ret': false };
     try {
-        let infApi, retApi, infRegex, retRegex, infConfigStorage, retConfigStorage
+        let infApi, retApi, infRegex, retRegex, infConfigStorage, retConfigStorage, infLog, retLog
         // PEGAR O AUT DO CONFIG
         infConfigStorage = { 'action': 'get', 'functionLocal': false, 'key': 'telein' } // 'functionLocal' SOMENTE NO NODEJS
         retConfigStorage = await configStorage(infConfigStorage);
@@ -22,51 +27,54 @@ async function leadChangeStatus(inf) {
 
         // API [ALTERAR STATUS DO LEAD]
         infApi = {
-            'method': 'POST', 'url': `https://interface.telein.com.br/index.php?link=247&tipo=sucesso&id_contato=${leadId}`,
+            'logFun': true, 'method': 'POST', 'url': `https://interface.telein.com.br/index.php?link=247&tipo=sucesso&id_contato=${leadId}`,
             'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
             'headers': { 'Cookie': aut, },
-            'body': `tabulacao=${status}`
+            'body': `tabulacao%3D${status}`
         };
-        // retApi = await api(infApi);
-        // if (!retApi.ret || !retApi.res.body.includes('Retorno realizado por')) {
-        //     console.log('[leadChangeStatus] FALSE: retApi');
-        //     if (!retApi.res.body.includes('E-mail ou login')) {
-        //         console.log('[leadChangeStatus] FALSE: retApi');
-        //         let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `leadChangeStatus_NAO_ACHOU_A_INF_DO_LEAD_1.txt`, 'text': retApi }
-        //         let retLog = await log(infLog);
-        //         return retApi
-        //     } else {
-        //         // REAUTENTICAR
-        //         let infLogin, retLogin
-        //         infLogin = { 'aut': false }
-        //         retLogin = await login(infLogin);
-        //         if (!retLogin.ret) {
-        //             console.log('[leadChangeStatus] FALSE: retLogin');
-        //             let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `leadChangeStatus_NAO_CONSEGUIU_LOGAR.txt`, 'text': retApi }
-        //             let retLog = await log(infLog);
-        //             return retApi
-        //         } else {
-        //             infApi = {
-        //                 'method': 'POST', 'url': `https://interface.telein.com.br/index.php?link=247&tipo=sucesso&id_contato=${leadId}`,
-        //                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-        //                 'headers': { 'Cookie': aut, },
-        //                 'body': `tabulacao=${status}`
-        //             };
-        //             retApi = await api(infApi);
-        //             if (!retApi.ret || !retApi.res.body.includes('Retorno realizado por')) {
-        //                 console.log('[leadChangeStatus] FALSE: retLogin');
-        //                 let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `leadChangeStatus_NAO_ACHOU_A_INF_DO_LEAD_2.txt`, 'text': retApi }
-        //                 let retLog = await log(infLog);
-        //                 return retApi
-        //             }
-        //         }
-        //     }
-        // } else { retApi = retApi.res.body }
+        retApi = await api(infApi);
+        if (!retApi.ret || !retApi.res.body.includes('Retorno realizado por')) {
+            console.log('[leadChangeStatus] FALSE: retApi 1');
+            if (!retApi.res.body.includes('E-mail ou login')) {
+                console.log('[leadChangeStatus] FALSE: retApi 2');
+                let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `leadChangeStatus_NAO_ACHOU_A_INF_DO_LEAD_1.txt`, 'text': retApi }
+                let retLog = await log(infLog);
+                return retApi
+            } else {
+                // REAUTENTICAR
+                let infLogin, retLogin
+                infLogin = { 'aut': false }
+                retLogin = await login(infLogin);
+                if (!retLogin.ret) {
+                    console.log('[leadChangeStatus] FALSE: retLogin 1');
+                    let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `leadChangeStatus_NAO_CONSEGUIU_LOGAR.txt`, 'text': retApi }
+                    let retLog = await log(infLog);
+                    return retApi
+                } else {
+                    infApi = {
+                        'logFun': true, 'method': 'POST', 'url': `https://interface.telein.com.br/index.php?link=247&tipo=sucesso&id_contato=${leadId}`,
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                        'headers': { 'Cookie': aut, },
+                        'body': `tabulacao=${status}`
+                    };
+                    retApi = await api(infApi);
+                    if (!retApi.ret || !retApi.res.body.includes('Retorno realizado por')) {
+                        console.log('[leadChangeStatus] FALSE: retLogin 2');
+                        let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `leadChangeStatus_NAO_ACHOU_A_INF_DO_LEAD_2.txt`, 'text': retApi }
+                        let retLog = await log(infLog);
+                        return retApi
+                    }
+                }
+            }
+        } else { retApi = retApi.res.body }
 
         // TESTES [LER ARQUIVO]
-        let infFile, retFile
-        infFile = { 'action': 'read', 'functionLocal': false, 'path': './log/LEAD_CHANGE_STATUS_OK.txt' }
-        retFile = await file(infFile); retApi = retFile.res
+        // let infFile, retFile
+        // infFile = { 'action': 'read', 'functionLocal': false, 'path': './log/LEAD_CHANGE_STATUS_OK.txt' }
+        // retFile = await file(infFile); retApi = retFile.res
+
+        infLog = { 'folder': 'Registros', 'path': `leadChangeStatus.txt`, 'text': retApi }
+        retLog = await log(infLog);
 
         ret['res'] = {
             'leadId': leadId,
@@ -74,6 +82,12 @@ async function leadChangeStatus(inf) {
         }
         ret['msg'] = `LEAD CHANGE STATUS: OK`
         ret['ret'] = true
+
+        // ### LOG FUN ###
+        if (inf.logFun) {
+            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+        }
     } catch (e) {
         let m = await regexE({ 'e': e });
         ret['msg'] = m.res

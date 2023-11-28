@@ -1,4 +1,4 @@
-// let infLogin, retLogin
+// let infLogin, retLogin // 'logFun': true,
 // infLogin = { 'aut': false }
 // retLogin = await login(infLogin)
 // console.log(retLogin)
@@ -25,7 +25,7 @@ async function login(inf) {
 
         // [1] FAZER LOGIN
         infApi = {
-            'method': 'POST', 'url': `https://interface.telein.com.br/op_access.php`,
+            'logFun': true, 'method': 'POST', 'url': `https://interface.telein.com.br/op_access.php`,
             'headers': {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                 'Cookie': aut,
@@ -34,7 +34,7 @@ async function login(inf) {
         };
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('escolher.php')) {
-            console.log('[login] FALSE: retApi');
+            console.log('[login] FALSE: retApi 1');
             let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `login_1_api_FALSE.txt`, 'text': retApi }
             let retLog = await log(infLog);
             ret['msg'] = `Erro ao fazer login`;
@@ -49,14 +49,14 @@ async function login(inf) {
 
         // [2] LISTAR USUÁRIOS
         infApi = {
-            'method': 'GET', 'url': `https://interface.telein.com.br/escolher.php`,
+            'logFun': true, 'method': 'GET', 'url': `https://interface.telein.com.br/escolher.php`,
             'headers': {
                 'Cookie': aut,
             }
         };
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('id_interface')) {
-            console.log('[login] FALSE: retApi');
+            console.log('[login] FALSE: retApi 2');
             let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `login_2_api_FALSE.txt`, 'text': retApi }
             let retLog = await log(infLog);
             ret['msg'] = `Erro ao pegar usuários`;
@@ -73,7 +73,7 @@ async function login(inf) {
         infRegex = { 'pattern': `name="interface" value="(.*?)">`, 'text': retApi }
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['1']) {
-            console.log('[login] FALSE: retRegex');
+            console.log('[login] FALSE: retRegex 1');
             let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `login_NAO_ACHOU_A_INTERFACE.txt`, 'text': retApi }
             let retLog = await log(infLog);
             ret['msg'] = `Não achou a interface`;
@@ -90,7 +90,7 @@ async function login(inf) {
         // infRegex = { 'pattern': `name="subatual" value="(.*?)">`, 'text': retApi }
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['1']) {
-            console.log('[login] FALSE: retRegex');
+            console.log('[login] FALSE: retRegex 2');
             let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `login_NAO_ACHOU_A_INTERFACE_ID.txt`, 'text': retApi }
             let retLog = await log(infLog);
             ret['msg'] = `Não achou a interface id`;
@@ -106,7 +106,7 @@ async function login(inf) {
         infRegex = { 'pattern': `name="subatual" value="(.*?)">`, 'text': retApi }
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['1']) {
-            console.log('[login] FALSE: retRegex');
+            console.log('[login] FALSE: retRegex 3');
             let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `login_NAO_ACHOU_O_SUBATUAL.txt`, 'text': retApi }
             let retLog = await log(infLog);
             ret['msg'] = `Não achou o subatual`;
@@ -125,6 +125,12 @@ async function login(inf) {
         };
         ret['msg'] = `LOGIN: OK`;
         ret['ret'] = true
+
+        // ### LOG FUN ###
+        if (inf.logFun) {
+            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+        }
     } catch (e) {
         let m = await regexE({ 'e': e });
         ret['msg'] = m.res
