@@ -1,5 +1,5 @@
-await import('./resources/@export.js');
 async function server(inf) {
+    await import('./resources/@export.js');
     let ret = { 'ret': false };
     try {
         let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, `server [URA_Reversa]`, '\n');
