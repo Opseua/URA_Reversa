@@ -6,8 +6,9 @@
 async function login(inf) {
     let ret = { 'ret': false };
     try {
-        let infApi, retApi, infRegex, retRegex, infConfigStorage, retConfigStorage;
+        let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, `[login] ANTES de autenticar`, '\n');
 
+        let infApi, retApi, infRegex, retRegex, infConfigStorage, retConfigStorage, infLog, retLog
         // PEGAR A LOGIN E AUT DO CONFIG
         infConfigStorage = { 'action': 'get', 'functionLocal': false, 'key': 'telein' } // 'functionLocal' SOMENTE NO NODEJS
         retConfigStorage = await configStorage(infConfigStorage);
@@ -25,7 +26,8 @@ async function login(inf) {
 
         // [1] FAZER LOGIN
         infApi = {
-            'logFun': true, 'method': 'POST', 'url': `https://interface.telein.com.br/op_access.php`,
+            // 'logFun': true, 
+            'method': 'POST', 'url': `https://interface.telein.com.br/op_access.php`,
             'headers': {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                 'Cookie': aut,
@@ -35,21 +37,18 @@ async function login(inf) {
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('escolher.php')) {
             console.log('[login] FALSE: retApi 1');
-            let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `login_1_api_FALSE.txt`, 'text': retApi }
+            let infLog = { 'folder': 'Registros', 'functionLocal': false, 'path': `login_1_api_FALSE.txt`, 'text': retApi }
             let retLog = await log(infLog);
             ret['msg'] = `Erro ao fazer login`;
-            return {
-                ...({ ret: ret.ret }),
-                ...(ret.msg && { msg: ret.msg }),
-                ...(ret.res && { res: ret.res }),
-            };
+            return ret
         } else {
             retApi = retApi.res.body
         }
 
         // [2] LISTAR USUÁRIOS
         infApi = {
-            'logFun': true, 'method': 'GET', 'url': `https://interface.telein.com.br/escolher.php`,
+            // 'logFun': true,
+            'method': 'GET', 'url': `https://interface.telein.com.br/escolher.php`,
             'headers': {
                 'Cookie': aut,
             }
@@ -57,14 +56,10 @@ async function login(inf) {
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('id_interface')) {
             console.log('[login] FALSE: retApi 2');
-            let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `login_2_api_FALSE.txt`, 'text': retApi }
+            let infLog = { 'folder': 'Registros', 'functionLocal': false, 'path': `login_2_api_FALSE.txt`, 'text': retApi }
             let retLog = await log(infLog);
             ret['msg'] = `Erro ao pegar usuários`;
-            return {
-                ...({ ret: ret.ret }),
-                ...(ret.msg && { msg: ret.msg }),
-                ...(ret.res && { res: ret.res }),
-            };
+            return ret
         } else {
             retApi = retApi.res.body
         }
@@ -74,14 +69,10 @@ async function login(inf) {
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['1']) {
             console.log('[login] FALSE: retRegex 1');
-            let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `login_NAO_ACHOU_A_INTERFACE.txt`, 'text': retApi }
+            let infLog = { 'folder': 'Registros', 'functionLocal': false, 'path': `login_NAO_ACHOU_A_INTERFACE.txt`, 'text': retApi }
             let retLog = await log(infLog);
             ret['msg'] = `Não achou a interface`;
-            return {
-                ...({ ret: ret.ret }),
-                ...(ret.msg && { msg: ret.msg }),
-                ...(ret.res && { res: ret.res }),
-            };
+            return ret
         }
         let uraInterface = retRegex.res['1']
 
@@ -91,14 +82,10 @@ async function login(inf) {
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['1']) {
             console.log('[login] FALSE: retRegex 2');
-            let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `login_NAO_ACHOU_A_INTERFACE_ID.txt`, 'text': retApi }
+            let infLog = { 'folder': 'Registros', 'functionLocal': false, 'path': `login_NAO_ACHOU_A_INTERFACE_ID.txt`, 'text': retApi }
             let retLog = await log(infLog);
             ret['msg'] = `Não achou a interface id`;
-            return {
-                ...({ ret: ret.ret }),
-                ...(ret.msg && { msg: ret.msg }),
-                ...(ret.res && { res: ret.res }),
-            };
+            return ret
         }
         let uraInterfaceId = retRegex.res['1']
 
@@ -107,14 +94,10 @@ async function login(inf) {
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['1']) {
             console.log('[login] FALSE: retRegex 3');
-            let infLog = { 'folder': 'URA_Reversa', 'functionLocal': true, 'path': `login_NAO_ACHOU_O_SUBATUAL.txt`, 'text': retApi }
+            let infLog = { 'folder': 'Registros', 'functionLocal': false, 'path': `login_NAO_ACHOU_O_SUBATUAL.txt`, 'text': retApi }
             let retLog = await log(infLog);
             ret['msg'] = `Não achou o subatual`;
-            return {
-                ...({ ret: ret.ret }),
-                ...(ret.msg && { msg: ret.msg }),
-                ...(ret.res && { res: ret.res }),
-            };
+            return ret
         }
         let uraSubatual = retRegex.res['1']
 
