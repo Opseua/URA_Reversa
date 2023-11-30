@@ -8,104 +8,60 @@ async function login(inf) {
     try {
         let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, `[login] ANTES de autenticar`, '\n');
 
-        let infApi, retApi, infRegex, retRegex, infConfigStorage, retConfigStorage, infLog, retLog
-        // PEGAR A LOGIN E AUT DO CONFIG
-        infConfigStorage = { 'action': 'get', 'functionLocal': false, 'key': 'telein' } // 'functionLocal' SOMENTE NO NODEJS
-        retConfigStorage = await configStorage(infConfigStorage);
-        if (!retConfigStorage.ret) {
-            console.log('[login] FALSE: retConfigStorage');
-            return retConfigStorage
-        } else {
-            retConfigStorage = retConfigStorage.res
-        }
-        let login = inf && inf.login ? inf.login : retConfigStorage.login
-        login = encodeURIComponent(login)
-        let senha = inf && inf.senha ? inf.senha : retConfigStorage.senha
-        senha = encodeURIComponent(senha)
-        let aut = inf && inf.aut ? inf.aut : retConfigStorage.aut
+        let infApi, retApi, infRegex, retRegex, infLog, retLog
+        let aut = inf && inf.aut ? inf.aut : 'aaaa';
+        let login = inf && inf.login ? inf.login : 'aaaa';
+        let password = inf && inf.password ? inf.password : 'aaaa';
+        let interfaceOk = inf && inf.interface ? inf.interface : 'aaaa';
+        let id_interfaceOk = inf && inf.id_interface ? inf.id_interface : 'aaaa';
+        let subatualOk = inf && inf.subatual ? inf.subatual : 'aaaa';
 
-        // [1] FAZER LOGIN
+        // [1] LOGIN
         infApi = {
-            // 'logFun': true, 
             'method': 'POST', 'url': `https://interface.telein.com.br/op_access.php`,
             'headers': {
-                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
                 'Cookie': aut,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
             },
-            'body': `login=${login}&senha=${senha}`
+            'body': {
+                'login': login,
+                'senha': senha,
+            }
         };
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('escolher.php')) {
-            console.log('[login] FALSE: retApi 1');
-            let infLog = { 'folder': 'Registros', 'functionLocal': false, 'path': `login_1_api_FALSE.txt`, 'text': retApi }
-            let retLog = await log(infLog);
+            let err = `[login] FALSE: retApi 1`
+            console.log(err);
+            infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+            retLog = await log(infLog);
             ret['msg'] = `Erro ao fazer login`;
             return ret
         } else {
             retApi = retApi.res.body
         }
 
-        // [2] LISTAR USUÁRIOS
+        // [2] USUÁRIO [SELECIONAR]
         infApi = {
-            // 'logFun': true,
-            'method': 'GET', 'url': `https://interface.telein.com.br/escolher.php`,
+            'method': 'POST', 'url': `https://interface.telein.com.br/alterarinterface.php`,
             'headers': {
                 'Cookie': aut,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            },
+            'body': {
+                'interface': interfaceOk,
+                'id_interface': id_interfaceOk,
+                'subatual': subatualOk,
             }
         };
         retApi = await api(infApi);
-        if (!retApi.ret || !retApi.res.body.includes('id_interface')) {
-            console.log('[login] FALSE: retApi 2');
-            let infLog = { 'folder': 'Registros', 'functionLocal': false, 'path': `login_2_api_FALSE.txt`, 'text': retApi }
-            let retLog = await log(infLog);
-            ret['msg'] = `Erro ao pegar usuários`;
-            return ret
-        } else {
-            retApi = retApi.res.body
-        }
-
-        // PEGAR A INTERFACE
-        infRegex = { 'pattern': `name="interface" value="(.*?)">`, 'text': retApi }
-        retRegex = regex(infRegex);
-        if (!retRegex.ret || !retRegex.res['1']) {
-            console.log('[login] FALSE: retRegex 1');
-            let infLog = { 'folder': 'Registros', 'functionLocal': false, 'path': `login_NAO_ACHOU_A_INTERFACE.txt`, 'text': retApi }
-            let retLog = await log(infLog);
-            ret['msg'] = `Não achou a interface`;
+        if (!retApi.ret || retApi.res.code !== 200) {
+            let err = `[login] FALSE: retApi 2`
+            console.log(err);
+            infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+            retLog = await log(infLog);
+            ret['msg'] = `Erro ao pegar selecionar usuário`;
             return ret
         }
-        let uraInterface = retRegex.res['1']
-
-        // PEGAR O ID DA INTERFACE
-        infRegex = { 'pattern': `name="id_interface" value="(.*?)">`, 'text': retApi }
-        // infRegex = { 'pattern': `name="subatual" value="(.*?)">`, 'text': retApi }
-        retRegex = regex(infRegex);
-        if (!retRegex.ret || !retRegex.res['1']) {
-            console.log('[login] FALSE: retRegex 2');
-            let infLog = { 'folder': 'Registros', 'functionLocal': false, 'path': `login_NAO_ACHOU_A_INTERFACE_ID.txt`, 'text': retApi }
-            let retLog = await log(infLog);
-            ret['msg'] = `Não achou a interface id`;
-            return ret
-        }
-        let uraInterfaceId = retRegex.res['1']
-
-        // PEGAR O SUBATUAL
-        infRegex = { 'pattern': `name="subatual" value="(.*?)">`, 'text': retApi }
-        retRegex = regex(infRegex);
-        if (!retRegex.ret || !retRegex.res['1']) {
-            console.log('[login] FALSE: retRegex 3');
-            let infLog = { 'folder': 'Registros', 'functionLocal': false, 'path': `login_NAO_ACHOU_O_SUBATUAL.txt`, 'text': retApi }
-            let retLog = await log(infLog);
-            ret['msg'] = `Não achou o subatual`;
-            return ret
-        }
-        let uraSubatual = retRegex.res['1']
-
-        ret['res'] = {
-            'uraInterface': uraInterface,
-            'uraInterfaceId': uraInterfaceId,
-            'uraSubatual': uraSubatual
-        };
         ret['msg'] = `LOGIN: OK`;
         ret['ret'] = true
 
@@ -130,4 +86,3 @@ if (eng) { // CHROME
 } else { // NODEJS
     global['login'] = login;
 }
-

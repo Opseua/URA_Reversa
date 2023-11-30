@@ -13,42 +13,60 @@
 async function leads(inf) {
     let ret = { 'ret': false };
     try {
-        let infApi, retApi, infRegex, retRegex, infConfigStorage, retConfigStorage, infLog, retLog, time
-        let aut = inf && inf.aut ? inf.aut : retConfigStorage.aut
+        let infApi, retApi, infRegex, retRegex, infLog, retLog, time
+        let aut = inf && inf.aut ? inf.aut : 'aaaa';
+        let login = inf && inf.login ? inf.login : 'aaaa';
+        let password = inf && inf.password ? inf.password : 'aaaa';
+        let interfaceOk = inf && inf.interface ? inf.interface : 'aaaa';
+        let id_interfaceOk = inf && inf.id_interface ? inf.id_interface : 'aaaa';
+        let subatualOk = inf && inf.subatual ? inf.subatual : 'aaaa';
         let status = inf && inf.status ? inf.status : ['Retorno realizado']
 
         // API [LISTA DE LEADS]
         infApi = {
-            // 'logFun': true,
             'method': 'GET', 'url': `https://interface.telein.com.br/index.php?link=246`,
             'headers': { 'Cookie': aut, }
         };
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('tirarverde')) {
-            console.log('[leads] FALSE: retApi 1');
+            let err = `[leads] FALSE: retApi 1`
+            console.log(err);
+            infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+            retLog = await log(infLog);
             // REAUTENTICAR
             let infLogin, retLogin
-            infLogin = { 'aut': aut }
+            infLogin = {
+                'aut': aut,
+                'login': login,
+                'password': password,
+                'interface': interfaceOk,
+                'id_interface': id_interfaceOk,
+                'subatual': subatualOk,
+            }
             retLogin = await login(infLogin);
             if (!retLogin.ret) {
-                console.log('[leads] FALSE: retLogin');
-                let infLog = { 'folder': 'Registros', 'functionLocal': false, 'path': `leads_NAO_CONSEGUIU_LOGAR.txt`, 'text': retApi }
-                let retLog = await log(infLog);
+                let err = `[leads] FALSE: retLogin`
+                console.log(err);
+                infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin }
+                retLog = await log(infLog);
                 return retApi
             } else {
                 infApi = {
-                    // 'logFun': true, 
                     'method': 'GET', 'url': `https://interface.telein.com.br/index.php?link=246`,
                     'headers': { 'Cookie': aut, }
                 };
                 retApi = await api(infApi);
                 if (!retApi.ret || !retApi.res.body.includes('tirarverde')) {
                     if (retApi.res.body.includes('para acessar as funcionalidades')) {
-                        console.log('[leads] FALSE: sem permissão para acessar as funcionalidades');
+                        let err = `[leads] sem permissão para acessar as funcionalidades`
+                        console.log(err);
+                        infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+                        retLog = await log(infLog);
                     } else {
-                        console.log('[leads] FALSE: retApi 3');
-                        let infLog = { 'folder': 'Registros', 'functionLocal': false, 'path': `leads_NAO_ACHOU_A_LISTA_DE_LEADS_2.txt`, 'text': retApi }
-                        let retLog = await log(infLog);
+                        let err = `[leads] FALSE: retApi 2`
+                        console.log(err);
+                        infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+                        retLog = await log(infLog);
                         return retApi
                     }
                 }
@@ -64,14 +82,20 @@ async function leads(inf) {
         // infFile = { 'action': 'read', 'functionLocal': false, 'path': './log/LEADS.txt' }
         // retFile = await file(infFile); retApi = retFile.res
 
+        // ## LOG ## API [LEADS]
+        // let err = `[leads] LOG`
+        // infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+        // retLog = await log(infLog);
+
         // PEGAR [ID LEAD]
         infRegex = { 'pattern': `href="index.php?link=247&id_contato=(.*?)"`, 'text': retApi }
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['5']) {
-            console.log('[leads] FALSE: retRegex');
-            let infLog = { 'folder': 'Registros', 'functionLocal': false, 'path': `leads_NAO_ACHOU_O_ID_DO_LEAD.txt`, 'text': retApi }
-            let retLog = await log(infLog);
             ret['msg'] = `Não achou o id do lead`;
+            let err = `[leads] ${ret.msg}`
+            // console.log(err);
+            infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+            retLog = await log(infLog);
             return ret
         }
         let leadId = retRegex.res['5']
@@ -81,7 +105,10 @@ async function leads(inf) {
         infHtmlToJson = { 'randomCol': true, 'html': retApi }
         retHtmlToJson = await htmlToJson(infHtmlToJson);
         if (!retHtmlToJson.ret) {
-            console.log('[leads] FALSE: retHtmlToJson');
+            let err = `[leads] FALSE: retHtmlToJson`
+            console.log(err);
+            infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
+            retLog = await log(infLog);
             return retHtmlToJson
         } else {
             retHtmlToJson = JSON.parse(retHtmlToJson.res)
@@ -92,26 +119,45 @@ async function leads(inf) {
 
         // ARRAY COM A LISTA DE LEADS
         let leadsNew = []
+        if (!retHtmlToJson.length > 0) {
+            let err = `[leads] retHtmlToJson ARRAY VAZIA`
+            console.log(err);
+            infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
+            retLog = await log(infLog);
+            return ret
+        }
+
+        // ## LOG ## API [LEADS]
+        let err = `[leads] LOG`
+        infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
+        retLog = await log(infLog);
+
         for (let [index, value] of retHtmlToJson.entries()) {
             // ###########################
             if (status.includes(value.colInd4)) {
-                let data = new Date(value.colInd0);
-                let day = data.getDate().toString().padStart(2, '0');
-                let mon = (data.getMonth() + 1).toString().padStart(2, '0');
-                let yea = data.getFullYear().toString();
-                let hou = data.getHours().toString().padStart(2, '0');
-                let min = data.getMinutes().toString().padStart(2, '0');
-                let sec = data.getSeconds().toString().padStart(2, '0');
-                data = `${day}/${mon}/${yea} ${hou}:${min}:${sec}`;
-                leadsNew.push({
-                    'leadId': leadId[index],
-                    'date': data,
-                    'status': value.colInd4,
-                    'telAbrev': value.colInd1,
-                    'mailing': value.colInd7,
-                })
+                let time = dateHour().res // 300
+                let timeStamp = Date.parse(value.colInd0) / 1000
+                let dif = Number(time.tim) - timeStamp
+                if (dif > 300) { // 5 MINUTOS ATRÁS
+                    let data = new Date(value.colInd0);
+                    let day = data.getDate().toString().padStart(2, '0');
+                    let mon = (data.getMonth() + 1).toString().padStart(2, '0');
+                    let yea = data.getFullYear().toString();
+                    let hou = data.getHours().toString().padStart(2, '0');
+                    let min = data.getMinutes().toString().padStart(2, '0');
+                    let sec = data.getSeconds().toString().padStart(2, '0');
+                    data = `${day}/${mon}/${yea} ${hou}:${min}:${sec}`;
+                    leadsNew.push({
+                        'leadId': leadId[index] ? leadId[index] : 'null',
+                        'date': data,
+                        'status': value.colInd4 ? value.colInd4 : 'null',
+                        'telAbrev': value.colInd1 ? value.colInd1 : 'null',
+                        'mailing': value.colInd7 ? value.colInd7 : 'null',
+                    })
+                }
             }
         }
+
         ret['res'] = leadsNew
         ret['msg'] = `LEADS: OK`
         ret['ret'] = true

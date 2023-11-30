@@ -6,52 +6,76 @@
 async function leadChangeStatus(inf) {
     let ret = { 'ret': false };
     try {
-        let infApi, retApi, infRegex, retRegex, infConfigStorage, retConfigStorage, infLog, retLog, time
-        let aut = inf && inf.aut ? inf.aut : retConfigStorage.aut
-        let leadId = inf && inf.leadId ? inf.leadId : `25787539`
+        let infApi, retApi, infRegex, retRegex, infLog, retLog, time
+        let aut = inf && inf.aut ? inf.aut : 'aaaa';
+        let login = inf && inf.login ? inf.login : 'aaaa';
+        let password = inf && inf.password ? inf.password : 'aaaa';
+        let interfaceOk = inf && inf.interface ? inf.interface : 'aaaa';
+        let id_interfaceOk = inf && inf.id_interface ? inf.id_interface : 'aaaa';
+        let subatualOk = inf && inf.subatual ? inf.subatual : 'aaaa';
+        let leadId = inf && inf.leadId ? inf.leadId : `25799086`
         let statusOption = {
             '1': 'Venda Realizada', '2': 'Sem interesse ', '3': 'Não era o cliente', '4': 'Inapto',
             '5': 'Não atende', '6': 'Caixa postal ', '7': 'Cliente vai analisar a proposta', '8': 'Solicitou contato depois',
             '9': 'Tratando no Whatsapp', '10': 'Aguardando Documento', '11': 'Cliente da Base ', '12': 'Fora de cobertura',
         }
-        let status = inf && inf.status ? inf.status : '4'
+        let statusOk = inf && inf.status ? inf.status : '4'
 
         // API [ALTERAR STATUS DO LEAD]
         infApi = {
-            //  'logFun': true,
             'method': 'POST', 'url': `https://interface.telein.com.br/index.php?link=247&tipo=sucesso&id_contato=${leadId}`,
-            'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-            'headers': { 'Cookie': aut, },
-            'body': `tabulacao%3D${status}`
+            'headers': {
+                'Cookie': aut,
+                'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+            },
+            'body': {
+                'tabulacao': statusOk,
+            }
         };
         retApi = await api(infApi);
+
+        let err = `[leadChangeStatus] LOG ${leadId}`
+        infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+        retLog = await log(infLog);
+
         if (!retApi.ret || !retApi.res.body.includes('Retorno realizado por')) {
-            console.log('[leadChangeStatus] FALSE: retApi 1');
+            let err = `[leadChangeStatus] FALSE: retApi 1`
+            console.log(err);
+            infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+            retLog = await log(infLog);
             // REAUTENTICAR
             let infLogin, retLogin
             infLogin = { 'aut': aut }
             retLogin = await login(infLogin);
             if (!retLogin.ret) {
-                console.log('[leadChangeStatus] FALSE: retLogin 1');
-                let infLog = { 'folder': 'Registros', 'functionLocal': false, 'path': `leadChangeStatus_NAO_CONSEGUIU_LOGAR.txt`, 'text': retApi }
-                let retLog = await log(infLog);
+                let err = `[leadChangeStatus] FALSE: retLogin 1`
+                console.log(err);
+                infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin }
+                retLog = await log(infLog);
                 return retApi
             } else {
                 infApi = {
-                    // 'logFun': true,
                     'method': 'POST', 'url': `https://interface.telein.com.br/index.php?link=247&tipo=sucesso&id_contato=${leadId}`,
-                    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-                    'headers': { 'Cookie': aut, },
-                    'body': `tabulacao=${status}`
+                    'headers': {
+                        'Cookie': aut,
+                        'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+                    },
+                    'body': {
+                        'tabulacao': statusOk,
+                    }
                 };
                 retApi = await api(infApi);
                 if (!retApi.ret || !retApi.res.body.includes('Retorno realizado por')) {
                     if (retApi.res.body.includes('para acessar as funcionalidades')) {
-                        console.log('[leads] FALSE: sem permissão para acessar as funcionalidades');
+                        let err = `[leadChangeStatus] sem permissão para acessar as funcionalidades`
+                        console.log(err);
+                        infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+                        retLog = await log(infLog);
                     } else {
-                        console.log('[leadChangeStatus] FALSE: retLogin 2');
-                        let infLog = { 'folder': 'Registros', 'functionLocal': false, 'path': `leadChangeStatus_NAO_ACHOU_A_INF_DO_LEAD_2.txt`, 'text': retApi }
-                        let retLog = await log(infLog);
+                        let err = `[leadChangeStatus] FALSE: retLogin 2`
+                        console.log(err);
+                        infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+                        retLog = await log(infLog);
                         return retApi
                     }
                 }
@@ -69,7 +93,7 @@ async function leadChangeStatus(inf) {
 
         ret['res'] = {
             'leadId': leadId,
-            'status': statusOption[status]
+            'status': statusOption[statusOk]
         }
         ret['msg'] = `LEAD CHANGE STATUS: OK`
         ret['ret'] = true
