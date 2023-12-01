@@ -4,7 +4,7 @@ async function server(inf) {
     try {
         let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, `server [URA_Reversa]`, '\n');
 
-        let infLog, retLog, infGoogleSheet, retGoogleSheet
+        let infLog, retLog, infGoogleSheet, retGoogleSheet, err
 
         // DADOS GLOBAIS DA PLANILHA E FAZER O PARSE
         gO.inf['id'] = '1UgKZbXFa_G3wn1XqVpfphWspSDt1EPrpzH0Trj-eMz4'; gO.inf['tab'] = 'ATENDIDO';
@@ -17,7 +17,7 @@ async function server(inf) {
         }
         retGoogleSheet = await googleSheet(infGoogleSheet);
         if (!retGoogleSheet.ret) {
-            let err = `[server] Erro ao pegar dados para planilha`
+            err = `[server] Erro ao pegar dados para planilha`
             console.log(err);
             infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheet }
             retLog = await log(infLog);
@@ -49,15 +49,15 @@ async function server(inf) {
                 'interface': interfaceInf,
                 'id_interface': id_interfaceInf,
                 'subatual': subatualInf,
-                'status': [ // 'Retorno realizado' | 'Pendente de retorno' 'Visualizado para retorno'
-                    'Retorno realizado', // ###### TESTES ######
+                'status': [
+                    // 'Retorno realizado', // ###### TESTES ######
                     'Pendente de retorno',
                     'Visualizado para retorno',
                 ]
             }
             retLeads = await leads(infLeads);
             if (!retLeads.ret) {
-                let err = `[server] FALSE: retLeads`
+                err = `[server] FALSE: retLeads`
                 console.log(err);
                 infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads }
                 retLog = await log(infLog);
@@ -78,7 +78,7 @@ async function server(inf) {
                     infLeadGet = { 'aut': autInf, 'leadId': value.leadId }
                     retLeadGet = await leadGet(infLeadGet);
                     if (!retLeadGet.ret) {
-                        let err = `[server] FALSE: retLeadGet`
+                        err = `[server] FALSE: retLeadGet`
                         console.log(err);
                         infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadGet }
                         retLog = await log(infLog);
@@ -93,7 +93,7 @@ async function server(inf) {
                     infLeadChangeStatus = { 'aut': autInf, 'leadId': value.leadId, 'status': '1' } // '4' → Inapto | '1' → Venda Realizada
                     retLeadChangeStatus = await leadChangeStatus(infLeadChangeStatus);
                     if (!retLeadChangeStatus.ret) {
-                        let err = `[server] FALSE: retLeadChangeStatus`
+                        err = `[server] FALSE: retLeadChangeStatus`
                         console.log(err);
                         infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadChangeStatus }
                         retLog = await log(infLog);
@@ -116,6 +116,7 @@ async function server(inf) {
                         retLeadGet.tel,
                         retLeadGet.email,
                         retLeadGet.administrador,
+                        `https://interface.telein.com.br/index.php?link=247&id_contato=${value.leadId}`
                     ]]
                     let sheetSendNew = sheetSend[0].join(conSplInf)
 
@@ -131,13 +132,13 @@ async function server(inf) {
                     }
                     retGoogleSheet = await googleSheet(infGoogleSheet);
                     if (!retGoogleSheet.ret) {
-                        let err = `[server] FALSE: retGoogleSheet`
+                        err = `[server] FALSE: retGoogleSheet`
                         console.log(err);
                         infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheet }
                         retLog = await log(infLog);
                         return retGoogleSheet
                     }
-                    console.log(`[${(index + 1).toString().padStart(2, '0')}] ID: ${sheetSend[0][0]} | NOVO STATUS: '${sheetSend[0][2]}'| TEL: ${sheetSend[0][7]} | SHEET OK `)
+                    console.log(`[${(index + 1).toString().padStart(2, '0')}] ID: ${sheetSend[0][0]} | NOVO STATUS: '${sheetSend[0][2]}' | TEL: ${sheetSend[0][7]} | SHEET OK `)
                 }
             }
             ret['ret'] = true
@@ -148,8 +149,8 @@ async function server(inf) {
         }
         console.log('FIM')
     } catch (e) {
-        let m = await regexE({ 'e': e });
-        ret['msg'] = m.res
+        let retRegexE = await regexE({ 'inf': inf, 'e': e });
+        ret['msg'] = retRegexE.res
     };
 }
 await server()

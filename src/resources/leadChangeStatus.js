@@ -6,9 +6,9 @@
 async function leadChangeStatus(inf) {
     let ret = { 'ret': false };
     try {
-        let infApi, retApi, infRegex, retRegex, infLog, retLog, time
+        let infApi, retApi, infRegex, retRegex, infLog, retLog, time, err
         let aut = inf && inf.aut ? inf.aut : 'aaaa';
-        let login = inf && inf.login ? inf.login : 'aaaa';
+        let loginOk = inf && inf.login ? inf.login : 'aaaa';
         let password = inf && inf.password ? inf.password : 'aaaa';
         let interfaceOk = inf && inf.interface ? inf.interface : 'aaaa';
         let id_interfaceOk = inf && inf.id_interface ? inf.id_interface : 'aaaa';
@@ -34,12 +34,13 @@ async function leadChangeStatus(inf) {
         };
         retApi = await api(infApi);
 
-        let err = `[leadChangeStatus] LOG ${leadId}`
-        infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+        // ## LOG ## retApi
+        err = `[leadChangeStatus] LOG retApi ${leadId}`
+        infLog = { 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
         retLog = await log(infLog);
 
         if (!retApi.ret || !retApi.res.body.includes('Retorno realizado por')) {
-            let err = `[leadChangeStatus] FALSE: retApi 1`
+            err = `[leadChangeStatus] FALSE: retApi 1`
             console.log(err);
             infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
@@ -48,7 +49,7 @@ async function leadChangeStatus(inf) {
             infLogin = { 'aut': aut }
             retLogin = await login(infLogin);
             if (!retLogin.ret) {
-                let err = `[leadChangeStatus] FALSE: retLogin 1`
+                err = `[leadChangeStatus] FALSE: retLogin 1`
                 console.log(err);
                 infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin }
                 retLog = await log(infLog);
@@ -67,20 +68,25 @@ async function leadChangeStatus(inf) {
                 retApi = await api(infApi);
                 if (!retApi.ret || !retApi.res.body.includes('Retorno realizado por')) {
                     if (retApi.res.body.includes('para acessar as funcionalidades')) {
-                        let err = `[leadChangeStatus] sem permissão para acessar as funcionalidades`
+                        err = `[leadChangeStatus] sem permissão para acessar as funcionalidades`
                         console.log(err);
                         infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         retLog = await log(infLog);
+                        return ret
                     } else {
-                        let err = `[leadChangeStatus] FALSE: retLogin 2`
+                        err = `[leadChangeStatus] FALSE: retLogin 2`
                         console.log(err);
                         infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         retLog = await log(infLog);
-                        return retApi
+                        return ret
                     }
+                } else {
+                    retApi = retApi.res.body
                 }
             }
-        } else { retApi = retApi.res.body }
+        } else {
+            retApi = retApi.res.body
+        }
 
         // TESTES [LER ARQUIVO]
         // let infFile, retFile
@@ -104,8 +110,8 @@ async function leadChangeStatus(inf) {
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {
-        let m = await regexE({ 'e': e });
-        ret['msg'] = m.res
+        let retRegexE = await regexE({ 'inf': inf, 'e': e });
+        ret['msg'] = retRegexE.res
     };
     return {
         ...({ ret: ret.ret }),

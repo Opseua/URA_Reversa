@@ -13,9 +13,9 @@
 async function leads(inf) {
     let ret = { 'ret': false };
     try {
-        let infApi, retApi, infRegex, retRegex, infLog, retLog, time
+        let infApi, retApi, infRegex, retRegex, infLog, retLog, time, err
         let aut = inf && inf.aut ? inf.aut : 'aaaa';
-        let login = inf && inf.login ? inf.login : 'aaaa';
+        let loginOk = inf && inf.login ? inf.login : 'aaaa';
         let password = inf && inf.password ? inf.password : 'aaaa';
         let interfaceOk = inf && inf.interface ? inf.interface : 'aaaa';
         let id_interfaceOk = inf && inf.id_interface ? inf.id_interface : 'aaaa';
@@ -29,7 +29,7 @@ async function leads(inf) {
         };
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('tirarverde')) {
-            let err = `[leads] FALSE: retApi 1`
+            err = `[leads] FALSE: retApi 1`
             console.log(err);
             infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
@@ -37,7 +37,7 @@ async function leads(inf) {
             let infLogin, retLogin
             infLogin = {
                 'aut': aut,
-                'login': login,
+                'login': loginOk,
                 'password': password,
                 'interface': interfaceOk,
                 'id_interface': id_interfaceOk,
@@ -45,7 +45,7 @@ async function leads(inf) {
             }
             retLogin = await login(infLogin);
             if (!retLogin.ret) {
-                let err = `[leads] FALSE: retLogin`
+                err = `[leads] FALSE: retLogin`
                 console.log(err);
                 infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin }
                 retLog = await log(infLog);
@@ -58,20 +58,25 @@ async function leads(inf) {
                 retApi = await api(infApi);
                 if (!retApi.ret || !retApi.res.body.includes('tirarverde')) {
                     if (retApi.res.body.includes('para acessar as funcionalidades')) {
-                        let err = `[leads] sem permissão para acessar as funcionalidades`
+                        err = `[leads] sem permissão para acessar as funcionalidades`
                         console.log(err);
                         infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         retLog = await log(infLog);
+                        return ret
                     } else {
-                        let err = `[leads] FALSE: retApi 2`
+                        err = `[leads] FALSE: retApi 2`
                         console.log(err);
                         infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         retLog = await log(infLog);
-                        return retApi
+                        return ret
                     }
+                } else {
+                    retApi = retApi.res.body
                 }
             }
-        } else { retApi = retApi.res.body }
+        } else {
+            retApi = retApi.res.body
+        }
 
         // time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, `[leads] DEPOIS da lista de lead`, '\n');
         // infLog = { 'folder': 'Registros', 'path': `leads.txt`, 'text': retApi }
@@ -82,17 +87,17 @@ async function leads(inf) {
         // infFile = { 'action': 'read', 'functionLocal': false, 'path': './log/LEADS.txt' }
         // retFile = await file(infFile); retApi = retFile.res
 
-        // ## LOG ## API [LEADS]
-        // let err = `[leads] LOG`
-        // infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
-        // retLog = await log(infLog);
+        // ## LOG ## retApi
+        err = `[leads] LOG retApi`
+        infLog = { 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+        retLog = await log(infLog);
 
         // PEGAR [ID LEAD]
-        infRegex = { 'pattern': `href="index.php?link=247&id_contato=(.*?)"`, 'text': retApi }
+        infRegex = { 'pattern': `index.php?link=247&id_contato=(.*?)"`, 'text': retApi }
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['5']) {
             ret['msg'] = `Não achou o id do lead`;
-            let err = `[leads] ${ret.msg}`
+            err = `[leads] ${ret.msg}`
             // console.log(err);
             infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
@@ -105,7 +110,7 @@ async function leads(inf) {
         infHtmlToJson = { 'randomCol': true, 'html': retApi }
         retHtmlToJson = await htmlToJson(infHtmlToJson);
         if (!retHtmlToJson.ret) {
-            let err = `[leads] FALSE: retHtmlToJson`
+            err = `[leads] FALSE: retHtmlToJson`
             console.log(err);
             infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
@@ -120,16 +125,16 @@ async function leads(inf) {
         // ARRAY COM A LISTA DE LEADS
         let leadsNew = []
         if (!retHtmlToJson.length > 0) {
-            let err = `[leads] retHtmlToJson ARRAY VAZIA`
+            err = `[leads] retHtmlToJson ARRAY VAZIA`
             console.log(err);
             infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
             return ret
         }
 
-        // ## LOG ## API [LEADS]
-        let err = `[leads] LOG`
-        infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
+        // ## LOG ## retHtmlToJson
+        err = `[leads] LOG retHtmlToJson`
+        infLog = { 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
         retLog = await log(infLog);
 
         for (let [index, value] of retHtmlToJson.entries()) {
@@ -168,8 +173,8 @@ async function leads(inf) {
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {
-        let m = await regexE({ 'e': e });
-        ret['msg'] = m.res
+        let retRegexE = await regexE({ 'inf': inf, 'e': e });
+        ret['msg'] = retRegexE.res
     };
     return {
         ...({ ret: ret.ret }),

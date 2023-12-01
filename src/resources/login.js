@@ -8,9 +8,9 @@ async function login(inf) {
     try {
         let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, `[login] ANTES de autenticar`, '\n');
 
-        let infApi, retApi, infRegex, retRegex, infLog, retLog
+        let infApi, retApi, infRegex, retRegex, infLog, retLog, err
         let aut = inf && inf.aut ? inf.aut : 'aaaa';
-        let login = inf && inf.login ? inf.login : 'aaaa';
+        let loginOk = inf && inf.login ? inf.login : 'aaaa';
         let password = inf && inf.password ? inf.password : 'aaaa';
         let interfaceOk = inf && inf.interface ? inf.interface : 'aaaa';
         let id_interfaceOk = inf && inf.id_interface ? inf.id_interface : 'aaaa';
@@ -24,13 +24,13 @@ async function login(inf) {
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
             },
             'body': {
-                'login': login,
-                'senha': senha,
+                'login': loginOk,
+                'senha': password,
             }
         };
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('escolher.php')) {
-            let err = `[login] FALSE: retApi 1`
+            err = `[login] FALSE: retApi 1`
             console.log(err);
             infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
@@ -39,6 +39,11 @@ async function login(inf) {
         } else {
             retApi = retApi.res.body
         }
+
+        // ## LOG ## retApi
+        err = `[login] LOG retApi`
+        infLog = { 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+        retLog = await log(infLog);
 
         // [2] USUÁRIO [SELECIONAR]
         infApi = {
@@ -55,7 +60,7 @@ async function login(inf) {
         };
         retApi = await api(infApi);
         if (!retApi.ret || retApi.res.code !== 200) {
-            let err = `[login] FALSE: retApi 2`
+            err = `[login] FALSE: retApi 2`
             console.log(err);
             infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
@@ -65,14 +70,16 @@ async function login(inf) {
         ret['msg'] = `LOGIN: OK`;
         ret['ret'] = true
 
+        await new Promise(resolve => { setTimeout(resolve, 2500) })
+
         // ### LOG FUN ###
         if (inf.logFun) {
             let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {
-        let m = await regexE({ 'e': e });
-        ret['msg'] = m.res
+        let retRegexE = await regexE({ 'inf': inf, 'e': e });
+        ret['msg'] = retRegexE.res
     };
     return {
         ...({ ret: ret.ret }),
@@ -86,3 +93,6 @@ if (eng) { // CHROME
 } else { // NODEJS
     global['login'] = login;
 }
+
+
+
