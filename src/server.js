@@ -1,6 +1,8 @@
+await import('./resources/@export.js');
+let e = import.meta.url;
 async function server(inf) {
-    await import('./resources/@export.js');
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e;
     try {
         let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, `server [URA_Reversa]`, '\n');
 
@@ -19,7 +21,7 @@ async function server(inf) {
         if (!retGoogleSheet.ret) {
             err = `[server] Erro ao pegar dados para planilha`
             console.log(err);
-            infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheet }
+            infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheet }
             retLog = await log(infLog);
             return retGoogleSheet
         } else {
@@ -39,7 +41,7 @@ async function server(inf) {
         while (!stop) {
             qtd++;
             time = dateHour().res;
-            console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec} ## COMEÇANDO LOOP: ${qtd} ##`)
+            console.log(`\n${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec} ## COMEÇANDO LOOP: ${qtd} ##`)
 
             // SEG <> SAB | 08H <> 19H
             if (['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB',].includes(time.dayNam) && (Number(time.hou) > 7 & Number(time.hou) < 20)) {
@@ -47,6 +49,7 @@ async function server(inf) {
                 // PEGAR NOVOS LEADS
                 let infLeads, retLeads
                 infLeads = {
+                    'e': e,
                     'aut': autInf,
                     'login': loginInf,
                     'password': passwordInf,
@@ -54,7 +57,7 @@ async function server(inf) {
                     'id_interface': id_interfaceInf,
                     'subatual': subatualInf,
                     'status': [
-                        // 'Retorno realizado', // ###### TESTES ######
+                        // 'Retorno realizado', // **************************** TESTES ****************************
                         'Pendente de retorno',
                         'Visualizado para retorno',
                     ]
@@ -63,7 +66,7 @@ async function server(inf) {
                 if (!retLeads.ret) {
                     err = `[server] FALSE: retLeads`
                     console.log(err);
-                    infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads }
+                    infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads }
                     retLog = await log(infLog);
                     return retLeads
                 } else {
@@ -79,12 +82,12 @@ async function server(inf) {
                     for (let [index, value] of retLeads.entries()) {
                         // ### PEGAR INF
                         let infLeadGet, retLeadGet
-                        infLeadGet = { 'aut': autInf, 'leadId': value.leadId }
+                        infLeadGet = { 'e': e, 'aut': autInf, 'leadId': value.leadId }
                         retLeadGet = await leadGet(infLeadGet);
                         if (!retLeadGet.ret) {
                             err = `[server] FALSE: retLeadGet`
                             console.log(err);
-                            infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadGet }
+                            infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadGet }
                             retLog = await log(infLog);
                             return retLeadGet
                         } else {
@@ -94,12 +97,12 @@ async function server(inf) {
 
                         // ###  ALTERAR STATUS
                         let infLeadChangeStatus, retLeadChangeStatus
-                        infLeadChangeStatus = { 'aut': autInf, 'leadId': value.leadId, 'status': '1' } // '4' → Inapto | '1' → Venda Realizada
+                        infLeadChangeStatus = { 'e': e, 'aut': autInf, 'leadId': value.leadId, 'status': '1' } // '4' → Inapto | '1' → Venda Realizada
                         retLeadChangeStatus = await leadChangeStatus(infLeadChangeStatus);
                         if (!retLeadChangeStatus.ret) {
                             err = `[server] FALSE: retLeadChangeStatus`
                             console.log(err);
-                            infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadChangeStatus }
+                            infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadChangeStatus }
                             retLog = await log(infLog);
                             return retLeadChangeStatus
                         } else {
@@ -138,7 +141,7 @@ async function server(inf) {
                         if (!retGoogleSheet.ret) {
                             err = `[server] FALSE: retGoogleSheet`
                             console.log(err);
-                            infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheet }
+                            infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheet }
                             retLog = await log(infLog);
                             return retGoogleSheet
                         }

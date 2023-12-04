@@ -1,10 +1,12 @@
 // let infLeadChangeStatus, retLeadChangeStatus // 'logFun': true,
-// infLeadChangeStatus = { 'aut': false, 'leadId': value.leadId, 'status': '1' } // '4' → Inapto | '1' → Venda Realizada
+// infLeadChangeStatus = { 'e': e, 'aut': false, 'leadId': value.leadId, 'status': '1' } // '4' → Inapto | '1' → Venda Realizada
 // retLeadChangeStatus = await leadChangeStatus(infLeadChangeStatus);
 // console.log(retLeadChangeStatus)
 
+let e = import.meta.url;
 async function leadChangeStatus(inf) {
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e;
     try {
         let infApi, retApi, infRegex, retRegex, infLog, retLog, time, err
         let aut = inf && inf.aut ? inf.aut : 'aaaa';
@@ -36,22 +38,22 @@ async function leadChangeStatus(inf) {
 
         // ## LOG ## retApi
         err = `[leadChangeStatus] LOG retApi ${leadId}`
-        infLog = { 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+        infLog = { 'e': e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
         retLog = await log(infLog);
 
         if (!retApi.ret || !retApi.res.body.includes('Retorno realizado por')) {
             err = `[leadChangeStatus] FALSE: retApi 1`
             console.log(err);
-            infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+            infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
             // REAUTENTICAR
             let infLogin, retLogin
-            infLogin = { 'aut': aut }
+            infLogin = { 'e': e, 'aut': aut }
             retLogin = await login(infLogin);
             if (!retLogin.ret) {
                 err = `[leadChangeStatus] FALSE: retLogin 1`
                 console.log(err);
-                infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin }
+                infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin }
                 retLog = await log(infLog);
                 return retApi
             } else {
@@ -67,16 +69,16 @@ async function leadChangeStatus(inf) {
                 };
                 retApi = await api(infApi);
                 if (!retApi.ret || !retApi.res.body.includes('Retorno realizado por')) {
-                    if (retApi.res.body.includes('para acessar as funcionalidades')) {
+                    if (retApi.res && retApi.res.body.includes('para acessar as funcionalidades')) {
                         err = `[leadChangeStatus] sem permissão para acessar as funcionalidades`
                         console.log(err);
-                        infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+                        infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         retLog = await log(infLog);
                         return ret
                     } else {
                         err = `[leadChangeStatus] FALSE: retLogin 2`
                         console.log(err);
-                        infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+                        infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         retLog = await log(infLog);
                         return ret
                     }
@@ -90,11 +92,11 @@ async function leadChangeStatus(inf) {
 
         // TESTES [LER ARQUIVO]
         // let infFile, retFile
-        // infFile = { 'action': 'read', 'functionLocal': false, 'path': './log/LEAD_CHANGE_STATUS_OK.txt' }
+        // infFile = { 'e': e,'action': 'read', 'functionLocal': false, 'path': './log/LEAD_CHANGE_STATUS_OK.txt' }
         // retFile = await file(infFile); retApi = retFile.res
 
         // time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, `[leadChangeStatus] DEPOIS de alterar o status`, '\n');
-        // infLog = { 'folder': 'Registros', 'path': `leadChangeStatus.txt`, 'text': retApi }
+        // infLog = {'e': e, 'folder': 'Registros', 'path': `leadChangeStatus.txt`, 'text': retApi }
         // retLog = await log(infLog);
 
         ret['res'] = {
@@ -105,8 +107,8 @@ async function leadChangeStatus(inf) {
         ret['ret'] = true
 
         // ### LOG FUN ###
-        if (inf.logFun) {
-            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+        if (inf && inf.logFun) {
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {

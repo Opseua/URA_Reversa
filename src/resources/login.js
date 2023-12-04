@@ -1,10 +1,12 @@
 // let infLogin, retLogin // 'logFun': true,
-// infLogin = { 'aut': false }
+// infLogin = { 'e': e, 'aut': false }
 // retLogin = await login(infLogin)
 // console.log(retLogin)
 
+let e = import.meta.url;
 async function login(inf) {
     let ret = { 'ret': false };
+    e = inf && inf.e ? inf.e : e;
     try {
         let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, `[login] ANTES de autenticar`, '\n');
 
@@ -32,7 +34,7 @@ async function login(inf) {
         if (!retApi.ret || !retApi.res.body.includes('escolher.php')) {
             err = `[login] FALSE: retApi 1`
             console.log(err);
-            infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+            infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
             ret['msg'] = `Erro ao fazer login`;
             return ret
@@ -42,7 +44,7 @@ async function login(inf) {
 
         // ## LOG ## retApi
         err = `[login] LOG retApi`
-        infLog = { 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+        infLog = { 'e': e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
         retLog = await log(infLog);
 
         // [2] USUÁRIO [SELECIONAR]
@@ -62,7 +64,7 @@ async function login(inf) {
         if (!retApi.ret || retApi.res.code !== 200) {
             err = `[login] FALSE: retApi 2`
             console.log(err);
-            infLog = { 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+            infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
             ret['msg'] = `Erro ao pegar selecionar usuário`;
             return ret
@@ -70,11 +72,12 @@ async function login(inf) {
         ret['msg'] = `LOGIN: OK`;
         ret['ret'] = true
 
-        await new Promise(resolve => { setTimeout(resolve, 2500) })
+        console.log('ESPERANDO 15 SEGUNDOS APÓS O LOGIN')
+        await new Promise(resolve => { setTimeout(resolve, 15000) })
 
         // ### LOG FUN ###
-        if (inf.logFun) {
-            let infFile = { 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
+        if (inf && inf.logFun) {
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
             infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
         }
     } catch (e) {
