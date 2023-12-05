@@ -7,18 +7,13 @@ let e = import.meta.url;
 async function leadGet(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {
-        const errs = async (err, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': err, 'inf': inf, 'catchGlobal': true }) } }
-        if (typeof window !== 'undefined') { window.addEventListener('error', (err) => errs(err, ret)); window.addEventListener('unhandledrejection', (err) => errs(err, ret)) }
-        else { process.on('uncaughtException', (err) => errs(err, ret)); process.on('unhandledRejection', (err) => errs(err, ret)) }
+        const errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } }
+        if (typeof window !== 'undefined') { window.addEventListener('error', (errC) => errs(errC, ret)); window.addEventListener('unhandledrejection', (errC) => errs(errC, ret)) }
+        else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        let infApi, retApi, infRegex, retRegex, infLog, retLog, time, err
+        let infApi, retApi, infRegex, retRegex, infLog, retLog, err
         let aut = inf && inf.aut ? inf.aut : 'aaaa';
-        let loginOk = inf && inf.login ? inf.login : 'aaaa';
-        let password = inf && inf.password ? inf.password : 'aaaa';
-        let interfaceOk = inf && inf.interface ? inf.interface : 'aaaa';
-        let id_interfaceOk = inf && inf.id_interface ? inf.id_interface : 'aaaa';
-        let subatualOk = inf && inf.subatual ? inf.subatual : 'aaaa';
         let leadId = inf && inf.leadId ? inf.leadId : `25799086`
 
         // API [PEGAR INF DO LEAD]
@@ -111,7 +106,7 @@ async function leadGet(inf) {
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
             return retApi
-        } else { retHtmlToJson = JSON.parse(retHtmlToJson.res.replaceAll('�', '').replaceAll('Ouvir Gravao', 'key').replaceAll('Baixar', 'value')) }
+        } else { retHtmlToJson = JSON.parse(retHtmlToJson.res.replace(/�/g, '').replace(/Ouvir Gravao/g, 'key').replace(/Baixar/g, 'value')) }
 
         if (!(retHtmlToJson instanceof Array)) {
             ret['msg'] = `Não achou a tabela do HTML`;
