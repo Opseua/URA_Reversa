@@ -10,28 +10,28 @@ async function server(inf) {
     try {
         let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, `server [URA_Reversa]`, '\n');
 
-        let infLog, retLog, infGoogleSheet, retGoogleSheet, err
+        let infLog, retLog, infGoogleSheets, retGoogleSheets, err
 
         // DADOS GLOBAIS DA PLANILHA E FAZER O PARSE
         gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO_[TELEIN]';
         let range = 'A2', id = gO.inf.id, tab = gO.inf.tab
-        infGoogleSheet = {
+        infGoogleSheets = {
             'action': 'get',
             'id': id,
             'tab': tab,
             'range': range,
         }
-        retGoogleSheet = await googleSheet(infGoogleSheet);
-        if (!retGoogleSheet.ret) {
+        retGoogleSheets = await googleSheets(infGoogleSheets);
+        if (!retGoogleSheets.ret) {
             err = `[server] Erro ao pegar dados para planilha`
             console.log(err);
-            infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheet }
+            infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
             retLog = await log(infLog);
-            return retGoogleSheet
+            return retGoogleSheets
         } else {
-            retGoogleSheet = retGoogleSheet.res[0][0]
+            retGoogleSheets = retGoogleSheets.res[0][0]
         }
-        gO.inf['json'] = JSON.parse(retGoogleSheet)
+        gO.inf['json'] = JSON.parse(retGoogleSheets)
         let colInf = inf && inf.col ? inf.col : gO.inf.json['colUra'];
         let autInf = inf && inf.aut ? inf.aut : gO.inf.json['autUra'];
         let conSplInf = inf && inf.conSpl ? inf.conSpl : gO.inf.json['conSpl'];
@@ -130,20 +130,20 @@ async function server(inf) {
                                     ]]
                                     let sheetSendNew = sheetSend[0].join(conSplInf)
 
-                                    infGoogleSheet = {
+                                    infGoogleSheets = {
                                         'action': 'send',
                                         'id': id,
                                         'tab': tab,
                                         'range': `${colInf}**`,
                                         'values': [[`${sheetSendNew}`]]
                                     }
-                                    retGoogleSheet = await googleSheet(infGoogleSheet);
-                                    if (!retGoogleSheet.ret) {
-                                        err = `[server] FALSE: retGoogleSheet`
+                                    retGoogleSheets = await googleSheets(infGoogleSheets);
+                                    if (!retGoogleSheets.ret) {
+                                        err = `[server] FALSE: retGoogleSheets`
                                         console.log(err);
-                                        infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheet }
+                                        infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
                                         retLog = await log(infLog);
-                                        return retGoogleSheet
+                                        return retGoogleSheets
                                     }
                                     console.log(`[${(index + 1).toString().padStart(2, '0')}] ID: ${sheetSend[0][0]} | TEL: ${sheetSend[0][5]} | SHEET OK `)
                                 }
