@@ -165,7 +165,7 @@ async function leads(inf) {
                         'date': data,
                         'status': value.colInd4 ? value.colInd4 : 'null',
                         'telAbrev': value.colInd1 ? value.colInd1 : 'null',
-                        'mailing': value.colInd7 ? value.colInd7 : 'null',
+                        'mailing': value.colInd7 ? value.colInd7.replace(/�/g, '') : 'null',
                     })
                 }
             }
