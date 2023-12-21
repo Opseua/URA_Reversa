@@ -40,6 +40,7 @@ async function server(inf) {
         let interfaceInf = inf && inf.interface ? inf.interface : gO.inf.json['interface'];
         let id_interfaceInf = inf && inf.id_interface ? inf.id_interface : gO.inf.json['id_interface'];
         let subatualInf = inf && inf.subatual ? inf.subatual : gO.inf.json['subatual'];
+        let scriptHour = inf && inf.scriptHour ? inf.scriptHour.split('|') : gO.inf.json['scriptHour'].split('|')
 
         for (let [index, value] of autInf.entries()) {
             if (value.name == 'PHPSESSID') {
@@ -54,8 +55,8 @@ async function server(inf) {
             time = dateHour().res;
             console.log(`\n${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec} ## COMEÇANDO LOOP: ${qtd} ##`)
 
-            // SEG <> SAB | 09:00 <> 18:59 (19h)
-            if (['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB',].includes(time.dayNam) && (Number(time.hou) > 8 & Number(time.hou) < 19)) {
+            // SEG <> SAB | [??:00] <> [??:00]
+            if (['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB',].includes(time.dayNam) && (Number(time.hou) > Number(scriptHour[0]) - 1 && Number(time.hou) < Number(scriptHour[1]))) {
 
                 // PEGAR NOVOS LEADS
                 let infLeads, retLeads
