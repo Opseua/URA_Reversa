@@ -54,8 +54,8 @@ async function server(inf) {
             time = dateHour().res;
             console.log(`\n${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec} ## COMEÇANDO LOOP: ${qtd} ##`)
 
-            // SEG <> SAB | 08:00 <> 19:59 (20h)
-            if (['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB',].includes(time.dayNam) && (Number(time.hou) > 7 & Number(time.hou) < 20)) {
+            // SEG <> SAB | 09:00 <> 18:59 (19h)
+            if (['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB',].includes(time.dayNam) && (Number(time.hou) > 8 & Number(time.hou) < 19)) {
 
                 // PEGAR NOVOS LEADS
                 let infLeads, retLeads
