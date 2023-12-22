@@ -23,7 +23,7 @@ async function server(inf) {
         }
         retGoogleSheets = await googleSheets(infGoogleSheets);
         if (!retGoogleSheets.ret) {
-            err = `[server] Erro ao pegar dados para planilha`
+            err = `$ Erro ao pegar dados para planilha`
             console.log(err);
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
             retLog = await log(infLog);
@@ -40,7 +40,7 @@ async function server(inf) {
         let interfaceInf = inf && inf.interface ? inf.interface : gO.inf.json['interface'];
         let id_interfaceInf = inf && inf.id_interface ? inf.id_interface : gO.inf.json['id_interface'];
         let subatualInf = inf && inf.subatual ? inf.subatual : gO.inf.json['subatual'];
-        let scriptHour = inf && inf.scriptHour ? inf.scriptHour.split('|') : gO.inf.json['scriptHour'].split('|')
+        let scriptHour = inf && inf.scriptHour ? inf.scriptHour.split('|') : gO.inf.json['scriptHourURA_Reversa'].split('|')
 
         for (let [index, value] of autInf.entries()) {
             if (value.name == 'PHPSESSID') {
@@ -76,7 +76,7 @@ async function server(inf) {
                 }
                 retLeads = await leads(infLeads);
                 if (!retLeads.ret) {
-                    err = `[server] FALSE: retLeads`
+                    err = `$ [server] FALSE: retLeads`
                     console.log(err);
                     infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads }
                     retLog = await log(infLog);
@@ -94,7 +94,7 @@ async function server(inf) {
                             infLeadGet = { 'e': e, 'aut': autInf, 'leadId': value.leadId }
                             retLeadGet = await leadGet(infLeadGet);
                             if (!retLeadGet.ret) {
-                                err = `[server] FALSE: retLeadGet`
+                                err = `$ [server] FALSE: retLeadGet`
                                 console.log(err);
                                 infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadGet }
                                 retLog = await log(infLog);
@@ -108,7 +108,7 @@ async function server(inf) {
                                 retLeadChangeStatus = await leadChangeStatus(infLeadChangeStatus);
                                 if (!retLeadChangeStatus.ret) {
                                     // if (!retLeadGet) { // →  TESTE
-                                    err = `[server] FALSE: retLeadChangeStatus`
+                                    err = `$ [server] FALSE: retLeadChangeStatus`
                                     console.log(err);
                                     infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadChangeStatus }
                                     retLog = await log(infLog);
@@ -140,7 +140,7 @@ async function server(inf) {
                                     }
                                     retGoogleSheets = await googleSheets(infGoogleSheets);
                                     if (!retGoogleSheets.ret) {
-                                        err = `[server] FALSE: retGoogleSheets`
+                                        err = `$ [server] FALSE: retGoogleSheets`
                                         console.log(err);
                                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
                                         retLog = await log(infLog);

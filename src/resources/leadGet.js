@@ -24,7 +24,7 @@ async function leadGet(inf) {
         };
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('Tecla Digitada')) {
-            err = `[leadGet] FALSE: retApi 1`
+            err = `$ [leadGet] FALSE: retApi 1`
             console.log(err);
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
@@ -33,7 +33,7 @@ async function leadGet(inf) {
             infLogin = { 'e': e, 'aut': aut }
             retLogin = await login(infLogin);
             if (!retLogin.ret) {
-                err = `[leadGet] FALSE: retLogin`
+                err = `$ [leadGet] FALSE: retLogin`
                 console.log(err);
                 infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin }
                 retLog = await log(infLog);
@@ -46,13 +46,13 @@ async function leadGet(inf) {
                 retApi = await api(infApi);
                 if (!retApi.ret || !retApi.res.body.includes('tirarverde')) {
                     if (retApi.res && retApi.res.body.includes('para acessar as funcionalidades')) {
-                        err = `[leadGet] sem permissão para acessar as funcionalidades`
+                        err = `$ [leadGet] sem permissão para acessar as funcionalidades`
                         console.log(err);
                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         retLog = await log(infLog);
                         return ret
                     } else {
-                        err = `[leadGet] FALSE: retAp 2`
+                        err = `$ [leadGet] FALSE: retAp 2`
                         console.log(err);
                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         retLog = await log(infLog);
@@ -76,7 +76,7 @@ async function leadGet(inf) {
         // retLog = await log(infLog);
 
         // ## LOG ## retApi
-        err = `[leadGet] LOG retApi ${leadId}`
+        err = `$ [leadGet] LOG retApi ${leadId}`
         infLog = { 'e': e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
         retLog = await log(infLog);
 
@@ -85,7 +85,7 @@ async function leadGet(inf) {
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['1']) {
             ret['msg'] = `Não achou o telefone do lead`;
-            err = `[leadGet] ${ret.msg}`
+            err = `$ [leadGet] ${ret.msg}`
             // console.log(err);
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
@@ -101,7 +101,7 @@ async function leadGet(inf) {
         }
         retHtmlToJson = await htmlToJson(infHtmlToJson)
         if (!retHtmlToJson.ret) {
-            err = `[leadGet] FALSE: retHtmlToJson`
+            err = `$ [leadGet] FALSE: retHtmlToJson`
             console.log(err);
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
@@ -110,7 +110,7 @@ async function leadGet(inf) {
 
         if (!(retHtmlToJson instanceof Array)) {
             ret['msg'] = `Não achou a tabela do HTML`;
-            err = `[leadGet] ${ret.msg}`
+            err = `$ [leadGet] ${ret.msg}`
             console.log(err);
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
@@ -118,7 +118,7 @@ async function leadGet(inf) {
         }
 
         if (!retHtmlToJson.length > 0) {
-            err = `[leadGet] retHtmlToJson ARRAY VAZIA`
+            err = `$ [leadGet] retHtmlToJson ARRAY VAZIA`
             console.log(err);
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
