@@ -155,7 +155,7 @@ async function server(inf) {
                     ret['msg'] = `SERVER: OK`
                 }
             } else {
-                console.log(`\n${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec} ## FORA DO DIA E HORÁRIO ##`)
+                console.log(`\n${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec} ## FORA DO DIA E HORÁRIO (${scriptHour[0]}:00 <> ${scriptHour[1]}:00) ##`)
             }
 
             time = dateHour().res;
