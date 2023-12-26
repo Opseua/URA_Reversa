@@ -3,15 +3,13 @@
 *.vscode*
 *.z_tempCodeRunner*
 *.z_CR*
-*.json*
+*.json
 !*package.json*
 *log/*
 *teste*
 *Teste*
 *TESTE*
-*exe*
 *bat
-*z_Outros*
 *blueStacks*
 *googleOAuth*
 *package-lock.json*
