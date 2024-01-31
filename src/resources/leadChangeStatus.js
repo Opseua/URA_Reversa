@@ -24,7 +24,7 @@ async function leadChangeStatus(inf) {
 
         // API [ALTERAR STATUS DO LEAD]
         infApi = {
-            'method': 'POST', 'url': `https://interface.telein.com.br/index.php?link=247&tipo=sucesso&id_contato=${leadId}`,
+            'e': e, 'method': 'POST', 'url': `https://interface.telein.com.br/index.php?link=247&tipo=sucesso&id_contato=${leadId}`,
             'headers': {
                 'Cookie': aut,
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -57,7 +57,7 @@ async function leadChangeStatus(inf) {
                 return retApi
             } else {
                 infApi = {
-                    'method': 'POST', 'url': `https://interface.telein.com.br/index.php?link=247&tipo=sucesso&id_contato=${leadId}`,
+                    'e': e, 'method': 'POST', 'url': `https://interface.telein.com.br/index.php?link=247&tipo=sucesso&id_contato=${leadId}`,
                     'headers': {
                         'Cookie': aut,
                         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',

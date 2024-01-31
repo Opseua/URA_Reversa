@@ -31,7 +31,7 @@ async function leads(inf) {
 
         // API [LISTA DE LEADS]
         infApi = {
-            'method': 'GET', 'url': `https://interface.telein.com.br/index.php?link=246`,
+            'e': e, 'method': 'GET', 'url': `https://interface.telein.com.br/index.php?link=246`,
             'headers': { 'Cookie': aut, }
         };
         retApi = await api(infApi);
@@ -60,7 +60,7 @@ async function leads(inf) {
                 return retApi
             } else {
                 infApi = {
-                    'method': 'GET', 'url': `https://interface.telein.com.br/index.php?link=246`,
+                    'e': e, 'method': 'GET', 'url': `https://interface.telein.com.br/index.php?link=246`,
                     'headers': { 'Cookie': aut, }
                 };
                 retApi = await api(infApi);
@@ -101,7 +101,7 @@ async function leads(inf) {
         retLog = await log(infLog);
 
         // PEGAR [ID LEAD]
-        infRegex = { 'pattern': `index.php?link=247&id_contato=(.*?)"`, 'text': retApi }
+        infRegex = { 'e': e, 'pattern': `index.php?link=247&id_contato=(.*?)"`, 'text': retApi }
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['5']) {
             ret['msg'] = `Não achou o id do lead`;
@@ -115,7 +115,7 @@ async function leads(inf) {
 
         // HTML → JSON
         let infHtmlToJson, retHtmlToJson
-        infHtmlToJson = { 'randomCol': true, 'html': retApi }
+        infHtmlToJson = { 'e': e, 'randomCol': true, 'html': retApi }
         retHtmlToJson = await htmlToJson(infHtmlToJson);
         if (!retHtmlToJson.ret) {
             err = `$ [leads] FALSE: retHtmlToJson`

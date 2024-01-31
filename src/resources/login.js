@@ -24,7 +24,7 @@ async function login(inf) {
 
         // [1] LOGIN
         infApi = {
-            'method': 'POST', 'url': `https://interface.telein.com.br/op_access.php`,
+            'e': e, 'method': 'POST', 'url': `https://interface.telein.com.br/op_access.php`,
             'headers': {
                 'Cookie': aut,
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -53,7 +53,7 @@ async function login(inf) {
 
         // [2] USUÁRIO [SELECIONAR]
         infApi = {
-            'method': 'POST', 'url': `https://interface.telein.com.br/alterarinterface.php`,
+            'e': e, 'method': 'POST', 'url': `https://interface.telein.com.br/alterarinterface.php`,
             'headers': {
                 'Cookie': aut,
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',

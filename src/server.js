@@ -16,7 +16,7 @@ async function server(inf) {
         gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO_[TELEIN]';
         let range = 'A2', id = gO.inf.id, tab = gO.inf.tab
         infGoogleSheets = {
-            'action': 'get',
+            'e': e, 'action': 'get',
             'id': id,
             'tab': tab,
             'range': range,
@@ -132,7 +132,7 @@ async function server(inf) {
                                     let sheetSendNew = sheetSend[0].join(conSplInf)
 
                                     infGoogleSheets = {
-                                        'action': 'send',
+                                        'e': e, 'action': 'send',
                                         'id': id,
                                         'tab': tab,
                                         'range': `${colInf}**`,

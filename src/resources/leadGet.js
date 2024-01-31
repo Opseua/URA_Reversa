@@ -18,8 +18,7 @@ async function leadGet(inf) {
 
         // API [PEGAR INF DO LEAD]
         infApi = {
-
-            'method': 'GET', 'url': `https://interface.telein.com.br/index.php?link=247&id_contato=${leadId}`,
+            'e': e, 'method': 'GET', 'url': `https://interface.telein.com.br/index.php?link=247&id_contato=${leadId}`,
             'headers': { 'Cookie': aut, }
         };
         retApi = await api(infApi);
@@ -40,7 +39,7 @@ async function leadGet(inf) {
                 return retApi
             } else {
                 infApi = {
-                    'method': 'GET', 'url': `https://interface.telein.com.br/index.php?link=247&id_contato=${leadId}`,
+                    'e': e, 'method': 'GET', 'url': `https://interface.telein.com.br/index.php?link=247&id_contato=${leadId}`,
                     'headers': { 'Cookie': aut, }
                 };
                 retApi = await api(infApi);
@@ -81,7 +80,7 @@ async function leadGet(inf) {
         retLog = await log(infLog);
 
         // PEGAR [TELEFONE]
-        infRegex = { 'pattern': `Contato:(.*?)</h2>`, 'text': retApi }
+        infRegex = { 'e': e, 'pattern': `Contato:(.*?)</h2>`, 'text': retApi }
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['1']) {
             ret['msg'] = `Não achou o telefone do lead`;
@@ -96,7 +95,7 @@ async function leadGet(inf) {
         // HTML → JSON [TABELA]
         let infHtmlToJson, retHtmlToJson
         infHtmlToJson = {
-            'randomCol': false,
+            'e': e, 'randomCol': false,
             'html': retApi
         }
         retHtmlToJson = await htmlToJson(infHtmlToJson)
