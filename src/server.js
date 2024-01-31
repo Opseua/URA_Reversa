@@ -1,5 +1,5 @@
 await import('./resources/@export.js');
-let e = import.meta.url;
+let e = import.meta.url, ee = e
 async function server(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {
@@ -8,9 +8,9 @@ async function server(inf) {
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, `server [URA_Reversa]`, '\n');
+        logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[URA_Reversa]\n` })
 
-        let infLog, retLog, infGoogleSheets, retGoogleSheets, err
+        let infLog, retLog, infGoogleSheets, retGoogleSheets, err, time
 
         // DADOS GLOBAIS DA PLANILHA E FAZER O PARSE
         gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO_[TELEIN]';

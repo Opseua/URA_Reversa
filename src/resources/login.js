@@ -3,16 +3,16 @@
 // retLogin = await login(infLogin)
 // console.log(retLogin)
 
-let e = import.meta.url;
+let e = import.meta.url, ee = e
 async function login(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {
-        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
+        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
         if (typeof window !== 'undefined') { window.addEventListener('error', (errC) => errs(errC, ret)); window.addEventListener('unhandledrejection', (errC) => errs(errC, ret)) }
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        let time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, `[login] ANTES de autenticar`, '\n');
+        logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `ANTES DE AUTENTICAR` })
 
         let infApi, retApi, infRegex, retRegex, infLog, retLog, err
         let aut = inf && inf.aut ? inf.aut : 'aaaa';
@@ -37,7 +37,7 @@ async function login(inf) {
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('escolher.php')) {
             err = `$ [login] FALSE: retApi 1`
-            console.log(err);
+            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
             ret['msg'] = `Erro ao fazer login`;
@@ -67,7 +67,7 @@ async function login(inf) {
         retApi = await api(infApi);
         if (!retApi.ret || retApi.res.code !== 200) {
             err = `$ [login] FALSE: retApi 2`
-            console.log(err);
+            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
             ret['msg'] = `Erro ao pegar selecionar usuário`;
@@ -76,13 +76,13 @@ async function login(inf) {
         ret['msg'] = `LOGIN: OK`;
         ret['ret'] = true
 
-        console.log('ESPERANDO 15 SEGUNDOS APÓS O LOGIN')
+        logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `ESPERANDO 15 SEGUNDOS APÓS O LOGIN` })
         await new Promise(resolve => { setTimeout(resolve, 15000) })
 
         // ### LOG FUN ###
         if (inf && inf.logFun) {
-            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
-            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
     } catch (e) {
         let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });

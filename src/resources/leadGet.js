@@ -3,11 +3,11 @@
 // retLeadGet = await leadGet(infLeadGet);
 // console.log(retLeadGet)
 
-let e = import.meta.url;
+let e = import.meta.url, ee = e
 async function leadGet(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     if (catchGlobal) {
-        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; let retRegexE = await regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
+        let errs = async (errC, ret) => { if (!ret.stop) { ret['stop'] = true; regexE({ 'e': errC, 'inf': inf, 'catchGlobal': true }) } };
         if (typeof window !== 'undefined') { window.addEventListener('error', (errC) => errs(errC, ret)); window.addEventListener('unhandledrejection', (errC) => errs(errC, ret)) }
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
@@ -24,7 +24,7 @@ async function leadGet(inf) {
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('Tecla Digitada')) {
             err = `$ [leadGet] FALSE: retApi 1`
-            console.log(err);
+            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
             // REAUTENTICAR
@@ -33,7 +33,7 @@ async function leadGet(inf) {
             retLogin = await login(infLogin);
             if (!retLogin.ret) {
                 err = `$ [leadGet] FALSE: retLogin`
-                console.log(err);
+                logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
                 infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin }
                 retLog = await log(infLog);
                 return retApi
@@ -46,13 +46,13 @@ async function leadGet(inf) {
                 if (!retApi.ret || !retApi.res.body.includes('tirarverde')) {
                     if (retApi.res && retApi.res.body.includes('para acessar as funcionalidades')) {
                         err = `$ [leadGet] sem permissão para acessar as funcionalidades`
-                        console.log(err);
+                        logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         retLog = await log(infLog);
                         return ret
                     } else {
                         err = `$ [leadGet] FALSE: retAp 2`
-                        console.log(err);
+                        logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         retLog = await log(infLog);
                         return ret
@@ -65,15 +65,6 @@ async function leadGet(inf) {
             retApi = retApi.res.body
         }
 
-        // // TESTES [LER ARQUIVO]
-        // let infFile, retFile
-        // infFile = {'e': e, 'action': 'read', 'functionLocal': false, 'path': './log/LEAD_GET.txt' }
-        // retFile = await file(infFile); retApi = retFile.res
-
-        // time = dateHour().res; console.log(`${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, `[leadGet] DEPOIS de pegar o lead`, '\n');
-        // infLog = { 'e': e,'folder': 'Registros', 'path': `leadGet.txt`, 'text': retApi }
-        // retLog = await log(infLog);
-
         // ## LOG ## retApi
         err = `$ [leadGet] LOG retApi ${leadId}`
         infLog = { 'e': e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
@@ -85,7 +76,7 @@ async function leadGet(inf) {
         if (!retRegex.ret || !retRegex.res['1']) {
             ret['msg'] = `Não achou o telefone do lead`;
             err = `$ [leadGet] ${ret.msg}`
-            // console.log(err);
+            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
             return ret
@@ -101,7 +92,7 @@ async function leadGet(inf) {
         retHtmlToJson = await htmlToJson(infHtmlToJson)
         if (!retHtmlToJson.ret) {
             err = `$ [leadGet] FALSE: retHtmlToJson`
-            console.log(err);
+            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
             return retApi
@@ -110,7 +101,7 @@ async function leadGet(inf) {
         if (!(retHtmlToJson instanceof Array)) {
             ret['msg'] = `Não achou a tabela do HTML`;
             err = `$ [leadGet] ${ret.msg}`
-            console.log(err);
+            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
             return ret
@@ -118,7 +109,7 @@ async function leadGet(inf) {
 
         if (!retHtmlToJson.length > 0) {
             err = `$ [leadGet] retHtmlToJson ARRAY VAZIA`
-            console.log(err);
+            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
             return ret
@@ -192,8 +183,8 @@ async function leadGet(inf) {
 
         // ### LOG FUN ###
         if (inf && inf.logFun) {
-            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }, retFile
-            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; retFile = await file(infFile);
+            let infFile = { 'e': e, 'action': 'write', 'functionLocal': false, 'logFun': new Error().stack, 'path': 'AUTO', }
+            infFile['rewrite'] = false; infFile['text'] = { 'inf': inf, 'ret': ret }; file(infFile);
         }
     } catch (e) {
         let retRegexE = await regexE({ 'inf': inf, 'e': e, 'catchGlobal': false });
