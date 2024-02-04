@@ -5,4 +5,6 @@ await import('../../../Chrome_Extension/src/resources/@functions.js');
 await import('./leadChangeStatus.js')
 await import('./leadGet.js')
 await import('./leads.js')
+await import('./leadsJsf.js')
 await import('./login.js')
+await import('./loginJsf.js')
