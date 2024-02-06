@@ -25,7 +25,6 @@ async function leadsJsf(inf) {
         let loginOk = inf && inf.loginJsf ? inf.loginJsf : 'aaaa';
         let password = inf && inf.passwordJsf ? inf.passwordJsf : 'aaaa';
 
-
         // DADOS GLOBAIS DA PLANILHA E FAZER O PARSE
         gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO_[TELEIN]';
         let range = 'A2', id = gO.inf.id, tab = gO.inf.tab
@@ -52,8 +51,9 @@ async function leadsJsf(inf) {
         let lastLead = inf && inf.lastLeadURA_ReversaJsf ? inf.lastLeadURA_ReversaJsf : gO.inf.json['lastLeadURA_ReversaJsf'];
 
         // DATA INICIAL À 5 DIAS ATRÁS
-        let timeSta = dateHour(-(86400 * 5)).res
+        let timeSta = dateHour(-(86400 * 15)).res
         let timeEnd = dateHour().res
+        console.log(`${timeSta.day}/${timeSta.mon}`)
         let url = `http://200.150.207.26/azcall/relatorio/relTbu.php?dt_inicial=${timeSta.day}/${timeSta.mon}/2024%200:00&dt_final=${timeEnd.day}/${timeEnd.mon}/2024%2023:59&telefone=&telefonetype=1&nome=&camp=&digito=1&nometype=1&Camp\[\]=&&pagina=1&button4=pesquisar`
 
         // API [LISTA DE LEADS]
@@ -61,52 +61,20 @@ async function leadsJsf(inf) {
             'e': e, 'method': 'GET', 'url': url,
             'headers': { 'Cookie': aut, }
         };
-        // retApi = await api(infApi);
-
+        retApi = await api(infApi);
 
         // TESTES
-        let infFile, retFile // 'logFun': true, 'raw': true,         rewrite TRUE → adicionar no mesmo arquivo
-        infFile = { 'e': e, 'action': 'read', 'functionLocal': false, 'path': "D:/ARQUIVOS/PROJETOS/URA_Reversa/LEADS.txt" }
-        retFile = await file(infFile);
-        retApi = { 'ret': true, 'res': { 'body': retFile.res } }
-
+        // let infFile, retFile // 'logFun': true, 'raw': true,         rewrite TRUE → adicionar no mesmo arquivo
+        // infFile = { 'e': e, 'action': 'read', 'functionLocal': false, 'path': "D:/ARQUIVOS/PROJETOS/URA_Reversa/LEADS.txt" }
+        // retFile = await file(infFile);
+        // retApi = { 'ret': true, 'res': { 'body': retFile.res } }
 
         if (!retApi.ret || !retApi.res.body.includes('Campanha')) {
             err = `$ [leads] FALSE: retApi 1`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
-            // REAUTENTICAR
-            let infLogin, retLogin
-            infLogin = {
-                'e': e,
-                'aut': aut,
-                'login': loginOk,
-                'password': password,
-            }
-            retLogin = await loginJsf(infLogin);
-            if (!retLogin.ret) {
-                err = `$ [leads] FALSE: retLogin`
-                logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
-                infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin }
-                retLog = await log(infLog);
-                return retApi
-            } else {
-                infApi = {
-                    'e': e, 'method': 'GET', 'url': url,
-                    'headers': { 'Cookie': aut, }
-                };
-                retApi = await api(infApi);
-                if (!retApi.ret || !retApi.res.body.includes('Campanha')) {
-                    err = `$ [leads] FALSE: retApi 2`
-                    logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
-                    infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
-                    retLog = await log(infLog);
-                    return ret
-                } else {
-                    retApi = retApi.res.body
-                }
-            }
+            return ret
         } else {
             retApi = retApi.res.body
         }
@@ -160,33 +128,49 @@ async function leadsJsf(inf) {
 
         // PEGAR LEADS
         let sendLeads = lastLead == 'NADA' ? true : false
-        for (let [index, value] of retHtmlToJson.reverse().entries()) {
-            // PEGAR O LEAD
-            if (sendLeads) {
-                let data = new Date(value.col2);
-                let day = data.getDate().toString().padStart(2, '0');
-                let mon = (data.getMonth() + 1).toString().padStart(2, '0');
-                let yea = data.getFullYear().toString();
-                let hou = data.getHours().toString().padStart(2, '0');
-                let min = data.getMinutes().toString().padStart(2, '0');
-                let sec = data.getSeconds().toString().padStart(2, '0');
-                data = `${day}/${mon}/${yea} ${hou}:${min}:${sec}`;
-                leadsNew.push({
-                    'leadId': `${yea}-${mon}-${day}_${hou}.${min}.${sec}-${value.col4}`,
-                    'date': data,
-                    'tel': value.col4 ? value.col4 : 'null',
-                    'cnpj': value.col5 ? value.col5 : 'null',
-                    'razaoSocial': 'RAZAO SOCIAL AQUI',
-                    'email': 'emailAqui@gmail.com',
-                    'administrador': value.col3 ? value.col3 : 'null',
-                    'mailing': value.col6 ? value.col6 : 'null',
-                })
-            }
-            // PERMITIR NOVOS LEADS (MANTER NO FINAL!!!)
-            if (lastLead.includes(`${value.col5}${conSplInf}${value.col4}`)) {
-                sendLeads = true
+        function newLeads(inf) {
+
+            for (let [index, value] of retHtmlToJson.reverse().entries()) {
+                // PEGAR O LEAD
+                if (sendLeads) {
+                    let partes = value.col2.split(' ');
+                    let data = partes[0].split('/');
+                    let hora = partes[1].split(':');
+                    let day = parseInt(data[0], 10).toString().padStart(2, '0');
+                    let mon = parseInt(data[1], 10).toString().padStart(2, '0');
+                    let yea = parseInt(data[2], 10).toString().padStart(4, '0');;
+                    let hou = parseInt(hora[0], 10).toString().padStart(2, '0');
+                    let min = parseInt(hora[1], 10).toString().padStart(2, '0');
+                    let sec = parseInt(hora[2], 10).toString().padStart(2, '0');
+                    data = `${day}/${mon}/${yea} ${hou}:${min}:${sec}`;
+                    leadsNew.push({
+                        'leadId': `${yea}-${mon}-${day}_${hou}.${min}.${sec}-${value.col4}`,
+                        'date': data,
+                        'tel': value.col4 ? value.col4 : 'null',
+                        'cnpj': value.col5 ? value.col5 : 'null',
+                        'razaoSocial': value.col3 ? value.col3 : 'null',
+                        'email': 'sem@gmail.com',
+                        'administrador': value.col3 ? value.col3 : 'null',
+                        'mailing': value.col6 ? value.col6 : 'null',
+                    })
+                }
+                // PERMITIR NOVOS LEADS (MANTER NO FINAL!!!)
+                if (lastLead.includes(`${value.col5}${conSplInf}${value.col4}`)) {
+                    sendLeads = true
+                }
             }
         }
+        newLeads()
+        console.log(leadsNew.length)
+
+        // PEGAR TODOS OS LEADS DA PÁGINA (SE NÃO ENCONTRAR O 'lastLead')
+        if (leadsNew.length == 0 && !sendLeads) {
+            sendLeads = true
+            newLeads()
+            console.log(leadsNew.length)
+        }
+
+        // return ret
 
         ret['res'] = leadsNew
         ret['msg'] = `LEADS: OK`

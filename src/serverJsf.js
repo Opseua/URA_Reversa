@@ -83,7 +83,7 @@ async function serverJsf(inf) {
                             let sheetSend = [[
                                 value.leadId, // LEAD ID
                                 `${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`, // DATA DA CONSULTA
-                                value.mailing,
+                                `(JSF) ${value.mailing}`,
                                 value.date, // DATA URA
                                 value.cnpj,
                                 value.tel,
