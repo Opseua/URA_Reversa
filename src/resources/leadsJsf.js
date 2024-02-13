@@ -22,8 +22,6 @@ async function leadsJsf(inf) {
     try {
         let infApi, retApi, infRegex, retRegex, infLog, retLog, err, time = dateHour().res, infGoogleSheets, retGoogleSheets
         let aut = inf && inf.autJsf ? inf.autJsf : 'aaaa';
-        let loginOk = inf && inf.loginJsf ? inf.loginJsf : 'aaaa';
-        let password = inf && inf.passwordJsf ? inf.passwordJsf : 'aaaa';
 
         // DADOS GLOBAIS DA PLANILHA E FAZER O PARSE
         gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO_[TELEIN]';
@@ -128,7 +126,7 @@ async function leadsJsf(inf) {
 
         // PEGAR LEADS
         let sendLeads = lastLead == 'NADA' ? true : false
-        function newLeads(inf) {
+        function newLeads() {
 
             for (let [index, value] of retHtmlToJson.reverse().entries()) {
                 // PEGAR O LEAD

@@ -2,6 +2,7 @@
 *__pycache__*
 *.vscode*
 *.z_tempCodeRunner*
+*.z_temp*
 *.z_CR*
 *.json
 !*package.json*
