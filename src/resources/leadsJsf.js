@@ -49,9 +49,8 @@ async function leadsJsf(inf) {
         let lastLead = inf && inf.lastLeadURA_ReversaJsf ? inf.lastLeadURA_ReversaJsf : gO.inf.json['lastLeadURA_ReversaJsf'];
 
         // DATA INICIAL À 5 DIAS ATRÁS
-        let timeSta = dateHour(-(86400 * 15)).res
+        let timeSta = dateHour(-(86400 * 5)).res
         let timeEnd = dateHour().res
-        console.log(`${timeSta.day}/${timeSta.mon}`)
         let url = `http://200.150.207.26/azcall/relatorio/relTbu.php?dt_inicial=${timeSta.day}/${timeSta.mon}/2024%200:00&dt_final=${timeEnd.day}/${timeEnd.mon}/2024%2023:59&telefone=&telefonetype=1&nome=&camp=&digito=1&nometype=1&Camp\[\]=&&pagina=1&button4=pesquisar`
 
         // API [LISTA DE LEADS]
@@ -69,7 +68,7 @@ async function leadsJsf(inf) {
 
         if (!retApi.ret || !retApi.res.body.includes('Campanha')) {
             err = `$ [leads] FALSE: retApi 1`
-            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
             return ret
@@ -88,7 +87,7 @@ async function leadsJsf(inf) {
         if (!retRegex.ret || !retRegex.res['3']) {
             ret['msg'] = `Não achou a tabela`;
             err = `$ [leads] ${ret.msg}`
-            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
             return ret
@@ -101,7 +100,7 @@ async function leadsJsf(inf) {
         retHtmlToJson = await htmlToJsonNew(infHtmlToJson);
         if (!retHtmlToJson.ret || retHtmlToJson.res.length < 1) {
             err = `$ [leads] FALSE: retHtmlToJson`
-            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
             return retHtmlToJson
@@ -113,7 +112,7 @@ async function leadsJsf(inf) {
         let leadsNew = []
         if (!retHtmlToJson.length > 0) {
             err = `$ [leads] retHtmlToJson ARRAY VAZIA`
-            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
             return ret
@@ -159,7 +158,6 @@ async function leadsJsf(inf) {
             }
         }
         newLeads()
-        console.log(leadsNew.length)
 
         // PEGAR TODOS OS LEADS DA PÁGINA (SE NÃO ENCONTRAR O 'lastLead')
         if (leadsNew.length == 0 && !sendLeads) {
