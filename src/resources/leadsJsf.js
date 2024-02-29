@@ -24,7 +24,7 @@ async function leadsJsf(inf) {
         let aut = inf && inf.autJsf ? inf.autJsf : 'aaaa';
 
         // DADOS GLOBAIS DA PLANILHA E FAZER O PARSE
-        gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO_[TELEIN]';
+        gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO';
         let range = 'A2', id = gO.inf.id, tab = gO.inf.tab
         infGoogleSheets = {
             'e': e, 'action': 'get',

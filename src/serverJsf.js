@@ -13,7 +13,7 @@ async function serverJsf(inf) {
         let infLog, retLog, infGoogleSheets, retGoogleSheets, err, time
 
         // DADOS GLOBAIS DA PLANILHA E FAZER O PARSE
-        gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO_[TELEIN]';
+        gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO';
         let range = 'A2', id = gO.inf.id, tab = gO.inf.tab
         infGoogleSheets = {
             'e': e, 'action': 'get',
