@@ -68,7 +68,7 @@ async function leadsJsf(inf) {
 
         if (!retApi.ret || !retApi.res.body.includes('Campanha')) {
             err = `$ [leads] FALSE: retApi 1`
-            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            // console.log({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
             return ret
@@ -87,7 +87,7 @@ async function leadsJsf(inf) {
         if (!retRegex.ret || !retRegex.res['3']) {
             ret['msg'] = `Não achou a tabela`;
             err = `$ [leads] ${ret.msg}`
-            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            // console.log({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
             return ret
@@ -100,7 +100,7 @@ async function leadsJsf(inf) {
         retHtmlToJson = await htmlToJsonNew(infHtmlToJson);
         if (!retHtmlToJson.ret || retHtmlToJson.res.length < 1) {
             err = `$ [leads] FALSE: retHtmlToJson`
-            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            // console.log({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
             return retHtmlToJson
@@ -112,7 +112,7 @@ async function leadsJsf(inf) {
         let leadsNew = []
         if (!retHtmlToJson.length > 0) {
             err = `$ [leads] retHtmlToJson ARRAY VAZIA`
-            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            // console.log({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
             return ret

@@ -12,7 +12,7 @@ async function login(inf) {
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `ANTES DE AUTENTICAR` })
+        console.log({ 'e': e, 'ee': ee, 'write': false, 'msg': `ANTES DE AUTENTICAR` })
 
         let infApi, retApi, infRegex, retRegex, infLog, retLog, err
         let aut = inf && inf.aut ? inf.aut : 'aaaa';
@@ -37,7 +37,7 @@ async function login(inf) {
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('escolher.php')) {
             err = `$ [login] FALSE: retApi 1`
-            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            console.log({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
             ret['msg'] = `Erro ao fazer login`;
@@ -67,7 +67,7 @@ async function login(inf) {
         retApi = await api(infApi);
         if (!retApi.ret || retApi.res.code !== 200) {
             err = `$ [login] FALSE: retApi 2`
-            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            console.log({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
             ret['msg'] = `Erro ao pegar selecionar usuário`;
@@ -76,7 +76,7 @@ async function login(inf) {
         ret['msg'] = `LOGIN: OK`;
         ret['ret'] = true
 
-        logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `ESPERANDO 15 SEGUNDOS APÓS O LOGIN` })
+        console.log({ 'e': e, 'ee': ee, 'write': false, 'msg': `ESPERANDO 15 SEGUNDOS APÓS O LOGIN` })
         await new Promise(resolve => { setTimeout(resolve, 15000) })
 
         // ### LOG FUN ###

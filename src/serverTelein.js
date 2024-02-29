@@ -8,7 +8,7 @@ async function server(inf) {
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[URA_Reversa]\n` })
+        console.log({ 'e': e, 'ee': ee, 'write': false, 'msg': `[URA_Reversa]\n` })
 
         let infLog, retLog, infGoogleSheets, retGoogleSheets, err, time
 

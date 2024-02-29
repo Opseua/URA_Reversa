@@ -8,7 +8,7 @@ async function serverJsf(inf) {
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[URA_Reversa JSF]\n` })
+        // console.log({ 'e': e, 'ee': ee, 'write': false, 'msg': `[URA_Reversa JSF]\n` })
 
         let infLog, retLog, infGoogleSheets, retGoogleSheets, err, time
 
