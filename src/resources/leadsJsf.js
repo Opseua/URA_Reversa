@@ -166,6 +166,8 @@ async function leadsJsf(inf) {
             console.log(leadsNew.length)
         }
 
+        // TESTES
+        // console.log(leadsNew)
         // return ret
 
         ret['res'] = leadsNew
