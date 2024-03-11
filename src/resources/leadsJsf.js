@@ -97,7 +97,7 @@ async function leadsJsf(inf) {
         // HTML → JSON
         let infHtmlToJson, retHtmlToJson
         infHtmlToJson = { 'e': e, 'mode': '2', 'html': retRegex }
-        retHtmlToJson = await htmlToJsonNew(infHtmlToJson);
+        retHtmlToJson = await htmlToJson(infHtmlToJson);
         if (!retHtmlToJson.ret || retHtmlToJson.res.length < 1) {
             err = `$ [leads] FALSE: retHtmlToJson`
             // console.log({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
