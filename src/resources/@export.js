@@ -1,6 +1,9 @@
 // FUNCTIONS
 await import('../../../Chrome_Extension/src/resources/@functions.js');
-await getPath({ 'e': new Error(), 'mode': 1, 'keep': true })
+
+// DEFINIR → LETTER | ROOT | FUNCTION | PROJECT | FILE | LINE
+let retGetPathNew = await getPathNew({ 'e': new Error(), 'isFunction': false, })
+// globalWindow.devResWs = cng == 1 ? 'CHROME' : 'NODEJS';
 
 // FUNÇÕES DESSE PROJETO
 await import('./leadChangeStatus.js')

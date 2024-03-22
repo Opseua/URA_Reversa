@@ -121,7 +121,7 @@ async function serverJsf(inf) {
 
             time = dateHour().res;
             console.log(`\n${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec} ## ESPERANDO DELAY PARA O PRÓXIMO LOOP ##`)
-            await new Promise(resolve => { setTimeout(resolve, 300000) }) // [60000] 1 MINUTO [300000] 5 MINUTOS
+            await new Promise(resolve => { setTimeout(resolve, 60000) }) // [60000] 1 MINUTO [300000] 5 MINUTOS
         }
         console.log('FIM')
     } catch (err) {
