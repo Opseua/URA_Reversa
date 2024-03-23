@@ -8,7 +8,7 @@ async function server(inf) {
         else { process.on('uncaughtException', (errC) => errs(errC, ret)); process.on('unhandledRejection', (errC) => errs(errC, ret)) }
     }
     try {
-        console.log({ 'e': e, 'ee': ee, 'write': false, 'msg': `[URA_Reversa]\n` })
+        logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[URA_Reversa]\n` })
 
         let infLog, retLog, infGoogleSheets, retGoogleSheets, err, time
 
@@ -24,7 +24,7 @@ async function server(inf) {
         retGoogleSheets = await googleSheets(infGoogleSheets);
         if (!retGoogleSheets.ret) {
             err = `$ Erro ao pegar dados para planilha`
-            console.log(err);
+            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
             retLog = await log(infLog);
             return retGoogleSheets
@@ -53,7 +53,7 @@ async function server(inf) {
         while (!stop) {
             qtd++;
             time = dateHour().res;
-            console.log(`\n${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec} ## COMEÇANDO LOOP: ${qtd} ##`)
+            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `## COMEÇANDO LOOP: ${qtd} ##` });
 
             // SEG <> SAB | [??:00] <> [??:00]
             if (['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB',].includes(time.dayNam) && (Number(time.hou) > Number(scriptHour[0]) - 1 && Number(time.hou) < Number(scriptHour[1]))) {
@@ -77,7 +77,7 @@ async function server(inf) {
                 retLeads = await leads(infLeads);
                 if (!retLeads.ret) {
                     err = `$ [server] FALSE: retLeads`
-                    console.log(err);
+                    logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
                     infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads }
                     retLog = await log(infLog);
                 } else {
@@ -85,7 +85,7 @@ async function server(inf) {
 
                     // SÓ RODAR SE O RETORNO DE leads FOR ARRAY
                     if (retLeads instanceof Array) {
-                        console.log(`${retLeads.length} LEADS COM O STATUS: '${infLeads.status}'`)
+                        logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${retLeads.length} LEADS COM O STATUS: '${infLeads.status}'` });
 
                         // PEGAR INF | ALTERAR STATUS | MANDAR PARA PLANILHA
                         for (let [index, value] of retLeads.entries()) {
@@ -95,12 +95,12 @@ async function server(inf) {
                             retLeadGet = await leadGet(infLeadGet);
                             if (!retLeadGet.ret) {
                                 err = `$ [server] FALSE: retLeadGet`
-                                console.log(err);
+                                logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
                                 infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadGet }
                                 retLog = await log(infLog);
                             } else {
                                 retLeadGet = retLeadGet.res
-                                // console.log(`LEAD ID: ${value.leadId} | TELEFONE: ${retLeadGet.tel}`)
+                                // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `LEAD ID: ${value.leadId} | TELEFONE: ${retLeadGet.tel}` });
 
                                 // ###  ALTERAR STATUS
                                 let infLeadChangeStatus, retLeadChangeStatus
@@ -109,7 +109,7 @@ async function server(inf) {
                                 if (!retLeadChangeStatus.ret) {
                                     // if (!retLeadGet) { // →  TESTE
                                     err = `$ [server] FALSE: retLeadChangeStatus`
-                                    console.log(err);
+                                    logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
                                     infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadChangeStatus }
                                     retLog = await log(infLog);
                                 } else {
@@ -141,12 +141,12 @@ async function server(inf) {
                                     retGoogleSheets = await googleSheets(infGoogleSheets);
                                     if (!retGoogleSheets.ret) {
                                         err = `$ [server] FALSE: retGoogleSheets`
-                                        console.log(err);
+                                        logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
                                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
                                         retLog = await log(infLog);
                                         return retGoogleSheets
                                     }
-                                    console.log(`[${(index + 1).toString().padStart(2, '0')}] ID: ${sheetSend[0][0]} | TEL: ${sheetSend[0][5]} | SHEET OK `)
+                                    logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[${(index + 1).toString().padStart(2, '0')}] ID: ${sheetSend[0][0]} | TEL: ${sheetSend[0][5]} | SHEET OK` });
                                 }
                             }
                         }
@@ -155,14 +155,13 @@ async function server(inf) {
                     ret['msg'] = `SERVER: OK`
                 }
             } else {
-                console.log(`\n${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec} ## FORA DO DIA E HORÁRIO (${scriptHour[0]}:00 <> ${scriptHour[1]}:00) ##`)
+                logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `## FORA DO DIA E HORÁRIO (${scriptHour[0]}:00 <> ${scriptHour[1]}:00) ##` });
             }
 
             time = dateHour().res;
             console.log(`\n${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec} ## ESPERANDO DELAY PARA O PRÓXIMO LOOP ##`)
             await new Promise(resolve => { setTimeout(resolve, 300000) }) // [60000] 1 MINUTO [300000] 5 MINUTOS
         }
-        console.log('FIM')
     } catch (err) {
         let retRegexE = await regexE({ 'inf': inf, 'e': err, 'catchGlobal': false });
         ret['msg'] = retRegexE.res

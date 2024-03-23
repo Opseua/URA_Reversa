@@ -35,7 +35,7 @@ async function leadsJsf(inf) {
         retGoogleSheets = await googleSheets(infGoogleSheets);
         if (!retGoogleSheets.ret) {
             err = `$ Erro ao pegar dados para planilha`
-            console.log(err);
+            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
             retLog = await log(infLog);
             return retGoogleSheets
@@ -68,7 +68,7 @@ async function leadsJsf(inf) {
 
         if (!retApi.ret || !retApi.res.body.includes('Campanha')) {
             err = `$ [leads] FALSE: retApi 1`
-            // console.log({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
             return ret
@@ -87,7 +87,7 @@ async function leadsJsf(inf) {
         if (!retRegex.ret || !retRegex.res['3']) {
             ret['msg'] = `Não achou a tabela`;
             err = `$ [leads] ${ret.msg}`
-            // console.log({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
             return ret
@@ -100,7 +100,7 @@ async function leadsJsf(inf) {
         retHtmlToJson = await htmlToJson(infHtmlToJson);
         if (!retHtmlToJson.ret || retHtmlToJson.res.length < 1) {
             err = `$ [leads] FALSE: retHtmlToJson`
-            // console.log({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
             return retHtmlToJson
@@ -112,7 +112,7 @@ async function leadsJsf(inf) {
         let leadsNew = []
         if (!retHtmlToJson.length > 0) {
             err = `$ [leads] retHtmlToJson ARRAY VAZIA`
-            // console.log({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
             return ret
@@ -163,11 +163,11 @@ async function leadsJsf(inf) {
         if (leadsNew.length == 0 && !sendLeads) {
             sendLeads = true
             newLeads()
-            console.log(leadsNew.length)
+            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${leadsNew.length}` });
         }
 
         // TESTES
-        // console.log(leadsNew)
+        // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${leadsNew}` });
         // return ret
 
         ret['res'] = leadsNew
