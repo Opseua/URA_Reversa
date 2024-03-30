@@ -126,7 +126,6 @@ async function leadsJsf(inf) {
         // PEGAR LEADS
         let sendLeads = lastLead == 'NADA' ? true : false
         function newLeads() {
-
             for (let [index, value] of retHtmlToJson.reverse().entries()) {
                 // PEGAR O LEAD
                 if (sendLeads) {
