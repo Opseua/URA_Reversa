@@ -1,4 +1,5 @@
 await import('./resources/@export.js');
+
 let e = import.meta.url, ee = e
 async function server(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;

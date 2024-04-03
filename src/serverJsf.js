@@ -1,4 +1,5 @@
 await import('./resources/@export.js');
+
 let e = import.meta.url, ee = e
 async function serverJsf(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
@@ -121,7 +122,7 @@ async function serverJsf(inf) {
 
             time = dateHour().res;
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `## ESPERANDO DELAY PARA O PRÓXIMO LOOP ##` });
-            await new Promise(resolve => { setTimeout(resolve, 60000) }) // [60000] 1 MINUTO [300000] 5 MINUTOS
+            await new Promise(resolve => { setTimeout(resolve, 180 * 1000) }) // SEGUNDOS
         }
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, 'catchGlobal': false });
