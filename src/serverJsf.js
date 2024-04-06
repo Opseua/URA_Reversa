@@ -111,6 +111,7 @@ async function serverJsf(inf) {
                                 return retGoogleSheets
                             }
                             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[${(index + 1).toString().padStart(2, '0')}] ID: ${sheetSend[0][0]} | TEL: ${sheetSend[0][5]} | SHEET OK` });
+                            await new Promise(resolve => { setTimeout(resolve, 5 * 1000) }) // SEGUNDOS
                         }
                     }
                     ret['ret'] = true
