@@ -4,7 +4,7 @@ set "letra=%letra:~0,1%" & set "local=%local:~0,-1%" & set "arquivo=%~nx0" & set
 set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1" & set "arg2=%~2" & set "arg3=%~3" & set "arg4=%~4"
 
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
-if "!arg1!" equ "" !fileMsg! "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND" & exit
+if "!arg1!" equ "" "!fileMsg!" "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND" & exit
 
 rem set "start=ERRO" & set "adm=ERRO" & NET SESSION >nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
 
@@ -22,11 +22,11 @@ for /f "tokens=1,2,3,4,5,6 delims=\" %%a in ("!local!") do ( set "project=%%d" &
 set "outrosAdd=!outrosAdd:z_Outros_=%replace%!" & set "scriptType=ERRO"
 set "mode=ALWAYSUP" & set "root=!letra!:\ARQUIVOS\PROJETOS" & set "fileScript=!root!\!project!\src\!outrosAdd!.js" & cd\ & !letra!: & cd !root!\!project!
 rem #### ↑↑↑↑↑↑↑↑↑ ########################################################## (NAO SUBIR OS 'if'!!!)
-if "!mode!"=="PM2" ( set "scriptType=pm2JList" )
-if "!mode!"=="CMD" ( set "scriptType=processKeep" )
-if "!mode!"=="LEGACY" ( set "scriptType=processKeep" )
+if "!mode!"=="PM2" ( set "scriptType=processPm2JList" )
+if "!mode!"=="CMD" ( set "scriptType=processCmdKeep" )
+if "!mode!"=="LEGACY" ( set "scriptType=processCmdKeep" )
 if "!mode!"=="ALWAYSUP" ( set "scriptType=processAlwaysUp" )
-if "!scriptType!" equ "ERRO" @echo x=msgbox((Replace(  "[!local!\!arquivo!]\n'mode' deve ser\n'PM2', 'CMD', 'LEGACY', 'ALWAYSUP'"  ,"\n",Chr(13))))>%temp%\alert.vbs & start "" %temp%\alert.vbs & exit
+if "!scriptType!" equ "ERRO" "!fileMsg!" "[!local!\!arquivo!]\n'mode' deve ser\n'PM2', 'CMD', 'LEGACY', 'ALWAYSUP'" & exit
 endlocal & call "%letra%:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\%scriptType%.bat" "%arg1%_WINTP2" "%project%@%outrosAdd%" "%fileScript%" "%mode%" & setlocal enabledelayedexpansion
 set "ret=%ret2%"
 rem #####################################################################
