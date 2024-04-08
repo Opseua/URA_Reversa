@@ -46,7 +46,7 @@ if "!ret!"=="true" (
 :ENCONTROU_[SIM]
 rem !1_BACKGROUND! "explorer"
 rem sendData [status]
-set "url=http://18.191.205.200:8888/EC2_NODEJS"
+set "url=http://!confHostOld!:!confPortOld!/EC2_NODEJS"
 set "method=POST"
 set "headers=--header=Content-Type:application/json --header=chave1:valor1 --header=chave2:valor2"
 set "body={"fun":[{"securityPass":"Password@2023WebSocketRet","retInf":false,"name":"sendData","par":{"stop":false,"status1":"$ Script parado","id":"1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc","tab":"INDICAR_MANUAL","range":"A32"}}]}"
@@ -62,7 +62,7 @@ exit
 :ENCONTROU_[NAO]
 rem !1_BACKGROUND! "notepad"
 rem sendData [status]
-set "url=http://18.191.205.200:8888/EC2_NODEJS"
+set "url=http://!confHostOld!:!confPortOld!/EC2_NODEJS"
 set "method=POST"
 set "headers=--header=Content-Type:application/json --header=chave1:valor1 --header=chave2:valor2"
 set "body={"fun":[{"securityPass":"Password@2023WebSocketRet","retInf":false,"name":"sendData","par":{"stop":false,"status1":"# Aguarde......","id":"1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc","tab":"INDICAR_MANUAL","range":"A32"}}]}"
