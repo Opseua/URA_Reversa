@@ -29,7 +29,7 @@ rem →→→ COMO USAR
 rem o nome do arquivo do '.vbs' e o paramentro que sera passado ao '2_SRIPT.BAT' so e necessario criar uma copia e definir o nome
 
 rem ############################ ABRIR ARQUIVO COM PARAMETROS ############################
-file = letra + ":\ARQUIVOS\WINDOWS\BAT\RUN_PORTABLE\1_BACKGROUND.exe"
+file = letra + ":\ARQUIVOS\WINDOWS\BAT\RUN_PORTABLE\2_BACKGROUND.exe"
 par1 = localizacao + "\2_SCRIPT.bat"
 par2 = arquivoSemExtensao
 par3 = "PAR OU VAR 3"
