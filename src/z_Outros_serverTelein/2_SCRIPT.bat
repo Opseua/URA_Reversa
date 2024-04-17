@@ -17,7 +17,7 @@ rem Exemplo 1: # WebScraper # criar a copia do nodeExe: 'nodeWebScraper_serverC6
 rem Exemplo 2: # WebScraper # criar a pasta: '.\src\z_Outros_serverJucesp' → o arquivo a ser executado sera o '.\src\serverJucesp.js'
 rem Exemplo 2: # WebScraper # criar a copia do nodeExe: 'nodeWebScraper_serverJucesp.exe'
 
-rem MODE →→→ 'PM2' (RESTART [SIM]) / 'CMD' (RESTART [SIM]) / 'LEGACY' (RESTART [NAO]) / 'ALWAYSUP' (RESTART [SIM]) # PROJECT | OUTROSADD | ARQUIVO SCRIPT
+rem MODE →→→ 'PM2' (RESTART [SIM]) / 'CMD' (RESTART [SIM]) / 'LEGACY' (RESTART [NAO]) # PROJECT | OUTROSADD | ARQUIVO SCRIPT
 for /f "tokens=1,2,3,4,5,6 delims=\" %%a in ("!local!") do ( set "project=%%d" & set "outrosAdd=%%f" ) & set "replace="
 set "outrosAdd=!outrosAdd:z_Outros_=%replace%!" & set "scriptType=ERRO"
 set "mode=CMD" & set "root=!letra!:\ARQUIVOS\PROJETOS" & set "fileScript=!root!\!project!\src\!outrosAdd!.js" & cd\ & !letra!: & cd !root!\!project!
@@ -25,8 +25,7 @@ rem #### ↑↑↑↑↑↑↑↑↑ ###########################################
 if "!mode!"=="PM2" ( set "scriptType=processPm2JList" )
 if "!mode!"=="CMD" ( set "scriptType=processCmdKeep" )
 if "!mode!"=="LEGACY" ( set "scriptType=processCmdKeep" )
-if "!mode!"=="ALWAYSUP" ( set "scriptType=processAlwaysUp" )
-if "!scriptType!" equ "ERRO" "!fileMsg!" "[!local!\!arquivo!]\n'mode' deve ser\n'PM2', 'CMD', 'LEGACY', 'ALWAYSUP'" & exit
+if "!scriptType!" equ "ERRO" "!fileMsg!" "[!local!\!arquivo!]\n'mode' deve ser\n'PM2', 'CMD', 'LEGACY'" & exit
 endlocal & call "%letra%:\ARQUIVOS\PROJETOS\Chrome_Extension\src\scripts\BAT\%scriptType%.bat" "%arg1%_WINTP2" "%project%@%outrosAdd%" "%fileScript%" "%mode%" & setlocal enabledelayedexpansion
 set "ret=%ret2%"
 rem #####################################################################
