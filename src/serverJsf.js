@@ -130,7 +130,7 @@ async function serverRun(inf) {
         ret['msg'] = retRegexE.res
     };
 }
-// TODAS AS FUNÇÕES PRIMÁRIAS DO 'server.js' / 'serverC6.js' / 'serverJsf.js' DEVEM ser 'serverRun'!!!
+// TODAS AS FUNÇÕES PRIMÁRIAS DO 'server.js' / 'serverC6.js' / 'serverJsf.js' DEVEM SE CHAMAR 'serverRun'!!!
 serverRun()
 
 
