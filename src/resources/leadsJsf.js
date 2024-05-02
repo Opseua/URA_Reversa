@@ -44,7 +44,7 @@ async function leadsJsf(inf) {
         let lastLead = inf && inf.lastLeadURA_ReversaJsf ? inf.lastLeadURA_ReversaJsf : gO.inf.json['lastLeadURA_ReversaJsf'];
 
         // DATA INICIAL À 5 DIAS ATRÁS
-        let timeSta = dateHour(-(86400 * 5)).res
+        let timeSta = dateHour(`-${(86400 * 5)}`).res
         let timeEnd = dateHour().res
         let url = `http://200.150.207.26/azcall/relatorio/relTbu.php?dt_inicial=${timeSta.day}/${timeSta.mon}/2024%200:00&dt_final=${timeEnd.day}/${timeEnd.mon}/2024%2023:59&telefone=&telefonetype=1&nome=&camp=&digito=1&nometype=1&Camp\[\]=&&pagina=1&button4=pesquisar`
 
