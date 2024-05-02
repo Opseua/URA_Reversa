@@ -16,22 +16,14 @@ async function serverRun(inf) {
         // DADOS GLOBAIS DA PLANILHA E FAZER O PARSE
         gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO';
         let range = 'A2', id = gO.inf.id, tab = gO.inf.tab
-        infGoogleSheets = {
-            'e': e, 'action': 'get',
-            'id': id,
-            'tab': tab,
-            'range': range,
-        }
+        infGoogleSheets = { 'e': e, 'action': 'get', 'id': id, 'tab': tab, 'range': range, }
         retGoogleSheets = await googleSheets(infGoogleSheets);
         if (!retGoogleSheets.ret) {
             err = `$ Erro ao pegar dados para planilha`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
-            retLog = await log(infLog);
-            return retGoogleSheets
-        } else {
-            retGoogleSheets = retGoogleSheets.res[0][0]
-        }
+            retLog = await log(infLog); return retGoogleSheets
+        } else { retGoogleSheets = retGoogleSheets.res[0][0] }
         gO.inf['json'] = JSON.parse(retGoogleSheets)
         let colInf = inf && inf.col ? inf.col : gO.inf.json['colUra'];
         let autInf = inf && inf.autJsf ? inf.autJsf : gO.inf.json['autUraJsf'];
@@ -40,31 +32,32 @@ async function serverRun(inf) {
         let passwordInf = inf && inf.passwordJsf ? inf.passwordJsf : gO.inf.json['passwordJsf'];
         let scriptHour = inf && inf.scriptHourJsf ? inf.scriptHourJsf.split('|') : gO.inf.json['scriptHourURA_ReversaJsf'].split('|')
 
-        for (let [index, value] of autInf.entries()) {
-            if (value.name == 'PHPSESSID') {
-                autInf = `PHPSESSID=${value.value}`
-                break
+        for (let [index, value] of autInf.entries()) { if (value.name == 'PHPSESSID') { autInf = `PHPSESSID=${value.value}`; break } }
+
+        async function keepRunning() {
+            time = dateHour().res;
+            infGoogleSheets = { 'e': e, 'action': 'send', 'id': `1tLiyYX_x4BfF1ZWuo0OI0IuM7PVfIYEphMq9xg0K7TQ`, 'tab': `INDICAR_AUTOMATICO`, 'range': `A138`, 'values': [[`${time.tim} | Rodando: serverJsf`]] }
+            retGoogleSheets = await googleSheets(infGoogleSheets)
+            if (!retGoogleSheets.ret) {
+                err = `$ Erro ao pegar dados para planilha`
+                logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
+                infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
+                retLog = await log(infLog); return retGoogleSheets
             }
         }
 
         let qtd = 0, stop = false
         while (!stop) {
-            qtd++;
-            time = dateHour().res;
-            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `## COMEÇANDO LOOP: ${qtd} ##` });
+            qtd++; time = dateHour().res; logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `## COMEÇANDO LOOP: ${qtd} ##` });
+
+            // MANTER O STATUS 'RODANDO' NA PLANILHA
+            keepRunning()
 
             // SEG <> SAB | [??:00] <> [??:00]
             if (['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB',].includes(time.dayNam) && (Number(time.hou) > Number(scriptHour[0]) - 1 && Number(time.hou) < Number(scriptHour[1]))) {
 
                 // PEGAR NOVOS LEADS
-                let infLeads, retLeads
-                infLeads = {
-                    'e': e,
-                    'aut': autInf,
-                    'login': loginInf,
-                    'password': passwordInf,
-                }
-                retLeads = await leadsJsf(infLeads);
+                let retLeads = await leadsJsf({ 'e': e, 'aut': autInf, 'login': loginInf, 'password': passwordInf, });
                 if (!retLeads.ret) {
                     err = `$ [server] FALSE: retLeads`
                     logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
@@ -95,22 +88,19 @@ async function serverRun(inf) {
                             ]]
                             let sheetSendNew = sheetSend[0].join(conSplInf)
 
-                            infGoogleSheets = {
-                                'e': e, 'action': 'send',
-                                'id': id,
-                                'tab': tab,
-                                'range': `${colInf}**`,
-                                'values': [[`${sheetSendNew}`]]
-                            }
+                            infGoogleSheets = { 'e': e, 'action': 'send', 'id': id, 'tab': tab, 'range': `${colInf}**`, 'values': [[`${sheetSendNew}`]] }
                             retGoogleSheets = await googleSheets(infGoogleSheets);
                             if (!retGoogleSheets.ret) {
                                 err = `$ [server] FALSE: retGoogleSheets`
                                 logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
                                 infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
-                                retLog = await log(infLog);
-                                return retGoogleSheets
+                                retLog = await log(infLog); return retGoogleSheets
                             }
                             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[${(index + 1).toString().padStart(2, '0')}] ID: ${sheetSend[0][0]} | TEL: ${sheetSend[0][5]} | SHEET OK` });
+
+                            // MANTER O STATUS 'RODANDO' NA PLANILHA
+                            keepRunning()
+
                             await new Promise(resolve => { setTimeout(resolve, 5 * 1000) }) // SEGUNDOS
                         }
                     }
@@ -121,7 +111,6 @@ async function serverRun(inf) {
                 logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `## FORA DO DIA E HORÁRIO (${scriptHour[0]}:00 <> ${scriptHour[1]}:00) ##` });
             }
 
-            time = dateHour().res;
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `## ESPERANDO DELAY PARA O PRÓXIMO LOOP ##` });
             await new Promise(resolve => { setTimeout(resolve, 180 * 1000) }) // SEGUNDOS
         }
