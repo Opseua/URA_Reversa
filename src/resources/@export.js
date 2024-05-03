@@ -3,7 +3,8 @@ let devC = new Error().stack.split('\n'); devC = devC[devC.length - 1]; let devC
 if (typeof window !== 'undefined') { devChildren = await new Promise((resolve) => { chrome.identity.getProfileUserInfo(function (u) { resolve(u.email) }) }) }
 
 // @functions
-await import('../../../Chrome_Extension/src/resources/@functions.js');
+// await import('../../../Chrome_Extension/src/resources/@functions.js');
+await import(`../../../${process.env.fileChrome_Extension.split('PROJETOS\\')[1]}/src/resources/@functions.js`);
 
 // DEFINIR → LETTER | ROOT | FUNCTION | PROJECT | FILE | LINE
 let retGetPath = await getPath({ 'e': new Error(), 'devChildren': devChildren })

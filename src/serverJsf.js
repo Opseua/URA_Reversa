@@ -31,7 +31,7 @@ async function serverRun(inf) {
 
         async function keepRunning() {
             time = dateHour().res;
-            infGoogleSheets = { 'e': e, 'action': 'send', 'id': `1tLiyYX_x4BfF1ZWuo0OI0IuM7PVfIYEphMq9xg0K7TQ`, 'tab': `INDICAR_AUTOMATICO`, 'range': `A138`, 'values': [[`${time.tim} | Rodando: serverJsf`]] }
+            infGoogleSheets = { 'e': e, 'action': 'send', 'id': `1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc`, 'tab': `INDICAR_AUTOMATICO`, 'range': `A138`, 'values': [[`${time.tim} | Rodando: serverJsf`]] }
             retGoogleSheets = await googleSheets(infGoogleSheets)
             if (!retGoogleSheets.ret) {
                 err = `$ Erro ao pegar dados para planilha`
@@ -64,6 +64,8 @@ async function serverRun(inf) {
                     // SÓ RODAR SE O RETORNO DE leads FOR ARRAY
                     if (retLeads instanceof Array) {
                         logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${retLeads.length} LEADS` });
+
+                        await new Promise(resolve => { setTimeout(resolve, 3 * 1000) })
 
                         // PEGAR INF | ALTERAR STATUS | MANDAR PARA PLANILHA
                         for (let [index, value] of retLeads.entries()) {
