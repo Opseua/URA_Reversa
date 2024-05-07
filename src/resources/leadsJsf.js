@@ -47,7 +47,6 @@ async function leadsJsf(inf) {
         let timeSta = dateHour(`-${(86400 * 5)}`).res
 
         let timeEnd = dateHour().res
-        console.log(`${timeSta.day}/${timeSta.mon} = ${timeEnd.day}/${timeEnd.mon}`)
         let url = `http://200.150.207.26/azcall/relatorio/relTbu.php?dt_inicial=${timeSta.day}/${timeSta.mon}/2024%200:00&dt_final=${timeEnd.day}/${timeEnd.mon}/2024%2023:59&telefone=&telefonetype=1&nome=&camp=&digito=1&nometype=1&Camp\[\]=&&pagina=1&button4=pesquisar`
 
         // API [LISTA DE LEADS]
@@ -76,7 +75,7 @@ async function leadsJsf(inf) {
         // ## LOG ## retApi
         err = `$ [leads] LOG retApi`
         infLog = { 'e': e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
-        retLog = await log(infLog);
+        retLog = await log(infLog); console.log(retLog)
 
         // PEGAR A TABELA
         infRegex = { 'e': e, 'pattern': `<table(.*?)</table>`, 'text': retApi }
