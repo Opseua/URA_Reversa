@@ -1,4 +1,4 @@
-// let infLeadChangeStatus, retLeadChangeStatus // 'logFun': true,
+// let infLeadChangeStatus, retLeadChangeStatus
 // infLeadChangeStatus = { 'e': e, 'aut': false, 'leadId': value.leadId, 'status': '1' } // '4' → Inapto | '1' → Venda Realizada
 // retLeadChangeStatus = await leadChangeStatus(infLeadChangeStatus);
 // console.log(retLeadChangeStatus)

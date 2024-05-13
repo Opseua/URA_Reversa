@@ -1,4 +1,4 @@
-// let infLeads, retLeads // 'logFun': true,
+// let infLeads, retLeads
 // infLeads = {
 //     'e': e,
 //     'aut': false,
@@ -57,7 +57,7 @@ async function leadsJsf(inf) {
         retApi = await api(infApi);
 
         // TESTES
-        // let infFile, retFile // 'logFun': true, 'raw': true,         rewrite TRUE → adicionar no mesmo arquivo
+        // let infFile, retFile // 'raw': true,         rewrite TRUE → adicionar no mesmo arquivo
         // infFile = { 'e': e, 'action': 'read', 'functionLocal': false, 'path': "D:/ARQUIVOS/PROJETOS/URA_Reversa/LEADS.txt" }
         // retFile = await file(infFile);
         // retApi = { 'ret': true, 'res': { 'body': retFile.res } }

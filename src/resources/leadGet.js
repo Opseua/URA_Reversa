@@ -1,4 +1,4 @@
-// let infLeadGet, retLeadGet // 'logFun': true,
+// let infLeadGet, retLeadGet
 // infLeadGet = { 'e': e, 'aut': false, 'leadId': value.leadId }
 // retLeadGet = await leadGet(infLeadGet);
 // console.log(retLeadGet)

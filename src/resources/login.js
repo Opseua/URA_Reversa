@@ -1,4 +1,4 @@
-// let infLogin, retLogin // 'logFun': true,
+// let infLogin, retLogin
 // infLogin = { 'e': e, 'aut': false }
 // retLogin = await login(infLogin)
 // console.log(retLogin)

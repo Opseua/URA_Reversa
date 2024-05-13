@@ -1,4 +1,4 @@
-// let infLeads, retLeads // 'logFun': true,
+// let infLeads, retLeads
 // infLeads = {
 //     'e': e,
 //     'aut': false,
