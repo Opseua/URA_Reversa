@@ -35,7 +35,7 @@ async function login(inf) {
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
-            ret['msg'] = `Erro ao fazer login`;
+            ret['msg'] = `LOGIN: ERRO | AO FAZER LOGIN`;
             return ret
         } else {
             retApi = retApi.res.body
@@ -65,7 +65,7 @@ async function login(inf) {
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
-            ret['msg'] = `Erro ao pegar selecionar usuário`;
+            ret['msg'] = `LOGIN: ERRO | AO PEGAR E SELECIONAR O USUÁRIO`;
             return ret
         }
         ret['msg'] = `LOGIN: OK`;

@@ -90,7 +90,7 @@ async function leads(inf) {
         infRegex = { 'e': e, 'pattern': `index.php?link=247&id_contato=(.*?)"`, 'text': retApi }
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['5']) {
-            ret['msg'] = `Não achou o id do lead`;
+            ret['msg'] = `LEAD: ERRO | NÃO ACHOU O ID DO LEAD`;
             err = `$ [leads] ${ret.msg}`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }

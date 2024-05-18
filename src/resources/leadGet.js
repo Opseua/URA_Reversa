@@ -69,7 +69,7 @@ async function leadGet(inf) {
         infRegex = { 'e': e, 'pattern': `Contato:(.*?)</h2>`, 'text': retApi }
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['1']) {
-            ret['msg'] = `Não achou o telefone do lead`;
+            ret['msg'] = `LEAD GET: ERRO | NÃO ACHOU O TELEFONE DO LEAD`;
             err = `$ [leadGet] ${ret.msg}`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
@@ -94,7 +94,7 @@ async function leadGet(inf) {
         } else { retHtmlToJson = JSON.parse(retHtmlToJson.res.replace(/�/g, '').replace(/Ouvir Gravao/g, 'key').replace(/Baixar/g, 'value')) }
 
         if (!(retHtmlToJson instanceof Array)) {
-            ret['msg'] = `Não achou a tabela do HTML`;
+            ret['msg'] = `LEAD GET: ERRO | NÃO ACHOU A TABELA DO HTML`;
             err = `$ [leadGet] ${ret.msg}`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }

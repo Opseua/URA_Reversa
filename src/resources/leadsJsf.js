@@ -81,7 +81,7 @@ async function leadsJsf(inf) {
         infRegex = { 'e': e, 'pattern': `<table(.*?)</table>`, 'text': retApi }
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['3']) {
-            ret['msg'] = `Não achou a tabela`;
+            ret['msg'] = `LEADS JSF: ERRO | NÃO ACHOU A TABELA`;
             err = `$ [leads] ${ret.msg}`
             // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
