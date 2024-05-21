@@ -8,8 +8,7 @@
 //         'Visualizado para retorno',
 //     ]
 // }
-// retLeads = await leads(infLeads);
-// console.log(retLeads)
+// retLeads = await leads(infLeads); console.log(retLeads)
 
 let e = import.meta.url, ee = e;
 async function leadsJsf(inf) {

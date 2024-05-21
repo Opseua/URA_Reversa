@@ -1,7 +1,6 @@
 // let infLeadGet, retLeadGet
 // infLeadGet = { 'e': e, 'aut': false, 'leadId': value.leadId }
-// retLeadGet = await leadGet(infLeadGet);
-// console.log(retLeadGet)
+// retLeadGet = await leadGet(infLeadGet); console.log(retLeadGet)
 
 let e = import.meta.url, ee = e;
 async function leadGet(inf) {

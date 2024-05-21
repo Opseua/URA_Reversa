@@ -1,7 +1,6 @@
 // let infLogin, retLogin
 // infLogin = { 'e': e, 'aut': false }
-// retLogin = await login(infLogin)
-// console.log(retLogin)
+// retLogin = await login(infLogin); console.log(retLogin)
 
 let e = import.meta.url, ee = e;
 async function login(inf) {
