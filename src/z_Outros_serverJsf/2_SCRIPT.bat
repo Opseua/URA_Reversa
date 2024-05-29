@@ -30,6 +30,9 @@ endlocal & call "%fileChrome_Extension%\src\scripts\BAT\%scriptType%.bat" "%arg1
 set "ret=%ret2%"
 rem #####################################################################
 
+rem APENAS ENCERRAR E NAO CONTINUAR O BAT
+if "%~2"=="ONLY_STOP" ( exit )
+
 exit
 exit
 exit
@@ -40,18 +43,20 @@ set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!"
 
 rem ESTAVA RODANDO [SIM]
 if "!ret!"=="TRUE" (
-	set "url=http://!confHostOld!:!confPortOld!/EC2_NODEJS"
+	set "url=http://!confHost!:!confPort!/?roo=AWS-NODEJS-WEBSOCKET-SERVER"
 	set "headers=--header=Content-Type:application/json --header=chave1:valor1 --header=chave2:valor2"
 	set "body={"fun":[  {"securityPass":"!confSecurityPass!","retInf":false,"name":"googleSheets","par": {"action":"send","id":"1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc","tab":"INDICAR_MANUAL","range":"A32","values":[["!timeNow! ^| $ Script parado"]]} }  ]}"
 	set "pathRes=!local!\z_BODY_RES.txt" & set "pathReq=!local!\z_BODY_REQ.txt" & echo !body! > "!pathReq!" & "!wget!" "--post-file=!pathReq!" "!headers!" --quiet -O "!pathRes!" "!url!"
+	del /f /s /q "!pathRes!" & del /f /s /q "!pathReq!"
 )
 
 rem ESTAVA RODANDO [NAO]
 if "!ret!"=="FALSE" (
-	set "url=http://!confHostOld!:!confPortOld!/EC2_NODEJS"
+	set "url=http://!confHost!:!confPort!/?roo=AWS-NODEJS-WEBSOCKET-SERVER"
 	set "headers=--header=Content-Type:application/json --header=chave1:valor1 --header=chave2:valor2"
 	set "body={"fun":[  {"securityPass":"!confSecurityPass!","retInf":false,"name":"googleSheets","par": {"action":"send","id":"1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc","tab":"INDICAR_MANUAL","range":"A32","values":[["!timeNow! ^| # Aguarde......"]]} }  ]}"
 	set "pathRes=!local!\z_BODY_RES.txt" & set "pathReq=!local!\z_BODY_REQ.txt" & echo !body! > "!pathReq!" & "!wget!" "--post-file=!pathReq!" "!headers!" --quiet -O "!pathRes!" "!url!"
+	del /f /s /q "!pathRes!" & del /f /s /q "!pathReq!"
 )
 
 exit
@@ -61,4 +66,5 @@ rem LER confBat
 rem set /p linha=<"!local!\zzz_confBat.json"
 rem for /f "tokens=1,2,3,4,5,6,7,8,9,10 delims=_-_-_" %%a in ("!linha!") do ( set "par1=%%a" & set "par2=%%b" & set "par3=%%c" )
 rem msg * "[2_SCRIPT.bat] par1: !par1! - par2: !par2! - par3: !par3!" & exit
+
 
