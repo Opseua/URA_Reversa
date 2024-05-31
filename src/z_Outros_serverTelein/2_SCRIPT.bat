@@ -31,7 +31,7 @@ set "ret=%ret2%"
 rem #####################################################################
 
 rem APENAS ENCERRAR E NAO CONTINUAR O BAT
-if "%~2"=="ONLY_START_STOP" ( exit )
+if "%~2"=="FORCE_STOP" ( exit )
 
 exit
 exit
