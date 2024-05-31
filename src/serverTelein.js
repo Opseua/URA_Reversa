@@ -1,10 +1,12 @@
+let eng = typeof window !== 'undefined'; let gloWin = eng ? window : global; gloWin['eng'] = eng; // [true] CHROME | [false] NODEJS
+function startupFun(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m = a % 1000; let f = m.toString().padStart(3, '0'); return `${s}.${f}` }; let startup = new Date();
 await import('./resources/@export.js');
 
 let e = import.meta.url, ee = e;
 async function serverRun(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `**************** SERVER ****************` })
+        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `**************** SERVER **************** [${startupFun(startup, new Date())}]` })
 
         let infLog, retLog, infGoogleSheets, retGoogleSheets, err, time
 
