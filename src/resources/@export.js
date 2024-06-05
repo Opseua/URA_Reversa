@@ -1,4 +1,4 @@
-let gloWin = eng ? window : global; // [true] CHROME | [false] NODEJS
+let gloWin; if (typeof window !== 'undefined') { window['eng'] = true; gloWin = window } else { global['eng'] = false; gloWin = global }; // [true] CHROME | [false] NODEJS
 // DEFINIR O 'devChildren' → [CHROME] EMAIL DO USUÁRIO | [NODEJS] PRIMEIRO ARQUIVO A SER EXECUTADO (NA MAIORIA DOS CASOS 'server')
 let devC = new Error().stack.split('\n'); devC = devC[devC.length - 1]; let devChildren = devC.includes('.js:') ? devC.match(/\/([^/]+)\.[^/]+$/)[1] : false
 if (eng) { devChildren = await new Promise((resolve) => { chrome.identity.getProfileUserInfo(function (u) { resolve(u.email) }) }) }
