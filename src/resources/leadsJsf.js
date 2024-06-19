@@ -46,7 +46,7 @@ async function leadsJsf(inf) {
         let timeSta = dateHour(`-${(86400 * 5)}`).res
 
         let timeEnd = dateHour().res
-        let url = `http://200.150.207.26/azcall/relatorio/relTbu.php?dt_inicial=${timeSta.day}/${timeSta.mon}/2024%200:00&dt_final=${timeEnd.day}/${timeEnd.mon}/2024%2023:59&telefone=&telefonetype=1&nome=&camp=&digito=1&nometype=1&Camp\[\]=&&pagina=1&button4=pesquisar`
+        let url = `http://200.150.194.253/azcall/relatorio/relTbu.php?dt_inicial=${timeSta.day}/${timeSta.mon}/2024%200:00&dt_final=${timeEnd.day}/${timeEnd.mon}/2024%2023:59&telefone=&telefonetype=1&nome=&camp=&digito=1&nometype=1&Camp\[\]=&&pagina=1&button4=pesquisar`
 
         // API [LISTA DE LEADS]
         infApi = {
@@ -157,11 +157,11 @@ async function leadsJsf(inf) {
         if (leadsNew.length == 0 && !sendLeads) {
             sendLeads = true
             newLeads()
-            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${leadsNew.length}` });
         }
 
         // TESTES
-        // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${leadsNew}` });
+        // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `→→→ QTD: ${leadsNew.length}\n\n${JSON.stringify(leadsNew, null, 2)}` });
+        // await new Promise(resolve => { setTimeout(resolve, 180000) }); // ESPERAR 3 MINUTOS
         // return ret
 
         ret['res'] = leadsNew

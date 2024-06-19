@@ -64,7 +64,7 @@ async function serverRun(inf) {
 
                     // SÓ RODAR SE O RETORNO DE leads FOR ARRAY
                     if (retLeads instanceof Array) {
-                        logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${retLeads.length} LEADS` });
+                        logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `ENVIANDO PARA A PLANILHA ${retLeads.length} LEADS` });
 
                         await new Promise(resolve => { setTimeout(resolve, 3 * 1000) })
 
@@ -82,7 +82,7 @@ async function serverRun(inf) {
                                 value.administrador,
                                 value.email,
                                 value.razaoSocial,
-                                `http://200.150.207.26/${value.leadId}`
+                                `http://200.150.194.253/${value.leadId}`
                             ]]
                             let sheetSendNew = sheetSend[0].join(conSplInf)
 
