@@ -161,18 +161,9 @@ async function leads(inf) {
         ret['ret'] = true
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, });
-        ret['msg'] = retRegexE.res
-    };
-    return {
-        ...({ ret: ret.ret }),
-        ...(ret.msg && { msg: ret.msg }),
-        ...(ret.res && { res: ret.res }),
-    };
-}
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res
+    }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
+};
 
-if (eng) { // CHROME
-    window['leads'] = leads;
-} else { // NODEJS
-    global['leads'] = leads;
-}
+// CHROME | NODEJS
+(eng ? window : global)['leads'] = leads;

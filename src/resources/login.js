@@ -74,21 +74,9 @@ async function login(inf) {
         await new Promise(resolve => { setTimeout(resolve, 15000) })
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, });
-        ret['msg'] = retRegexE.res
-    };
-    return {
-        ...({ ret: ret.ret }),
-        ...(ret.msg && { msg: ret.msg }),
-        ...(ret.res && { res: ret.res }),
-    };
-}
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res
+    }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
+};
 
-if (eng) { // CHROME
-    window['login'] = login;
-} else { // NODEJS
-    global['login'] = login;
-}
-
-
-
+// CHROME | NODEJS
+(eng ? window : global)['login'] = login;

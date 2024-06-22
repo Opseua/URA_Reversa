@@ -91,18 +91,9 @@ async function leadChangeStatus(inf) {
         ret['ret'] = true
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, });
-        ret['msg'] = retRegexE.res
-    };
-    return {
-        ...({ ret: ret.ret }),
-        ...(ret.msg && { msg: ret.msg }),
-        ...(ret.res && { res: ret.res }),
-    };
-}
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res
+    }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
+};
 
-if (eng) { // CHROME
-    window['leadChangeStatus'] = leadChangeStatus;
-} else { // NODEJS
-    global['leadChangeStatus'] = leadChangeStatus;
-}
+// CHROME | NODEJS
+(eng ? window : global)['leadChangeStatus'] = leadChangeStatus;
