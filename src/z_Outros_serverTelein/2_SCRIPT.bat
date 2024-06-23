@@ -26,7 +26,7 @@ if "!mode!"=="PM2" ( set "scriptType=processPm2JList" )
 if "!mode!"=="CMD" ( set "scriptType=processCmdKeep" )
 if "!mode!"=="LEGACY" ( set "scriptType=processCmdKeep" )
 if "!scriptType!" equ "ERRO" !fileMsg! "[!local!\!arquivo!]\n'mode' deve ser\n'PM2', 'CMD', 'LEGACY'" & exit
-endlocal & call "%fileChrome_Extension%\src\scripts\BAT\%scriptType%.bat" "%arg1%_WINTP2" "%project%@%outrosAdd%" "%fileScript%" "%mode%" & setlocal enabledelayedexpansion
+endlocal & call "%fileChrome_Extension%\src\scripts\BAT\%scriptType%.bat" "%arg1%_WINTP3" "%project%@%outrosAdd%" "%fileScript%" "%mode%" & setlocal enabledelayedexpansion
 set "ret=%ret2%"
 rem #####################################################################
 
@@ -66,4 +66,5 @@ rem LER confBat
 rem set /p linha=<"!local!\zzz_confBat.json"
 rem for /f "tokens=1,2,3,4,5,6,7,8,9,10 delims=_-_-_" %%a in ("!linha!") do ( set "par1=%%a" & set "par2=%%b" & set "par3=%%c" )
 rem msg * "[2_SCRIPT.bat] par1: !par1! - par2: !par2! - par3: !par3!" & exit
+
 
