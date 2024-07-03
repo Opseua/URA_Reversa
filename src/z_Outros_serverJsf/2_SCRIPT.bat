@@ -34,7 +34,6 @@ if "%~2"=="FORCE_STOP" ( exit )
 
 exit
 exit
-exit
 
 rem TIMESTAMP ATUAL (OBRIGATORIO FICAR APOS O CALL!!!)
 echo WScript.Echo(new Date().getTime()); > !temp!\time.js & for /f "delims=" %%a in ('cscript //nologo !temp!\time.js') do set "timeNow=%%a"
