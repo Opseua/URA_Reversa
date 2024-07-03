@@ -6,7 +6,7 @@ let e = import.meta.url, ee = e;
 async function leadGet(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        let infApi, retApi, infRegex, retRegex, infLog, retLog, err
+        let infApi, retApi, infRegex, retRegex, infLog, err
         let aut = inf && inf.aut ? inf.aut : 'aaaa';
         let leadId = inf && inf.leadId ? inf.leadId : `25799086`
 
@@ -20,7 +20,7 @@ async function leadGet(inf) {
             err = `$ [leadGet] FALSE: retApi 1`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
-            retLog = await log(infLog);
+            await log(infLog);
             // REAUTENTICAR
             let infLogin, retLogin
             infLogin = { 'e': e, 'aut': aut }
@@ -29,7 +29,7 @@ async function leadGet(inf) {
                 err = `$ [leadGet] FALSE: retLogin`
                 logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
                 infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin }
-                retLog = await log(infLog);
+                await log(infLog);
                 return retApi
             } else {
                 infApi = {
@@ -42,13 +42,13 @@ async function leadGet(inf) {
                         err = `$ [leadGet] sem permissão para acessar as funcionalidades`
                         logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
-                        retLog = await log(infLog);
+                        await log(infLog);
                         return ret
                     } else {
                         err = `$ [leadGet] FALSE: retAp 2`
                         logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
-                        retLog = await log(infLog);
+                        await log(infLog);
                         return ret
                     }
                 } else {
@@ -62,7 +62,7 @@ async function leadGet(inf) {
         // ## LOG ## retApi
         err = `$ [leadGet] LOG retApi ${leadId}`
         infLog = { 'e': e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
-        retLog = await log(infLog);
+        await log(infLog);
 
         // PEGAR [TELEFONE]
         infRegex = { 'e': e, 'pattern': `Contato:(.*?)</h2>`, 'text': retApi }
@@ -72,7 +72,7 @@ async function leadGet(inf) {
             err = `$ [leadGet] ${ret.msg}`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
-            retLog = await log(infLog);
+            await log(infLog);
             return ret
         }
         let tel = retRegex.res['1'].replace(/[^0-9]/g, '');
@@ -88,7 +88,7 @@ async function leadGet(inf) {
             err = `$ [leadGet] FALSE: retHtmlToJson`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
-            retLog = await log(infLog);
+            await log(infLog);
             return retApi
         } else { retHtmlToJson = JSON.parse(retHtmlToJson.res.replace(/�/g, '').replace(/Ouvir Gravao/g, 'key').replace(/Baixar/g, 'value')) }
 
@@ -97,7 +97,7 @@ async function leadGet(inf) {
             err = `$ [leadGet] ${ret.msg}`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
-            retLog = await log(infLog);
+            await log(infLog);
             return ret
         }
 
@@ -105,7 +105,7 @@ async function leadGet(inf) {
             err = `$ [leadGet] retHtmlToJson ARRAY VAZIA`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
-            retLog = await log(infLog);
+            await log(infLog);
             return ret
         }
 

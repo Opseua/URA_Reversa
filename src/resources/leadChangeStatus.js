@@ -6,7 +6,7 @@ let e = import.meta.url, ee = e;
 async function leadChangeStatus(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        let infApi, retApi, infRegex, retRegex, infLog, retLog, time, err
+        let infApi, retApi, infLog, time, err
         let aut = inf && inf.aut ? inf.aut : 'aaaa';
         let leadId = inf && inf.leadId ? inf.leadId : `25799086`
         let statusOption = {
@@ -32,13 +32,13 @@ async function leadChangeStatus(inf) {
         // ## LOG ## retApi
         err = `$ [leadChangeStatus] LOG retApi ${leadId}`
         infLog = { 'e': e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
-        retLog = await log(infLog);
+        await log(infLog);
 
         if (!retApi.ret || !retApi.res.body.includes('Retorno realizado por')) {
             err = `$ [leadChangeStatus] FALSE: retApi 1`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
-            retLog = await log(infLog);
+            await log(infLog);
             // REAUTENTICAR
             let infLogin, retLogin
             infLogin = { 'e': e, 'aut': aut }
@@ -47,7 +47,7 @@ async function leadChangeStatus(inf) {
                 err = `$ [leadChangeStatus] FALSE: retLogin 1`
                 logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
                 infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin }
-                retLog = await log(infLog);
+                await log(infLog);
                 return retApi
             } else {
                 infApi = {
@@ -66,13 +66,13 @@ async function leadChangeStatus(inf) {
                         err = `$ [leadChangeStatus] sem permissão para acessar as funcionalidades`
                         logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
-                        retLog = await log(infLog);
+                        await log(infLog);
                         return ret
                     } else {
                         err = `$ [leadChangeStatus] FALSE: retLogin 2`
                         logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
-                        retLog = await log(infLog);
+                        await log(infLog);
                         return ret
                     }
                 } else {

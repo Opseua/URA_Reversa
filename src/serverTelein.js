@@ -7,7 +7,7 @@ async function serverRun(inf) {
     try {
         logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `**************** SERVER **************** [${startupFun(startup, new Date())}]` })
 
-        let infLog, retLog, infGoogleSheets, retGoogleSheets, err, time
+        let infLog, infGoogleSheets, retGoogleSheets, err, time
 
         // DADOS GLOBAIS DA PLANILHA E FAZER O PARSE
         gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO';
@@ -23,7 +23,7 @@ async function serverRun(inf) {
             err = `$ Erro ao pegar dados para planilha`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
-            retLog = await log(infLog);
+            await log(infLog);
             return retGoogleSheets
         } else {
             retGoogleSheets = retGoogleSheets.res[0][0]
@@ -76,7 +76,7 @@ async function serverRun(inf) {
                     err = `$ [server] FALSE: retLeads`
                     logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
                     infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads }
-                    retLog = await log(infLog);
+                    await log(infLog);
                 } else {
                     retLeads = retLeads.res
 
@@ -94,7 +94,7 @@ async function serverRun(inf) {
                                 err = `$ [server] FALSE: retLeadGet`
                                 logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
                                 infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadGet }
-                                retLog = await log(infLog);
+                                await log(infLog);
                             } else {
                                 retLeadGet = retLeadGet.res
                                 // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `LEAD ID: ${value.leadId} | TELEFONE: ${retLeadGet.tel}` });
@@ -108,7 +108,7 @@ async function serverRun(inf) {
                                     err = `$ [server] FALSE: retLeadChangeStatus`
                                     logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
                                     infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadChangeStatus }
-                                    retLog = await log(infLog);
+                                    await log(infLog);
                                 } else {
                                     retLeadChangeStatus = retLeadChangeStatus.res
 
@@ -140,7 +140,7 @@ async function serverRun(inf) {
                                         err = `$ [server] FALSE: retGoogleSheets`
                                         logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
                                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
-                                        retLog = await log(infLog);
+                                        await log(infLog);
                                         return retGoogleSheets
                                     }
                                     logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[${(index + 1).toString().padStart(2, '0')}] ID: ${sheetSend[0][0]} | TEL: ${sheetSend[0][5]} | SHEET OK` });

@@ -8,7 +8,7 @@ async function login(inf) {
     try {
         logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `ANTES DE AUTENTICAR` })
 
-        let infApi, retApi, infRegex, retRegex, infLog, retLog, err
+        let infApi, retApi, infLog, err
         let aut = inf && inf.aut ? inf.aut : 'aaaa';
         let loginOk = inf && inf.login ? inf.login : 'aaaa';
         let password = inf && inf.password ? inf.password : 'aaaa';
@@ -33,7 +33,7 @@ async function login(inf) {
             err = `$ [login] FALSE: retApi 1`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
-            retLog = await log(infLog);
+            await log(infLog);
             ret['msg'] = `LOGIN: ERRO | AO FAZER LOGIN`;
             return ret
         } else {
@@ -43,7 +43,7 @@ async function login(inf) {
         // ## LOG ## retApi
         err = `$ [login] LOG retApi`
         infLog = { 'e': e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
-        retLog = await log(infLog);
+        await log(infLog);
 
         // [2] USUÁRIO [SELECIONAR]
         infApi = {
@@ -63,7 +63,7 @@ async function login(inf) {
             err = `$ [login] FALSE: retApi 2`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
-            retLog = await log(infLog);
+            await log(infLog);
             ret['msg'] = `LOGIN: ERRO | AO PEGAR E SELECIONAR O USUÁRIO`;
             return ret
         }
