@@ -44,7 +44,7 @@ async function serverRun(inf) {
                 // PEGAR NOVOS LEADS
                 let retLeads = await leadsJsf({ 'e': e, 'aut': autInf, 'login': loginInf, 'password': passwordInf, });
                 if (!retLeads.ret) {
-                    err = `$ [server] FALSE: retLeads`; logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` }); await log({ 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads });
+                    err = `@ [server] FALSE: retLeads`; logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` }); await log({ 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads });
                 } else {
                     retLeads = retLeads.res
 
@@ -72,7 +72,7 @@ async function serverRun(inf) {
 
                             infGoogleSheets = { 'e': e, 'action': 'send', 'id': id, 'tab': tab, 'range': `${colInf}**`, 'values': [[`${sheetSendNew}`]] };
                             retGoogleSheets = await googleSheets(infGoogleSheets); if (!retGoogleSheets.ret) {
-                                err = `$ [server] FALSE: retGoogleSheets`
+                                err = `@ [server] FALSE: retGoogleSheets`
                                 logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` }); await log({ 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }); return retGoogleSheets
                             }; logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[${(index + 1).toString().padStart(2, '0')}] ID: ${sheetSend[0][0]} | TEL: ${sheetSend[0][5]} | SHEET OK` });
 

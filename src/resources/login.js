@@ -30,7 +30,7 @@ async function login(inf) {
         };
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('escolher.php')) {
-            err = `$ [login] FALSE: retApi 1`
+            err = `@ [login] FALSE: retApi 1`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             await log(infLog);
@@ -41,7 +41,7 @@ async function login(inf) {
         }
 
         // ## LOG ## retApi
-        err = `$ [login] LOG retApi`
+        err = `@ [login] LOG retApi`
         infLog = { 'e': e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
         await log(infLog);
 
@@ -60,7 +60,7 @@ async function login(inf) {
         };
         retApi = await api(infApi);
         if (!retApi.ret || retApi.res.code !== 200) {
-            err = `$ [login] FALSE: retApi 2`
+            err = `@ [login] FALSE: retApi 2`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             await log(infLog);

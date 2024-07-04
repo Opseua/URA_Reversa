@@ -73,7 +73,7 @@ async function serverRun(inf) {
                 }
                 retLeads = await leads(infLeads);
                 if (!retLeads.ret) {
-                    err = `$ [server] FALSE: retLeads`
+                    err = `@ [server] FALSE: retLeads`
                     logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
                     infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads }
                     await log(infLog);
@@ -91,7 +91,7 @@ async function serverRun(inf) {
                             infLeadGet = { 'e': e, 'aut': autInf, 'leadId': value.leadId }
                             retLeadGet = await leadGet(infLeadGet);
                             if (!retLeadGet.ret) {
-                                err = `$ [server] FALSE: retLeadGet`
+                                err = `@ [server] FALSE: retLeadGet`
                                 logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
                                 infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadGet }
                                 await log(infLog);
@@ -105,7 +105,7 @@ async function serverRun(inf) {
                                 retLeadChangeStatus = await leadChangeStatus(infLeadChangeStatus);
                                 if (!retLeadChangeStatus.ret) {
                                     // if (!retLeadGet) { // →  TESTE
-                                    err = `$ [server] FALSE: retLeadChangeStatus`
+                                    err = `@ [server] FALSE: retLeadChangeStatus`
                                     logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
                                     infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadChangeStatus }
                                     await log(infLog);
@@ -137,7 +137,7 @@ async function serverRun(inf) {
                                     }
                                     retGoogleSheets = await googleSheets(infGoogleSheets);
                                     if (!retGoogleSheets.ret) {
-                                        err = `$ [server] FALSE: retGoogleSheets`
+                                        err = `@ [server] FALSE: retGoogleSheets`
                                         logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
                                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
                                         await log(infLog);

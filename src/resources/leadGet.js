@@ -17,7 +17,7 @@ async function leadGet(inf) {
         };
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('Tecla Digitada')) {
-            err = `$ [leadGet] FALSE: retApi 1`
+            err = `@ [leadGet] FALSE: retApi 1`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             await log(infLog);
@@ -26,7 +26,7 @@ async function leadGet(inf) {
             infLogin = { 'e': e, 'aut': aut }
             retLogin = await login(infLogin);
             if (!retLogin.ret) {
-                err = `$ [leadGet] FALSE: retLogin`
+                err = `@ [leadGet] FALSE: retLogin`
                 logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
                 infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin }
                 await log(infLog);
@@ -39,13 +39,13 @@ async function leadGet(inf) {
                 retApi = await api(infApi);
                 if (!retApi.ret || !retApi.res.body.includes('tirarverde')) {
                     if (retApi.res && retApi.res.body.includes('para acessar as funcionalidades')) {
-                        err = `$ [leadGet] sem permissão para acessar as funcionalidades`
+                        err = `@ [leadGet] sem permissão para acessar as funcionalidades`
                         logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         await log(infLog);
                         return ret
                     } else {
-                        err = `$ [leadGet] FALSE: retAp 2`
+                        err = `@ [leadGet] FALSE: retAp 2`
                         logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         await log(infLog);
@@ -60,7 +60,7 @@ async function leadGet(inf) {
         }
 
         // ## LOG ## retApi
-        err = `$ [leadGet] LOG retApi ${leadId}`
+        err = `@ [leadGet] LOG retApi ${leadId}`
         infLog = { 'e': e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
         await log(infLog);
 
@@ -69,7 +69,7 @@ async function leadGet(inf) {
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['1']) {
             ret['msg'] = `LEAD GET: ERRO | NÃO ACHOU O TELEFONE DO LEAD`;
-            err = `$ [leadGet] ${ret.msg}`
+            err = `@ [leadGet] ${ret.msg}`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             await log(infLog);
@@ -85,7 +85,7 @@ async function leadGet(inf) {
         }
         retHtmlToJson = await htmlToJson(infHtmlToJson)
         if (!retHtmlToJson.ret) {
-            err = `$ [leadGet] FALSE: retHtmlToJson`
+            err = `@ [leadGet] FALSE: retHtmlToJson`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             await log(infLog);
@@ -94,7 +94,7 @@ async function leadGet(inf) {
 
         if (!(retHtmlToJson instanceof Array)) {
             ret['msg'] = `LEAD GET: ERRO | NÃO ACHOU A TABELA DO HTML`;
-            err = `$ [leadGet] ${ret.msg}`
+            err = `@ [leadGet] ${ret.msg}`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             await log(infLog);
@@ -102,7 +102,7 @@ async function leadGet(inf) {
         }
 
         if (!retHtmlToJson.length > 0) {
-            err = `$ [leadGet] retHtmlToJson ARRAY VAZIA`
+            err = `@ [leadGet] retHtmlToJson ARRAY VAZIA`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             await log(infLog);

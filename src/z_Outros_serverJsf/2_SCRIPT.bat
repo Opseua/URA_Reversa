@@ -45,7 +45,7 @@ if "!ret!"=="TRUE" (
 	set "headers=--header=Content-Type:application/json --header=chave1:valor1 --header=chave2:valor2"
 	set "body={"fun":[  {"securityPass":"!confSecurityPass!","retInf":false,"name":"googleSheets","par": {"action":"send","id":"1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc","tab":"INDICAR_MANUAL","range":"A32","values":[["!timeNow! ^| $ Script parado"]]} }  ]}"
 	set "pathRes=!local!\z_BODY_RES.txt" & set "pathReq=!local!\z_BODY_REQ.txt" & echo !body! > "!pathReq!" & "!wget!" "--post-file=!pathReq!" "!headers!" --quiet -O "!pathRes!" "!url!"
-	del /f /s /q "!pathRes!" & del /f /s /q "!pathReq!"
+	del /F /Q "!pathRes!" & del /F /Q "!pathReq!"
 )
 
 rem ESTAVA RODANDO [NAO]
@@ -54,7 +54,7 @@ if "!ret!"=="FALSE" (
 	set "headers=--header=Content-Type:application/json --header=chave1:valor1 --header=chave2:valor2"
 	set "body={"fun":[  {"securityPass":"!confSecurityPass!","retInf":false,"name":"googleSheets","par": {"action":"send","id":"1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc","tab":"INDICAR_MANUAL","range":"A32","values":[["!timeNow! ^| # Aguarde......"]]} }  ]}"
 	set "pathRes=!local!\z_BODY_RES.txt" & set "pathReq=!local!\z_BODY_REQ.txt" & echo !body! > "!pathReq!" & "!wget!" "--post-file=!pathReq!" "!headers!" --quiet -O "!pathRes!" "!url!"
-	del /f /s /q "!pathRes!" & del /f /s /q "!pathReq!"
+	del /F /Q "!pathRes!" & del /F /Q "!pathReq!"
 )
 
 exit
