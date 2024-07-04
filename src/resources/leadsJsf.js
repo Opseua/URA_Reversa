@@ -62,7 +62,7 @@ async function leadsJsf(inf) {
         // retApi = { 'ret': true, 'res': { 'body': retFile.res } }
 
         if (!retApi.ret || !retApi.res.body.includes('Campanha')) {
-            err = `@ [leads] FALSE: retApi 1`
+            err = `% [leads] FALSE: retApi 1`
             // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
@@ -72,7 +72,7 @@ async function leadsJsf(inf) {
         }
 
         // ## LOG ## retApi
-        err = `@ [leads] LOG retApi`
+        err = `% [leads] LOG retApi`
         infLog = { 'e': e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
         retLog = await log(infLog); console.log(retLog)
 
@@ -81,7 +81,7 @@ async function leadsJsf(inf) {
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['3']) {
             ret['msg'] = `LEADS JSF: ERRO | NÃO ACHOU A TABELA`;
-            err = `@ [leads] ${ret.msg}`
+            err = `% [leads] ${ret.msg}`
             // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
@@ -94,7 +94,7 @@ async function leadsJsf(inf) {
         infHtmlToJson = { 'e': e, 'mode': '2', 'html': retRegex }
         retHtmlToJson = await htmlToJson(infHtmlToJson);
         if (!retHtmlToJson.ret || retHtmlToJson.res.length < 1) {
-            err = `@ [leads] FALSE: retHtmlToJson`
+            err = `% [leads] FALSE: retHtmlToJson`
             // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
@@ -106,7 +106,7 @@ async function leadsJsf(inf) {
         // ARRAY COM A LISTA DE LEADS
         let leadsNew = []
         if (!retHtmlToJson.length > 0) {
-            err = `@ [leads] retHtmlToJson ARRAY VAZIA`
+            err = `% [leads] retHtmlToJson ARRAY VAZIA`
             // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
@@ -114,7 +114,7 @@ async function leadsJsf(inf) {
         }
 
         // ## LOG ## retHtmlToJson
-        err = `@ [leads] LOG retHtmlToJson`
+        err = `% [leads] LOG retHtmlToJson`
         infLog = { 'e': e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
         retLog = await log(infLog);
 
@@ -169,7 +169,7 @@ async function leadsJsf(inf) {
         ret['ret'] = true
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res;
     }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
 };
 

@@ -30,12 +30,12 @@ async function leadChangeStatus(inf) {
         retApi = await api(infApi);
 
         // ## LOG ## retApi
-        err = `@ [leadChangeStatus] LOG retApi ${leadId}`
+        err = `% [leadChangeStatus] LOG retApi ${leadId}`
         infLog = { 'e': e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
         await log(infLog);
 
         if (!retApi.ret || !retApi.res.body.includes('Retorno realizado por')) {
-            err = `@ [leadChangeStatus] FALSE: retApi 1`
+            err = `% [leadChangeStatus] FALSE: retApi 1`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             await log(infLog);
@@ -44,7 +44,7 @@ async function leadChangeStatus(inf) {
             infLogin = { 'e': e, 'aut': aut }
             retLogin = await login(infLogin);
             if (!retLogin.ret) {
-                err = `@ [leadChangeStatus] FALSE: retLogin 1`
+                err = `% [leadChangeStatus] FALSE: retLogin 1`
                 logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
                 infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin }
                 await log(infLog);
@@ -63,13 +63,13 @@ async function leadChangeStatus(inf) {
                 retApi = await api(infApi);
                 if (!retApi.ret || !retApi.res.body.includes('Retorno realizado por')) {
                     if (retApi.res && retApi.res.body.includes('para acessar as funcionalidades')) {
-                        err = `@ [leadChangeStatus] sem permissão para acessar as funcionalidades`
+                        err = `% [leadChangeStatus] sem permissão para acessar as funcionalidades`
                         logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         await log(infLog);
                         return ret
                     } else {
-                        err = `@ [leadChangeStatus] FALSE: retLogin 2`
+                        err = `% [leadChangeStatus] FALSE: retLogin 2`
                         logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         await log(infLog);
@@ -91,7 +91,7 @@ async function leadChangeStatus(inf) {
         ret['ret'] = true
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res
+        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res;
     }; return { ...({ ret: ret.ret }), ...(ret.msg && { msg: ret.msg }), ...(ret.res && { res: ret.res }), };
 };
 
