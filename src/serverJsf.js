@@ -14,7 +14,7 @@ async function serverRun(inf) {
         let range = 'A2', id = gO.inf.id, tab = gO.inf.tab
         retGoogleSheets = await googleSheets({ 'e': e, 'action': 'get', 'id': id, 'tab': tab, 'range': range, });
         if (!retGoogleSheets.ret) {
-            err = `$ Erro ao pegar dados para planilha`; logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
+            err = `$ Erro ao pegar-enviar dados para planilha`; logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
             await log({ 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }); return retGoogleSheets
         } else { retGoogleSheets = retGoogleSheets.res[0][0] }
         gO.inf['json'] = JSON.parse(retGoogleSheets); let colInf = inf && inf.col ? inf.col : gO.inf.json['colUra']; let autInf = inf && inf.autJsf ? inf.autJsf : gO.inf.json['autUraJsf'];
@@ -27,7 +27,7 @@ async function serverRun(inf) {
             time = dateHour().res;
             retGoogleSheets = await googleSheets({ 'e': e, 'action': 'send', 'id': `1wEiSgZHeaUjM6Gl1Y67CZZZ7UTsDweQhRYKqaTu3_I8`, 'tab': `INDICAR_AUTOMATICO`, 'range': `A130`, 'values': [[`${time.tim} | Rodando: serverJsf`]] })
             if (!retGoogleSheets.ret) {
-                err = `$ Erro ao pegar dados para planilha`; logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
+                err = `$ Erro ao pegar-enviar dados para planilha`; logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
                 infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }; retLog = await log(infLog); return retGoogleSheets
             }
         }

@@ -28,7 +28,7 @@ async function leadsJsf(inf) {
         }
         retGoogleSheets = await googleSheets(infGoogleSheets);
         if (!retGoogleSheets.ret) {
-            err = `$ Erro ao pegar dados para planilha`
+            err = `$ Erro ao pegar-enviar dados para planilha`
             logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
             retLog = await log(infLog);
