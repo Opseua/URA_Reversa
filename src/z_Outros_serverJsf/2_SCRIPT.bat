@@ -27,13 +27,11 @@ rem CHECAR SE ESTA RODANDO
 rem tasklist /fi "ImageName eq node!project!_!outrosAdd!.exe" /fo csv 2>NUL | find /I "node!project!_!outrosAdd!.exe">NUL
 rem if "%ERRORLEVEL%"=="0"  ( set "ret=TRUE" ) else ( set "ret=FALSE" )
 
-if "!arg1!"=="!arg1:OFF=!" (
-	rem ESTA RODANDO [SIM]
-	rem if "!ret!"=="TRUE" ( )
+rem ESTA RODANDO [NAO]
+rem if "!ret!"=="FALSE" ( if "!arg1!"=="!arg1:OFF=!" ( ) )
 
-	rem ESTA RODANDO [NAO]
-	rem if "!ret!"=="FALSE" ( )
-)
+rem ESTA RODANDO [SIM]
+rem if "!ret!"=="TRUE" ( )
 
 rem  (NAO SUBIR OS 'if'!!!)
 if "!mode!"=="CMD" ( set "scriptType=processCmdKeep" )
