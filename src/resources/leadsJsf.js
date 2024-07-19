@@ -29,7 +29,7 @@ async function leadsJsf(inf) {
         retGoogleSheets = await googleSheets(infGoogleSheets);
         if (!retGoogleSheets.ret) {
             err = `$ Erro ao pegar-enviar dados para planilha`
-            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
+            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` });
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
             retLog = await log(infLog);
             return retGoogleSheets
@@ -63,7 +63,7 @@ async function leadsJsf(inf) {
 
         if (!retApi.ret || !retApi.res.body.includes('Campanha')) {
             err = `% [leads] FALSE: retApi 1`
-            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
             return ret
@@ -82,7 +82,7 @@ async function leadsJsf(inf) {
         if (!retRegex.ret || !retRegex.res['3']) {
             ret['msg'] = `LEADS JSF: ERRO | NÃO ACHOU A TABELA`;
             err = `% [leads] ${ret.msg}`
-            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             retLog = await log(infLog);
             return ret
@@ -95,7 +95,7 @@ async function leadsJsf(inf) {
         retHtmlToJson = await htmlToJson(infHtmlToJson);
         if (!retHtmlToJson.ret || retHtmlToJson.res.length < 1) {
             err = `% [leads] FALSE: retHtmlToJson`
-            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
             return retHtmlToJson
@@ -107,7 +107,7 @@ async function leadsJsf(inf) {
         let leadsNew = []
         if (!retHtmlToJson.length > 0) {
             err = `% [leads] retHtmlToJson ARRAY VAZIA`
-            // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             retLog = await log(infLog);
             return ret
@@ -160,7 +160,7 @@ async function leadsJsf(inf) {
         }
 
         // TESTES
-        // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `→→→ QTD: ${leadsNew.length}\n\n${JSON.stringify(leadsNew, null, 2)}` });
+        // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `→→→ QTD: ${leadsNew.length}\n\n${JSON.stringify(leadsNew, null, 2)}` });
         // await new Promise(resolve => { setTimeout(resolve, 180000) }); // ESPERAR 3 MINUTOS
         // return ret
 

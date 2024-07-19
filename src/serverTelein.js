@@ -21,7 +21,7 @@ async function serverRun(inf) {
         retGoogleSheets = await googleSheets(infGoogleSheets);
         if (!retGoogleSheets.ret) {
             err = `$ Erro ao pegar-enviar dados para planilha`
-            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
+            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` });
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
             await log(infLog);
             return retGoogleSheets
@@ -50,7 +50,7 @@ async function serverRun(inf) {
         while (!stop) {
             qtd++;
             time = dateHour().res;
-            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `## COMEÇANDO LOOP: ${qtd} ##` });
+            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `## COMEÇANDO LOOP: ${qtd} ##` });
 
             // SEG <> SAB | [??:00] <> [??:00]
             if (['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB',].includes(time.dayNam) && (Number(time.hou) > Number(scriptHour[0]) - 1 && Number(time.hou) < Number(scriptHour[1]))) {
@@ -74,7 +74,7 @@ async function serverRun(inf) {
                 retLeads = await leads(infLeads);
                 if (!retLeads.ret) {
                     err = `% [server] FALSE: retLeads`
-                    logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
+                    logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` });
                     infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads }
                     await log(infLog);
                 } else {
@@ -82,7 +82,7 @@ async function serverRun(inf) {
 
                     // SÓ RODAR SE O RETORNO DE leads FOR ARRAY
                     if (retLeads instanceof Array) {
-                        logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${retLeads.length} LEADS COM O STATUS: '${infLeads.status}'` });
+                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${retLeads.length} LEADS COM O STATUS: '${infLeads.status}'` });
 
                         // PEGAR INF | ALTERAR STATUS | MANDAR PARA PLANILHA
                         for (let [index, value] of retLeads.entries()) {
@@ -92,12 +92,12 @@ async function serverRun(inf) {
                             retLeadGet = await leadGet(infLeadGet);
                             if (!retLeadGet.ret) {
                                 err = `% [server] FALSE: retLeadGet`
-                                logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
+                                logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` });
                                 infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadGet }
                                 await log(infLog);
                             } else {
                                 retLeadGet = retLeadGet.res
-                                // logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `LEAD ID: ${value.leadId} | TELEFONE: ${retLeadGet.tel}` });
+                                // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `LEAD ID: ${value.leadId} | TELEFONE: ${retLeadGet.tel}` });
 
                                 // ###  ALTERAR STATUS
                                 let infLeadChangeStatus, retLeadChangeStatus
@@ -106,7 +106,7 @@ async function serverRun(inf) {
                                 if (!retLeadChangeStatus.ret) {
                                     // if (!retLeadGet) { // →  TESTE
                                     err = `% [server] FALSE: retLeadChangeStatus`
-                                    logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
+                                    logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` });
                                     infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadChangeStatus }
                                     await log(infLog);
                                 } else {
@@ -138,12 +138,12 @@ async function serverRun(inf) {
                                     retGoogleSheets = await googleSheets(infGoogleSheets);
                                     if (!retGoogleSheets.ret) {
                                         err = `% [server] FALSE: retGoogleSheets`
-                                        logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` });
+                                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` });
                                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
                                         await log(infLog);
                                         return retGoogleSheets
                                     }
-                                    logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `[${(index + 1).toString().padStart(2, '0')}] ID: ${sheetSend[0][0]} | TEL: ${sheetSend[0][5]} | SHEET OK` });
+                                    logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `[${(index + 1).toString().padStart(2, '0')}] ID: ${sheetSend[0][0]} | TEL: ${sheetSend[0][5]} | SHEET OK` });
                                 }
                             }
                         }
@@ -152,11 +152,11 @@ async function serverRun(inf) {
                     ret['msg'] = `SERVER: OK`
                 }
             } else {
-                logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `## FORA DO DIA E HORÁRIO (${scriptHour[0]}:00 <> ${scriptHour[1]}:00) ##` });
+                logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `## FORA DO DIA E HORÁRIO (${scriptHour[0]}:00 <> ${scriptHour[1]}:00) ##` });
             }
 
             time = dateHour().res;
-            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `## ESPERANDO DELAY PARA O PRÓXIMO LOOP ##` })
+            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `## ESPERANDO DELAY PARA O PRÓXIMO LOOP ##` })
             await new Promise(resolve => { setTimeout(resolve, 300000) }) // [60000] 1 MINUTO [300000] 5 MINUTOS
         }
     } catch (catchErr) {

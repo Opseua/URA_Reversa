@@ -31,7 +31,7 @@ async function leads(inf) {
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('tirarverde')) {
             err = `% [leads] FALSE: retApi 1`
-            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             await log(infLog);
             // REAUTENTICAR
@@ -48,7 +48,7 @@ async function leads(inf) {
             retLogin = await login(infLogin);
             if (!retLogin.ret) {
                 err = `% [leads] FALSE: retLogin`
-                logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+                logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
                 infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin }
                 await log(infLog);
                 return retApi
@@ -61,13 +61,13 @@ async function leads(inf) {
                 if (!retApi.ret || !retApi.res.body.includes('tirarverde')) {
                     if (retApi.res && retApi.res.body.includes('para acessar as funcionalidades')) {
                         err = `% [leads] sem permissão para acessar as funcionalidades`
-                        logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         await log(infLog);
                         return ret
                     } else {
                         err = `% [leads] FALSE: retApi 2`
-                        logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
                         infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         await log(infLog);
                         return ret
@@ -91,7 +91,7 @@ async function leads(inf) {
         if (!retRegex.ret || !retRegex.res['5']) {
             ret['msg'] = `LEAD: ERRO | NÃO ACHOU O ID DO LEAD`;
             err = `% [leads] ${ret.msg}`
-            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             await log(infLog);
             return ret
@@ -104,7 +104,7 @@ async function leads(inf) {
         retHtmlToJson = await htmlToJson(infHtmlToJson);
         if (!retHtmlToJson.ret) {
             err = `% [leads] FALSE: retHtmlToJson`
-            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             await log(infLog);
             return retHtmlToJson
@@ -119,7 +119,7 @@ async function leads(inf) {
         let leadsNew = []
         if (!retHtmlToJson.length > 0) {
             err = `% [leads] retHtmlToJson ARRAY VAZIA`
-            logConsole({ 'e': e, 'ee': ee, 'write': false, 'msg': `${err}` })
+            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
             infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             await log(infLog);
             return ret
