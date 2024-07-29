@@ -36,7 +36,7 @@ rem if "!ret!"=="TRUE" ( )
 rem  (NAO SUBIR OS 'if'!!!)
 if "!mode!"=="CMD" ( set "scriptType=processCmdKeep" )
 if "!mode!"=="LEGACY" ( set "scriptType=processCmdKeep" )
-if "!scriptType!" equ "ERRO" !fileMsg! "[!local!\!arquivo!]\n'mode' deve ser\n'CMD', 'LEGACY'" & exit
+if "!scriptType!" equ "ERRO" !fileMsg! "[!local!\!arquivo!]\n\n'mode' deve ser\n'CMD', 'LEGACY'" & exit
 endlocal & call "%fileChrome_Extension%\src\scripts\BAT\%scriptType%.bat" "%arg1%_WINTP2" "%project%@%outrosAdd%" "%fileScript%" "%mode%" & setlocal enabledelayedexpansion
 set "ret=%ret2%"
 rem #####################################################################
