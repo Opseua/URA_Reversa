@@ -13,19 +13,19 @@ rem set "timeNow=!timeNow:~0,-3!" & set "dia=!DATE:~0,2!" & set "mes=!DATE:~3,2!
 
 rem →→→ COMO USAR: Definir o 'mode'
 rem Exemplo 1: # WebScraper # criar a pasta: '.\src\z_Outros_serverC6' → o arquivo a ser executado sera o '.\src\serverC6.js'
-rem Exemplo 1: # WebScraper # criar a copia do nodeExe: 'nodeWebScraper_serverC6.exe'
+rem Exemplo 1: # WebScraper # criar a copia do programExe: 'nodeWebScraper_serverC6.exe'
 rem Exemplo 2: # WebScraper # criar a pasta: '.\src\z_Outros_serverJucesp' → o arquivo a ser executado sera o '.\src\serverJucesp.js'
-rem Exemplo 2: # WebScraper # criar a copia do nodeExe: 'nodeWebScraper_serverJucesp.exe'
+rem Exemplo 2: # WebScraper # criar a copia do programExe: 'nodeWebScraper_serverJucesp.exe'
 
 rem MODE →→→ 'CMD' (RESTART [SIM]) / 'LEGACY' (RESTART [NAO]) # PROJECT | OUTROSADD | ARQUIVO SCRIPT
 for /f "tokens=1,2,3,4,5,6 delims=\" %%a in ("!local!") do ( set "project=%%d" & set "outrosAdd=%%f" ) & set "replace="
-set "outrosAdd=!outrosAdd:z_Outros_=%replace%!" & set "scriptType=ERRO"
-set "mode=CMD" & set "root=!letra!:\ARQUIVOS\PROJETOS" & set "fileScript=!root!\!project!\src\!outrosAdd!.js" & cd\ & !letra!: & cd !root!\!project!
-rem #### ↑↑↑↑↑↑↑↑↑ ##########################################################
+set "outrosAdd=!outrosAdd:z_Outros_=%replace%!" & set "scriptType=ERRO" & set "ret=ERRO"
+set "mode=CMD" & set "programExe=node" & set "root=!letra!:\ARQUIVOS\PROJETOS" & set "fileScript=!root!\!project!\src\!outrosAdd!" & cd\ & !letra!: & cd !root!\!project!
+rem #### ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ ##########################################################
 
 rem CHECAR SE ESTA RODANDO
-rem tasklist /fi "ImageName eq node!project!_!outrosAdd!.exe" /fo csv 2>NUL | find /I "node!project!_!outrosAdd!.exe">NUL
-rem if "%ERRORLEVEL%"=="0" ( set "ret=TRUE" ) else ( set "ret=FALSE" )
+tasklist /fi "ImageName eq !programExe!!project!_!outrosAdd!.exe" /fo csv 2>NUL | find /I "!programExe!!project!_!outrosAdd!.exe">NUL
+if "%ERRORLEVEL%"=="0" ( set "ret=TRUE" ) else ( set "ret=FALSE" )
 
 rem ESTA RODANDO [NAO]
 rem if "!ret!"=="FALSE" ( if "!arg1!"=="!arg1:OFF=!" ( ) )
@@ -34,10 +34,9 @@ rem ESTA RODANDO [SIM]
 rem if "!ret!"=="TRUE" ( )
 
 rem  (NAO SUBIR OS 'if'!!!)
-if "!mode!"=="CMD" ( set "scriptType=processCmdKeep" )
-if "!mode!"=="LEGACY" ( set "scriptType=processCmdKeep" )
+if "!mode!"=="CMD" ( set "scriptType=processCmdKeep" ) else ( if "!mode!"=="LEGACY" ( set "scriptType=processCmdKeep" ) )
 if "!scriptType!" equ "ERRO" !fileMsg! "[!local!\!arquivo!]\n\n'mode' deve ser\n'CMD', 'LEGACY'" & exit
-endlocal & call "%fileChrome_Extension%\src\scripts\BAT\%scriptType%.bat" "%arg1%_WINTP2" "%project%@%outrosAdd%" "%fileScript%" "%mode%" & setlocal enabledelayedexpansion
+endlocal & call "%fileChrome_Extension%\src\scripts\BAT\%scriptType%.bat" "%arg1%_WINTP2" "%project%@%outrosAdd%" "%fileScript%" "%mode%" "%programExe%" "%ret%" & setlocal enabledelayedexpansion
 set "ret=%ret2%"
 rem #####################################################################
 
@@ -59,3 +58,6 @@ rem if "!ret!"=="FALSE" ( )
 
 exit
 exit
+
+
+
