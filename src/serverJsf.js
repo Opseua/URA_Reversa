@@ -49,7 +49,7 @@ async function serverRun(inf) {
                     retLeads = retLeads.res
 
                     // SÓ RODAR SE O RETORNO DE leads FOR ARRAY
-                    if (retLeads instanceof Array) {
+                    if (Array.isArray(retLeads)) {
                         logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ENVIANDO PARA A PLANILHA ${retLeads.length} LEADS` });
                         await new Promise(resolve => { setTimeout(resolve, 3 * 1000) })
 

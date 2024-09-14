@@ -92,7 +92,7 @@ async function leadGet(inf) {
             return retApi
         } else { retHtmlToJson = JSON.parse(retHtmlToJson.res.replace(/�/g, '').replace(/Ouvir Gravao/g, 'key').replace(/Baixar/g, 'value')) }
 
-        if (!(retHtmlToJson instanceof Array)) {
+        if (!Array.isArray(retHtmlToJson)) {
             ret['msg'] = `LEAD GET: ERRO | NÃO ACHOU A TABELA DO HTML`;
             err = `% [leadGet] ${ret.msg}`
             logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })

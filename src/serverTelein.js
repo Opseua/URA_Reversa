@@ -81,7 +81,7 @@ async function serverRun(inf) {
                     retLeads = retLeads.res
 
                     // SÓ RODAR SE O RETORNO DE leads FOR ARRAY
-                    if (retLeads instanceof Array) {
+                    if (Array.isArray(retLeads)) {
                         logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${retLeads.length} LEADS COM O STATUS: '${infLeads.status}'` });
 
                         // PEGAR INF | ALTERAR STATUS | MANDAR PARA PLANILHA
