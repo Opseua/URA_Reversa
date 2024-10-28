@@ -129,7 +129,7 @@ async function leadsJsf(inf) {
                     let hora = partes[1].split(':');
                     let day = parseInt(data[0], 10).toString().padStart(2, '0');
                     let mon = parseInt(data[1], 10).toString().padStart(2, '0');
-                    let yea = parseInt(data[2], 10).toString().padStart(4, '0');;
+                    let yea = parseInt(data[2], 10).toString().padStart(4, '0');
                     let hou = parseInt(hora[0], 10).toString().padStart(2, '0');
                     let min = parseInt(hora[1], 10).toString().padStart(2, '0');
                     let sec = parseInt(hora[2], 10).toString().padStart(2, '0');
@@ -170,7 +170,9 @@ async function leadsJsf(inf) {
 
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res;
-    }; return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
+    };
+
+    return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
 };
 
 // CHROME | NODEJS
