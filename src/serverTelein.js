@@ -4,7 +4,7 @@ await import('./resources/@export.js'); let e = import.meta.url, ee = e;
 async function serverRun(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `**************** SERVER **************** [${startupFun(startup, new Date())}]` })
+        logConsole({ e, ee, 'write': true, 'msg': `**************** SERVER **************** [${startupFun(startup, new Date())}]` })
 
         let infLog, infGoogleSheets, retGoogleSheets, err, time
 
@@ -12,7 +12,7 @@ async function serverRun(inf) {
         gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO';
         let range = 'A2', id = gO.inf.id, tab = gO.inf.tab
         infGoogleSheets = {
-            'e': e, 'action': 'get',
+            e, 'action': 'get',
             'id': id,
             'tab': tab,
             'range': range,
@@ -20,8 +20,8 @@ async function serverRun(inf) {
         retGoogleSheets = await googleSheets(infGoogleSheets);
         if (!retGoogleSheets.ret) {
             err = `$ Erro ao pegar-enviar dados para planilha`
-            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` });
-            infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
+            logConsole({ e, ee, 'write': true, 'msg': `${err}` });
+            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
             await log(infLog);
             return retGoogleSheets
         } else {
@@ -49,7 +49,7 @@ async function serverRun(inf) {
         while (!stop) {
             qtd++;
             time = dateHour().res;
-            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `## COMEÇANDO LOOP: ${qtd} ##` });
+            logConsole({ e, ee, 'write': true, 'msg': `## COMEÇANDO LOOP: ${qtd} ##` });
 
             // SEG <> SAB | [??:00] <> [??:00]
             if (['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB',].includes(time.dayNam) && (Number(time.hou) > Number(scriptHour[0]) - 1 && Number(time.hou) < Number(scriptHour[1]))) {
@@ -57,7 +57,7 @@ async function serverRun(inf) {
                 // PEGAR NOVOS LEADS
                 let infLeads, retLeads
                 infLeads = {
-                    'e': e,
+                    e,
                     'aut': autInf,
                     'login': loginInf,
                     'password': passwordInf,
@@ -73,40 +73,40 @@ async function serverRun(inf) {
                 retLeads = await leads(infLeads);
                 if (!retLeads.ret) {
                     err = `% [server] FALSE: retLeads`
-                    logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` });
-                    infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads }
+                    logConsole({ e, ee, 'write': true, 'msg': `${err}` });
+                    infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads }
                     await log(infLog);
                 } else {
                     retLeads = retLeads.res
 
                     // SÓ RODAR SE O RETORNO DE leads FOR ARRAY
                     if (Array.isArray(retLeads)) {
-                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${retLeads.length} LEADS COM O STATUS: '${infLeads.status}'` });
+                        logConsole({ e, ee, 'write': true, 'msg': `${retLeads.length} LEADS COM O STATUS: '${infLeads.status}'` });
 
                         // PEGAR INF | ALTERAR STATUS | MANDAR PARA PLANILHA
                         for (let [index, value] of retLeads.entries()) {
                             // ### PEGAR INF
                             let infLeadGet, retLeadGet
-                            infLeadGet = { 'e': e, 'aut': autInf, 'leadId': value.leadId }
+                            infLeadGet = { e, 'aut': autInf, 'leadId': value.leadId }
                             retLeadGet = await leadGet(infLeadGet);
                             if (!retLeadGet.ret) {
                                 err = `% [server] FALSE: retLeadGet`
-                                logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` });
-                                infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadGet }
+                                logConsole({ e, ee, 'write': true, 'msg': `${err}` });
+                                infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadGet }
                                 await log(infLog);
                             } else {
                                 retLeadGet = retLeadGet.res
-                                // logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `LEAD ID: ${value.leadId} | TELEFONE: ${retLeadGet.tel}` });
+                                // logConsole({ e, ee, 'write': true, 'msg': `LEAD ID: ${value.leadId} | TELEFONE: ${retLeadGet.tel}` });
 
                                 // ###  ALTERAR STATUS
                                 let infLeadChangeStatus, retLeadChangeStatus
-                                infLeadChangeStatus = { 'e': e, 'aut': autInf, 'leadId': value.leadId, 'status': '1' } // '4' → Inapto | '1' → Venda Realizada
+                                infLeadChangeStatus = { e, 'aut': autInf, 'leadId': value.leadId, 'status': '1' } // '4' → Inapto | '1' → Venda Realizada
                                 retLeadChangeStatus = await leadChangeStatus(infLeadChangeStatus);
                                 if (!retLeadChangeStatus.ret) {
                                     // if (!retLeadGet) { // →  TESTE
                                     err = `% [server] FALSE: retLeadChangeStatus`
-                                    logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` });
-                                    infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadChangeStatus }
+                                    logConsole({ e, ee, 'write': true, 'msg': `${err}` });
+                                    infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadChangeStatus }
                                     await log(infLog);
                                 } else {
                                     retLeadChangeStatus = retLeadChangeStatus.res
@@ -128,7 +128,7 @@ async function serverRun(inf) {
                                     let sheetSendNew = sheetSend[0].join(conSplInf)
 
                                     infGoogleSheets = {
-                                        'e': e, 'action': 'send',
+                                        e, 'action': 'send',
                                         'id': id,
                                         'tab': tab,
                                         'range': `${colInf}**`,
@@ -137,12 +137,12 @@ async function serverRun(inf) {
                                     retGoogleSheets = await googleSheets(infGoogleSheets);
                                     if (!retGoogleSheets.ret) {
                                         err = `% [server] FALSE: retGoogleSheets`
-                                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` });
-                                        infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
+                                        logConsole({ e, ee, 'write': true, 'msg': `${err}` });
+                                        infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
                                         await log(infLog);
                                         return retGoogleSheets
                                     }
-                                    logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `[${(index + 1).toString().padStart(2, '0')}] ID: ${sheetSend[0][0]} | TEL: ${sheetSend[0][5]} | SHEET OK` });
+                                    logConsole({ e, ee, 'write': true, 'msg': `[${(index + 1).toString().padStart(2, '0')}] ID: ${sheetSend[0][0]} | TEL: ${sheetSend[0][5]} | SHEET OK` });
                                 }
                             }
                         }
@@ -151,11 +151,11 @@ async function serverRun(inf) {
                     ret['msg'] = `SERVER: OK`
                 }
             } else {
-                logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `## FORA DO DIA E HORÁRIO (${scriptHour[0]}:00 <> ${scriptHour[1]}:00) ##` });
+                logConsole({ e, ee, 'write': true, 'msg': `## FORA DO DIA E HORÁRIO (${scriptHour[0]}:00 <> ${scriptHour[1]}:00) ##` });
             }
 
             time = dateHour().res;
-            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `## ESPERANDO DELAY PARA O PRÓXIMO LOOP ##` })
+            logConsole({ e, ee, 'write': true, 'msg': `## ESPERANDO DELAY PARA O PRÓXIMO LOOP ##` })
             await new Promise(resolve => { setTimeout(resolve, 300000) }) // [60000] 1 MINUTO [300000] 5 MINUTOS
         }
     } catch (catchErr) {

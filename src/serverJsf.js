@@ -4,17 +4,17 @@ await import('./resources/@export.js'); let e = import.meta.url, ee = e;
 async function serverRun(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `**************** SERVER **************** [${startupFun(startup, new Date())}]` })
+        logConsole({ e, ee, 'write': true, 'msg': `**************** SERVER **************** [${startupFun(startup, new Date())}]` })
 
         let infLog, infGoogleSheets, retGoogleSheets, err, time
 
         // DADOS GLOBAIS DA PLANILHA E FAZER O PARSE
         gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO';
         let range = 'A2', id = gO.inf.id, tab = gO.inf.tab
-        retGoogleSheets = await googleSheets({ 'e': e, 'action': 'get', 'id': id, 'tab': tab, 'range': range, });
+        retGoogleSheets = await googleSheets({ e, 'action': 'get', 'id': id, 'tab': tab, 'range': range, });
         if (!retGoogleSheets.ret) {
-            err = `$ Erro ao pegar-enviar dados para planilha`; logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` });
-            await log({ 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }); return retGoogleSheets
+            err = `$ Erro ao pegar-enviar dados para planilha`; logConsole({ e, ee, 'write': true, 'msg': `${err}` });
+            await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }); return retGoogleSheets
         } else { retGoogleSheets = retGoogleSheets.res[0][0] }
         gO.inf['json'] = JSON.parse(retGoogleSheets); let colInf = inf && inf.col ? inf.col : gO.inf.json['colUra']; let autInf = inf && inf.autJsf ? inf.autJsf : gO.inf.json['autUraJsf'];
         let conSplInf = inf && inf.conSpl ? inf.conSpl : gO.inf.json['conSpl']; let loginInf = inf && inf.loginJsf ? inf.loginJsf : gO.inf.json['loginJsf'];
@@ -24,15 +24,15 @@ async function serverRun(inf) {
 
         async function keepRunning() {
             time = dateHour().res;
-            retGoogleSheets = await googleSheets({ 'e': e, 'action': 'send', 'id': `1wEiSgZHeaUjM6Gl1Y67CZZZ7UTsDweQhRYKqaTu3_I8`, 'tab': `INDICAR_AUTOMATICO`, 'range': `A130`, 'values': [[`${time.tim} | Rodando: serverJsf`]] })
+            retGoogleSheets = await googleSheets({ e, 'action': 'send', 'id': `1wEiSgZHeaUjM6Gl1Y67CZZZ7UTsDweQhRYKqaTu3_I8`, 'tab': `INDICAR_AUTOMATICO`, 'range': `A130`, 'values': [[`${time.tim} | Rodando: serverJsf`]] })
             if (!retGoogleSheets.ret) {
-                err = `$ Erro ao pegar-enviar dados para planilha`; logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` });
-                infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }; retLog = await log(infLog); return retGoogleSheets
+                err = `$ Erro ao pegar-enviar dados para planilha`; logConsole({ e, ee, 'write': true, 'msg': `${err}` });
+                infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }; retLog = await log(infLog); return retGoogleSheets
             }
         }
 
         let qtd = 0, stop = false; while (!stop) {
-            qtd++; time = dateHour().res; logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `## COMEÇANDO LOOP: ${qtd} ##` });
+            qtd++; time = dateHour().res; logConsole({ e, ee, 'write': true, 'msg': `## COMEÇANDO LOOP: ${qtd} ##` });
 
             // MANTER O STATUS 'RODANDO' NA PLANILHA
             keepRunning()
@@ -41,15 +41,15 @@ async function serverRun(inf) {
             if (['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB',].includes(time.dayNam) && (Number(time.hou) > Number(scriptHour[0]) - 1 && Number(time.hou) < Number(scriptHour[1]))) {
 
                 // PEGAR NOVOS LEADS
-                let retLeads = await leadsJsf({ 'e': e, 'aut': autInf, 'login': loginInf, 'password': passwordInf, });
+                let retLeads = await leadsJsf({ e, 'aut': autInf, 'login': loginInf, 'password': passwordInf, });
                 if (!retLeads.ret) {
-                    err = `% [server] FALSE: retLeads`; logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` }); await log({ 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads });
+                    err = `% [server] FALSE: retLeads`; logConsole({ e, ee, 'write': true, 'msg': `${err}` }); await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads });
                 } else {
                     retLeads = retLeads.res
 
                     // SÓ RODAR SE O RETORNO DE leads FOR ARRAY
                     if (Array.isArray(retLeads)) {
-                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ENVIANDO PARA A PLANILHA ${retLeads.length} LEADS` });
+                        logConsole({ e, ee, 'write': true, 'msg': `ENVIANDO PARA A PLANILHA ${retLeads.length} LEADS` });
                         await new Promise(resolve => { setTimeout(resolve, 3 * 1000) })
 
                         // PEGAR INF | ALTERAR STATUS | MANDAR PARA PLANILHA
@@ -69,11 +69,11 @@ async function serverRun(inf) {
                             ]]
                             let sheetSendNew = sheetSend[0].join(conSplInf)
 
-                            infGoogleSheets = { 'e': e, 'action': 'send', 'id': id, 'tab': tab, 'range': `${colInf}**`, 'values': [[`${sheetSendNew}`]] };
+                            infGoogleSheets = { e, 'action': 'send', 'id': id, 'tab': tab, 'range': `${colInf}**`, 'values': [[`${sheetSendNew}`]] };
                             retGoogleSheets = await googleSheets(infGoogleSheets); if (!retGoogleSheets.ret) {
                                 err = `% [server] FALSE: retGoogleSheets`
-                                logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` }); await log({ 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }); return retGoogleSheets
-                            }; logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `[${(index + 1).toString().padStart(2, '0')}] ID: ${sheetSend[0][0]} | TEL: ${sheetSend[0][5]} | SHEET OK` });
+                                logConsole({ e, ee, 'write': true, 'msg': `${err}` }); await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }); return retGoogleSheets
+                            }; logConsole({ e, ee, 'write': true, 'msg': `[${(index + 1).toString().padStart(2, '0')}] ID: ${sheetSend[0][0]} | TEL: ${sheetSend[0][5]} | SHEET OK` });
 
                             // MANTER O STATUS 'RODANDO' NA PLANILHA
                             keepRunning()
@@ -85,10 +85,10 @@ async function serverRun(inf) {
                     ret['msg'] = `SERVER: OK`
                 }
             } else {
-                logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `## FORA DO DIA E HORÁRIO (${scriptHour[0]}:00 <> ${scriptHour[1]}:00) ##` });
+                logConsole({ e, ee, 'write': true, 'msg': `## FORA DO DIA E HORÁRIO (${scriptHour[0]}:00 <> ${scriptHour[1]}:00) ##` });
             }
 
-            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `## ESPERANDO DELAY PARA O PRÓXIMO LOOP ##` });
+            logConsole({ e, ee, 'write': true, 'msg': `## ESPERANDO DELAY PARA O PRÓXIMO LOOP ##` });
             await new Promise(resolve => { setTimeout(resolve, 180 * 1000) }) // SEGUNDOS
         }
     } catch (catchErr) {

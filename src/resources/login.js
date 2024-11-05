@@ -1,12 +1,12 @@
 // let infLogin, retLogin
-// infLogin = { 'e': e, 'aut': false }
+// infLogin = { e, 'aut': false }
 // retLogin = await login(infLogin); console.log(retLogin)
 
 let e = import.meta.url, ee = e;
 async function login(inf) {
     let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
     try {
-        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ANTES DE AUTENTICAR` })
+        logConsole({ e, ee, 'write': true, 'msg': `ANTES DE AUTENTICAR` })
 
         let infApi, retApi, infLog, err
         let aut = inf && inf.aut ? inf.aut : 'aaaa';
@@ -18,7 +18,7 @@ async function login(inf) {
 
         // [1] LOGIN
         infApi = {
-            'e': e, 'method': 'POST', 'url': `https://interface.telein.com.br/op_access.php`,
+            e, 'method': 'POST', 'url': `https://interface.telein.com.br/op_access.php`,
             'headers': {
                 'Cookie': aut,
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -31,8 +31,8 @@ async function login(inf) {
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('escolher.php')) {
             err = `% [login] FALSE: retApi 1`
-            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
-            infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+            logConsole({ e, ee, 'write': true, 'msg': `${err}` })
+            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             await log(infLog);
             ret['msg'] = `LOGIN: ERRO | AO FAZER LOGIN`;
             return ret
@@ -42,12 +42,12 @@ async function login(inf) {
 
         // ## LOG ## retApi
         err = `% [login] LOG retApi`
-        infLog = { 'e': e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+        infLog = { e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
         await log(infLog);
 
         // [2] USUÁRIO [SELECIONAR]
         infApi = {
-            'e': e, 'method': 'POST', 'url': `https://interface.telein.com.br/alterarinterface.php`,
+            e, 'method': 'POST', 'url': `https://interface.telein.com.br/alterarinterface.php`,
             'headers': {
                 'Cookie': aut,
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -61,8 +61,8 @@ async function login(inf) {
         retApi = await api(infApi);
         if (!retApi.ret || retApi.res.code !== 200) {
             err = `% [login] FALSE: retApi 2`
-            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
-            infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+            logConsole({ e, ee, 'write': true, 'msg': `${err}` })
+            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             await log(infLog);
             ret['msg'] = `LOGIN: ERRO | AO PEGAR E SELECIONAR O USUÁRIO`;
             return ret
@@ -70,7 +70,7 @@ async function login(inf) {
         ret['msg'] = `LOGIN: OK`;
         ret['ret'] = true
 
-        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `ESPERANDO 15 SEGUNDOS APÓS O LOGIN` })
+        logConsole({ e, ee, 'write': true, 'msg': `ESPERANDO 15 SEGUNDOS APÓS O LOGIN` })
         await new Promise(resolve => { setTimeout(resolve, 15000) })
 
     } catch (catchErr) {

@@ -1,5 +1,5 @@
 // let infLeadChangeStatus, retLeadChangeStatus
-// infLeadChangeStatus = { 'e': e, 'aut': false, 'leadId': value.leadId, 'status': '1' } // '4' → Inapto | '1' → Venda Realizada
+// infLeadChangeStatus = { e, 'aut': false, 'leadId': value.leadId, 'status': '1' } // '4' → Inapto | '1' → Venda Realizada
 // retLeadChangeStatus = await leadChangeStatus(infLeadChangeStatus); console.log(retLeadChangeStatus)
 
 let e = import.meta.url, ee = e;
@@ -18,7 +18,7 @@ async function leadChangeStatus(inf) {
 
         // API [ALTERAR STATUS DO LEAD]
         infApi = {
-            'e': e, 'method': 'POST', 'url': `https://interface.telein.com.br/index.php?link=247&tipo=sucesso&id_contato=${leadId}`,
+            e, 'method': 'POST', 'url': `https://interface.telein.com.br/index.php?link=247&tipo=sucesso&id_contato=${leadId}`,
             'headers': {
                 'Cookie': aut,
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -31,27 +31,27 @@ async function leadChangeStatus(inf) {
 
         // ## LOG ## retApi
         err = `% [leadChangeStatus] LOG retApi ${leadId}`
-        infLog = { 'e': e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+        infLog = { e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
         await log(infLog);
 
         if (!retApi.ret || !retApi.res.body.includes('Retorno realizado por')) {
             err = `% [leadChangeStatus] FALSE: retApi 1`
-            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
-            infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+            logConsole({ e, ee, 'write': true, 'msg': `${err}` })
+            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             await log(infLog);
             // REAUTENTICAR
             let infLogin, retLogin
-            infLogin = { 'e': e, 'aut': aut }
+            infLogin = { e, 'aut': aut }
             retLogin = await login(infLogin);
             if (!retLogin.ret) {
                 err = `% [leadChangeStatus] FALSE: retLogin 1`
-                logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
-                infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin }
+                logConsole({ e, ee, 'write': true, 'msg': `${err}` })
+                infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin }
                 await log(infLog);
                 return retApi
             } else {
                 infApi = {
-                    'e': e, 'method': 'POST', 'url': `https://interface.telein.com.br/index.php?link=247&tipo=sucesso&id_contato=${leadId}`,
+                    e, 'method': 'POST', 'url': `https://interface.telein.com.br/index.php?link=247&tipo=sucesso&id_contato=${leadId}`,
                     'headers': {
                         'Cookie': aut,
                         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -64,14 +64,14 @@ async function leadChangeStatus(inf) {
                 if (!retApi.ret || !retApi.res.body.includes('Retorno realizado por')) {
                     if (retApi.res && retApi.res.body.includes('para acessar as funcionalidades')) {
                         err = `% [leadChangeStatus] sem permissão para acessar as funcionalidades`
-                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
-                        infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+                        logConsole({ e, ee, 'write': true, 'msg': `${err}` })
+                        infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         await log(infLog);
                         return ret
                     } else {
                         err = `% [leadChangeStatus] FALSE: retLogin 2`
-                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
-                        infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+                        logConsole({ e, ee, 'write': true, 'msg': `${err}` })
+                        infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         await log(infLog);
                         return ret
                     }

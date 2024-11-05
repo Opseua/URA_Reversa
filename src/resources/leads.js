@@ -1,6 +1,6 @@
 // let infLeads, retLeads
 // infLeads = {
-//     'e': e,
+//     e,
 //     'aut': false,
 //     'status': [ // 'Retorno realizado' | 'Pendente de retorno' 'Visualizado para retorno'
 //         // 'Retorno realizado', // ###### TESTES ######
@@ -25,19 +25,19 @@ async function leads(inf) {
 
         // API [LISTA DE LEADS]
         infApi = {
-            'e': e, 'method': 'GET', 'url': `https://interface.telein.com.br/index.php?link=246`,
+            e, 'method': 'GET', 'url': `https://interface.telein.com.br/index.php?link=246`,
             'headers': { 'Cookie': aut, }
         };
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('tirarverde')) {
             err = `% [leads] FALSE: retApi 1`
-            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
-            infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+            logConsole({ e, ee, 'write': true, 'msg': `${err}` })
+            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             await log(infLog);
             // REAUTENTICAR
             let infLogin, retLogin
             infLogin = {
-                'e': e,
+                e,
                 'aut': aut,
                 'login': loginOk,
                 'password': password,
@@ -48,27 +48,27 @@ async function leads(inf) {
             retLogin = await login(infLogin);
             if (!retLogin.ret) {
                 err = `% [leads] FALSE: retLogin`
-                logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
-                infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin }
+                logConsole({ e, ee, 'write': true, 'msg': `${err}` })
+                infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin }
                 await log(infLog);
                 return retApi
             } else {
                 infApi = {
-                    'e': e, 'method': 'GET', 'url': `https://interface.telein.com.br/index.php?link=246`,
+                    e, 'method': 'GET', 'url': `https://interface.telein.com.br/index.php?link=246`,
                     'headers': { 'Cookie': aut, }
                 };
                 retApi = await api(infApi);
                 if (!retApi.ret || !retApi.res.body.includes('tirarverde')) {
                     if (retApi.res && retApi.res.body.includes('para acessar as funcionalidades')) {
                         err = `% [leads] sem permissão para acessar as funcionalidades`
-                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
-                        infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+                        logConsole({ e, ee, 'write': true, 'msg': `${err}` })
+                        infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         await log(infLog);
                         return ret
                     } else {
                         err = `% [leads] FALSE: retApi 2`
-                        logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
-                        infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+                        logConsole({ e, ee, 'write': true, 'msg': `${err}` })
+                        infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
                         await log(infLog);
                         return ret
                     }
@@ -82,17 +82,17 @@ async function leads(inf) {
 
         // ## LOG ## retApi
         err = `% [leads] LOG retApi`
-        infLog = { 'e': e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+        infLog = { e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
         await log(infLog);
 
         // PEGAR [ID LEAD]
-        infRegex = { 'e': e, 'pattern': `index.php?link=247&id_contato=(.*?)"`, 'text': retApi }
+        infRegex = { e, 'pattern': `index.php?link=247&id_contato=(.*?)"`, 'text': retApi }
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['5']) {
             ret['msg'] = `LEAD: ERRO | NÃO ACHOU O ID DO LEAD`;
             err = `% [leads] ${ret.msg}`
-            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
-            infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+            logConsole({ e, ee, 'write': true, 'msg': `${err}` })
+            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
             await log(infLog);
             return ret
         }
@@ -100,34 +100,34 @@ async function leads(inf) {
 
         // HTML → JSON
         let infHtmlToJson, retHtmlToJson
-        infHtmlToJson = { 'e': e, 'randomCol': true, 'html': retApi }
+        infHtmlToJson = { e, 'randomCol': true, 'html': retApi }
         retHtmlToJson = await htmlToJson(infHtmlToJson);
         if (!retHtmlToJson.ret) {
             err = `% [leads] FALSE: retHtmlToJson`
-            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
-            infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
+            logConsole({ e, ee, 'write': true, 'msg': `${err}` })
+            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             await log(infLog);
             return retHtmlToJson
         } else {
             retHtmlToJson = JSON.parse(retHtmlToJson.res)
         }
 
-        // infLog = { 'e': e, 'folder': 'Registros', 'path': `HTML_JSON.txt`, 'text': retHtmlToJson }
+        // infLog = { e, 'folder': 'Registros', 'path': `HTML_JSON.txt`, 'text': retHtmlToJson }
         // await log(infLog);
 
         // ARRAY COM A LISTA DE LEADS
         let leadsNew = []
         if (!retHtmlToJson.length > 0) {
             err = `% [leads] retHtmlToJson ARRAY VAZIA`
-            logConsole({ 'e': e, 'ee': ee, 'write': true, 'msg': `${err}` })
-            infLog = { 'e': e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
+            logConsole({ e, ee, 'write': true, 'msg': `${err}` })
+            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
             await log(infLog);
             return ret
         }
 
         // ## LOG ## retHtmlToJson
         err = `% [leads] LOG retHtmlToJson`
-        infLog = { 'e': e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
+        infLog = { e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
         await log(infLog);
 
         for (let [index, value] of retHtmlToJson.entries()) {
