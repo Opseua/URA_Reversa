@@ -17,8 +17,8 @@ pesquisar = "\"+arr(qtd)
 substituir = ""
 resultado = (Replace(txt,pesquisar,substituir))
 rem DEFINIR O DESTINO
-localizacao_completa = localizacao                        rem RESULTADO: 'D:\ARQUIVOS\WINDOWS\PORTABLE_Telegram'
-localizacao_completa_ate_a_pasta_anterior = resultado     rem RESULTADO: 'D:\ARQUIVOS\WINDOWS'
+localizacao_completa = localizacao                        rem RESULTADO: '!letra!:\ARQUIVOS\WINDOWS\PORTABLE_Telegram'
+localizacao_completa_ate_a_pasta_anterior = resultado     rem RESULTADO: '!letra!:\ARQUIVOS\WINDOWS'
 localizacao_so_a_ultima_pasta = ultimapasta               rem RESULTADO: 'PORTABLE_Telegram'
 
 rem ############################ NOME DO PROJETO ############################
