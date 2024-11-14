@@ -20,7 +20,7 @@ rem Exemplo 2: # WebScraper # criar a copia do programExe: 'nodeWebScraper_serve
 rem MODE →→→ 'CMD' (RESTART [SIM]) / 'LEGACY' (RESTART [NAO]) # PROJECT | OUTROSADD | ARQUIVO SCRIPT
 for /f "tokens=1,2,3,4,5,6 delims=\" %%a in ("!local!") do ( set "project=%%d" & set "outrosAdd=%%f" ) & set "replace="
 set "outrosAdd=!outrosAdd:z_Outros_=%replace%!" & set "scriptType=ERRO" & set "ret=ERRO"
-set "mode=CMD" & set "programExe=node" & set "root=!letra!:\ARQUIVOS\PROJETOS" & set "fileScript=!root!\!project!\src\!outrosAdd!" & cd\ & !letra!: & cd !root!\!project!
+set "mode=CMD" & set "programExe=node" & set "root=!fileProjetos!" & set "fileScript=!root!\!project!\src\!outrosAdd!" & cd\ & !letra!: & cd !root!\!project!
 rem #### ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ ##########################################################
 
 rem CHECAR SE ESTA RODANDO

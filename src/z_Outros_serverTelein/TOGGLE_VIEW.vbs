@@ -17,8 +17,8 @@ pesquisar = "\"+arr(qtd)
 substituir = ""
 resultado = (Replace(txt,pesquisar,substituir))
 rem DEFINIR O DESTINO
-localizacao_completa = localizacao                        rem RESULTADO: '!letra!:\ARQUIVOS\WINDOWS\PORTABLE_Telegram'
-localizacao_completa_ate_a_pasta_anterior = resultado     rem RESULTADO: '!letra!:\ARQUIVOS\WINDOWS'
+localizacao_completa = localizacao                        rem RESULTADO: '!fileWindows!\PORTABLE_Telegram'
+localizacao_completa_ate_a_pasta_anterior = resultado     rem RESULTADO: '!fileWindows!'
 localizacao_so_a_ultima_pasta = ultimapasta               rem RESULTADO: 'PORTABLE_Telegram'
 
 rem ############################ NOME DO PROJETO ############################
@@ -28,12 +28,17 @@ outros = arr(5)
 rem →→→ COMO USAR
 rem o nome do arquivo do '.vbs' e o paramentro que sera passado ao '2_SRIPT.BAT' so e necessario criar uma copia e definir o nome
 
-rem MUDAR LOCAL DO TERMINAL
 Set WshShell = CreateObject("WScript.Shell")
-WshShell.CurrentDirectory = letra + ":\ARQUIVOS\PROJETOS\"+ project
+
+rem PEGAR VARIAVEL DE AMBIENTE
+fileProjetos = WshShell.ExpandEnvironmentStrings("%fileProjetos%")
+fileWindows = WshShell.ExpandEnvironmentStrings("%fileWindows%")
+
+rem MUDAR LOCAL DO TERMINAL
+WshShell.CurrentDirectory = fileProjetos + "\" + project
 
 rem ############################ ABRIR ARQUIVO COM PARAMETROS ############################
-file = letra + ":\ARQUIVOS\WINDOWS\BAT\RUN_PORTABLE\2_BACKGROUND.exe"
+file = fileWindows + "\BAT\RUN_PORTABLE\2_BACKGROUND.exe"
 par1 = localizacao + "\2_SCRIPT.bat"
 par2 = arquivoSemExtensao
 par3 = "PAR_VAR_3"
