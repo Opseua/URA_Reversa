@@ -12,7 +12,7 @@
 
 let e = import.meta.url, ee = e;
 async function leadsJsf(inf) {
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
         let infApi, retApi, infRegex, retRegex, infLog, retLog, err, time = dateHour().res, infGoogleSheets, retGoogleSheets
         let aut = inf && inf.autJsf ? inf.autJsf : 'aaaa';
@@ -57,7 +57,7 @@ async function leadsJsf(inf) {
 
         // TESTES
         // let infFile, retFile // 'raw': true,         rewrite TRUE → adicionar no mesmo arquivo
-        // infFile = { e, 'action': 'read', 'functionLocal': false, 'path': "!letter!:/ARQUIVOS/PROJETOS/URA_Reversa/LEADS.txt" }
+        // infFile = { e, 'action': 'read', 'functionLocal': false, 'path': `${fileProjetos}/URA_Reversa/LEADS.txt` }
         // retFile = await file(infFile);
         // retApi = { 'ret': true, 'res': { 'body': retFile.res } }
 

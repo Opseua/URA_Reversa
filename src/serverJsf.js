@@ -2,9 +2,9 @@ function startupFun(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m =
 await import('./resources/@export.js'); let e = import.meta.url, ee = e;
 
 async function serverRun(inf) {
-    let ret = { 'ret': false }; e = inf && inf.e ? inf.e : e;
+    let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        logConsole({ e, ee, 'write': true, 'msg': `**************** SERVER **************** [${startupFun(startup, new Date())}]` })
+        logConsole({ e, ee, 'write': true, 'msg': `**************** SERVER **************** [${startupFun(startup, new Date())}]`, });
 
         let infLog, infGoogleSheets, retGoogleSheets, err, time
 
