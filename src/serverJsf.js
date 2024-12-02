@@ -27,7 +27,7 @@ async function serverRun(inf) {
             retGoogleSheets = await googleSheets({ e, 'action': 'send', 'id': `1wEiSgZHeaUjM6Gl1Y67CZZZ7UTsDweQhRYKqaTu3_I8`, 'tab': `INDICAR_AUTOMATICO`, 'range': `A130`, 'values': [[`${time.tim} | Rodando: serverJsf`]] })
             if (!retGoogleSheets.ret) {
                 err = `$ Erro ao pegar-enviar dados para planilha`; logConsole({ e, ee, 'write': true, 'msg': `${err}` });
-                infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }; retLog = await log(infLog); return retGoogleSheets
+                infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }; await log(infLog); return retGoogleSheets
             }
         }
 
