@@ -1,3 +1,3 @@
-import { jsConfig } from '../../../ARQUIVOS/PROJETOS/Chrome_Extension/src/scripts/media/eslint.config.js'
+import { jsConfig } from '../../../ARQUIVOS/PROJETOS/Chrome_Extension/src/eslint.config.js';
 
-export default [...jsConfig]
+export default [...jsConfig];
