@@ -11,7 +11,7 @@
 // retLeads = await leads(infLeads); console.log(retLeads)
 
 let e = import.meta.url, ee = e;
-async function leadsJsf(inf) {
+async function leadsJsf(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
         let infApi, retApi, infRegex, retRegex, infLog, retLog, err, time = dateHour().res, infGoogleSheets, retGoogleSheets

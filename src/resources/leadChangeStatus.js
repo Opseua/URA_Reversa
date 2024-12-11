@@ -3,7 +3,7 @@
 // retLeadChangeStatus = await leadChangeStatus(infLeadChangeStatus); console.log(retLeadChangeStatus)
 
 let e = import.meta.url, ee = e;
-async function leadChangeStatus(inf) {
+async function leadChangeStatus(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
         let infApi, retApi, infLog, time, err

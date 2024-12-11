@@ -3,7 +3,7 @@
 // retLogin = await login(infLogin); console.log(retLogin)
 
 let e = import.meta.url, ee = e;
-async function login(inf) {
+async function login(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
         logConsole({ e, ee, 'write': true, 'msg': `ANTES DE AUTENTICAR` })

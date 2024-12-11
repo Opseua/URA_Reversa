@@ -3,7 +3,7 @@
 // retLeadGet = await leadGet(infLeadGet); console.log(retLeadGet)
 
 let e = import.meta.url, ee = e;
-async function leadGet(inf) {
+async function leadGet(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
         let infApi, retApi, infRegex, retRegex, infLog, err
