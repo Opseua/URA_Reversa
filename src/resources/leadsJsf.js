@@ -14,44 +14,44 @@ let e = import.meta.url, ee = e;
 async function leadsJsf(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let infApi, retApi, infRegex, retRegex, infLog, retLog, err, time = dateHour().res, infGoogleSheets, retGoogleSheets
+        let infApi, retApi, infRegex, retRegex, infLog, retLog, err, time = dateHour().res, infGoogleSheets, retGoogleSheets;
         let aut = inf && inf.autJsf ? inf.autJsf : 'aaaa';
 
         // DADOS GLOBAIS DA PLANILHA E FAZER O PARSE
         gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO';
-        let range = 'A2', id = gO.inf.id, tab = gO.inf.tab
+        let range = 'A2', id = gO.inf.id, tab = gO.inf.tab;
         infGoogleSheets = {
             e, 'action': 'get',
             'id': id,
             'tab': tab,
             'range': range,
-        }
+        };
         retGoogleSheets = await googleSheets(infGoogleSheets);
         if (!retGoogleSheets.ret) {
-            err = `$ Erro ao pegar-enviar dados para planilha`
-            logConsole({ e, ee, 'write': true, 'msg': `${err}` });
-            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets }
+            err = `$ Erro ao pegar-enviar dados para planilha`;
+            logConsole({ e, ee, 'write': true, 'msg': `${err}`, });
+            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets, };
             retLog = await log(infLog);
-            return retGoogleSheets
+            return retGoogleSheets;
         } else {
-            retGoogleSheets = retGoogleSheets.res[0][0]
+            retGoogleSheets = retGoogleSheets.res[0][0];
         }
-        gO.inf['json'] = JSON.parse(retGoogleSheets)
+        gO.inf['json'] = JSON.parse(retGoogleSheets);
 
         // ÚLTIMO LEAD QUE FOI PEGO NO JSF
         let conSplInf = inf && inf.conSpl ? inf.conSpl : gO.inf.json['conSpl'];
         let lastLead = inf && inf.lastLeadURA_ReversaJsf ? inf.lastLeadURA_ReversaJsf : gO.inf.json['lastLeadURA_ReversaJsf'];
 
         // DATA INICIAL À 5 DIAS ATRÁS
-        let timeSta = dateHour(`-${(86400 * 5)}`).res
+        let timeSta = dateHour(`-${(86400 * 5)}`).res;
 
-        let timeEnd = dateHour().res
-        let url = `http://200.150.194.253/azcall/relatorio/relTbu.php?dt_inicial=${timeSta.day}/${timeSta.mon}/2024%200:00&dt_final=${timeEnd.day}/${timeEnd.mon}/2024%2023:59&telefone=&telefonetype=1&nome=&camp=&digito=1&nometype=1&Camp\[\]=&&pagina=1&button4=pesquisar`
+        let timeEnd = dateHour().res;
+        let url = `http://200.150.194.253/azcall/relatorio/relTbu.php?dt_inicial=${timeSta.day}/${timeSta.mon}/2024%200:00&dt_final=${timeEnd.day}/${timeEnd.mon}/2024%2023:59&telefone=&telefonetype=1&nome=&camp=&digito=1&nometype=1&Camp\[\]=&&pagina=1&button4=pesquisar`;
 
         // API [LISTA DE LEADS]
         infApi = {
             e, 'method': 'GET', 'url': url,
-            'headers': { 'Cookie': aut, }
+            'headers': { 'Cookie': aut, },
         };
         retApi = await api(infApi);
 
@@ -62,66 +62,66 @@ async function leadsJsf(inf = {}) {
         // retApi = { 'ret': true, 'res': { 'body': retFile.res } }
 
         if (!retApi.ret || !retApi.res.body.includes('Campanha')) {
-            err = `% [leads] FALSE: retApi 1`
+            err = `% [leads] FALSE: retApi 1`;
             // logConsole({ e, ee, 'write': true, 'msg': `${err}` })
-            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, };
             retLog = await log(infLog);
-            return ret
+            return ret;
         } else {
-            retApi = retApi.res.body
+            retApi = retApi.res.body;
         }
 
         // ## LOG ## retApi
-        err = `% [leads] LOG retApi`
-        infLog = { e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
-        retLog = await log(infLog); console.log(retLog)
+        err = `% [leads] LOG retApi`;
+        infLog = { e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, };
+        retLog = await log(infLog); console.log(retLog);
 
         // PEGAR A TABELA
-        infRegex = { e, 'pattern': `<table(.*?)</table>`, 'text': retApi }
+        infRegex = { e, 'pattern': `<table(.*?)</table>`, 'text': retApi, };
         retRegex = regex(infRegex);
         if (!retRegex.ret || !retRegex.res['3']) {
             ret['msg'] = `LEADS JSF: ERRO | NÃO ACHOU A TABELA`;
-            err = `% [leads] ${ret.msg}`
+            err = `% [leads] ${ret.msg}`;
             // logConsole({ e, ee, 'write': true, 'msg': `${err}` })
-            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi }
+            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, };
             retLog = await log(infLog);
-            return ret
+            return ret;
         }
-        retRegex = `<table${retRegex.res['3']}</table>`
+        retRegex = `<table${retRegex.res['3']}</table>`;
 
         // HTML → JSON
-        let infHtmlToJson, retHtmlToJson
-        infHtmlToJson = { e, 'mode': '2', 'html': retRegex }
+        let infHtmlToJson, retHtmlToJson;
+        infHtmlToJson = { e, 'mode': '2', 'html': retRegex, };
         retHtmlToJson = await htmlToJson(infHtmlToJson);
         if (!retHtmlToJson.ret || retHtmlToJson.res.length < 1) {
-            err = `% [leads] FALSE: retHtmlToJson`
+            err = `% [leads] FALSE: retHtmlToJson`;
             // logConsole({ e, ee, 'write': true, 'msg': `${err}` })
-            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
+            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, };
             retLog = await log(infLog);
-            return retHtmlToJson
+            return retHtmlToJson;
         } else {
-            retHtmlToJson = JSON.parse(retHtmlToJson.res)
+            retHtmlToJson = JSON.parse(retHtmlToJson.res);
         }
 
         // ARRAY COM A LISTA DE LEADS
-        let leadsNew = []
+        let leadsNew = [];
         if (!retHtmlToJson.length > 0) {
-            err = `% [leads] retHtmlToJson ARRAY VAZIA`
+            err = `% [leads] retHtmlToJson ARRAY VAZIA`;
             // logConsole({ e, ee, 'write': true, 'msg': `${err}` })
-            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
+            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, };
             retLog = await log(infLog);
-            return ret
+            return ret;
         }
 
         // ## LOG ## retHtmlToJson
-        err = `% [leads] LOG retHtmlToJson`
-        infLog = { e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson }
+        err = `% [leads] LOG retHtmlToJson`;
+        infLog = { e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, };
         retLog = await log(infLog);
 
         // PEGAR LEADS
-        let sendLeads = lastLead == 'NADA' ? true : false
+        let sendLeads = (lastLead === 'NADA');
         function newLeads() {
-            for (let [index, value] of retHtmlToJson.reverse().entries()) {
+            for (let [index, value,] of retHtmlToJson.reverse().entries()) {
                 // PEGAR O LEAD
                 if (sendLeads) {
                     let partes = value.col2.split(' ');
@@ -143,20 +143,20 @@ async function leadsJsf(inf = {}) {
                         'email': 'sem@gmail.com',
                         'administrador': value.col3 ? value.col3 : 'null',
                         'mailing': value.col6 ? value.col6 : 'null',
-                    })
+                    });
                 }
                 // PERMITIR NOVOS LEADS (MANTER NO FINAL!!!)
                 if (lastLead.includes(`${value.col5}${conSplInf}${value.col4}`)) {
-                    sendLeads = true
+                    sendLeads = true;
                 }
             }
         }
-        newLeads()
+        newLeads();
 
         // PEGAR TODOS OS LEADS DA PÁGINA (SE NÃO ENCONTRAR O 'lastLead')
-        if (leadsNew.length == 0 && !sendLeads) {
-            sendLeads = true
-            newLeads()
+        if (leadsNew.length === 0 && !sendLeads) {
+            sendLeads = true;
+            newLeads();
         }
 
         // TESTES
@@ -164,15 +164,15 @@ async function leadsJsf(inf = {}) {
         // await new Promise(resolve => { setTimeout(resolve, 180000) }); // ESPERAR 3 MINUTOS
         // return ret
 
-        ret['res'] = leadsNew
-        ret['msg'] = `LEADS: OK`
-        ret['ret'] = true
+        ret['res'] = leadsNew;
+        ret['msg'] = `LEADS: OK`;
+        ret['ret'] = true;
 
     } catch (catchErr) {
         let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
-    return { ...({ 'ret': ret.ret }), ...(ret.msg && { 'msg': ret.msg }), ...(ret.res && { 'res': ret.res }), };
+    return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };
 };
 
 // CHROME | NODEJS
