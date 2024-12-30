@@ -1,64 +1,47 @@
 rem IDENTIFICAR O ARQUIVO E A LOCALIZACAO COMPLETA (sem o nome do arquivo)
 Set pathCommand = CreateObject("Scripting.FileSystemObject")
-arquivo = pathCommand.GetFileName(WScript.ScriptFullName)
-arquivoSemExtensao = (Replace(arquivo,".vbs",""))
 localizacao = pathCommand.GetParentFolderName(WScript.ScriptFullName)
+arquivo = pathCommand.GetFileName(WScript.ScriptFullName)
+arquivoSemExtensao = ( Replace( arquivo , ".vbs" , "" ) )
+arr = Split( localizacao , "\" )
+ultimapasta = arr( UBound(arr) )
+letra = ( Replace( arr(0) , ":" , "" ) )
+localizacao = ( Replace( localizacao , letra + ":\" , "" ) )
 
-rem DIVIDIR O CAMINHO POR '\' | QUANTIDADE DE ARRAYs | ULTIMA PASTA | LETRA DA UNIDADE
-arr = Split(localizacao, "\")
-qtd = ubound(arr)
-ultimapasta = arr(qtd)
-letra = arr(0)
-rem SUBSTITUIR O ':' DA LETRA DA UNIDADE
-letra = (Replace(letra,":",""))
-rem SUBSTITUIR O NOME DA ULTIMA PASTA POR NADA
-txt = localizacao
-pesquisar = "\"+arr(qtd)
-substituir = ""
-resultado = (Replace(txt,pesquisar,substituir))
-rem DEFINIR O DESTINO
-localizacao_completa = localizacao                        rem RESULTADO: '!fileWindows!\PORTABLE_Telegram'
-localizacao_completa_ate_a_pasta_anterior = resultado     rem RESULTADO: '!fileWindows!'
-localizacao_so_a_ultima_pasta = ultimapasta               rem RESULTADO: 'PORTABLE_Telegram'
+rem MsgBox ( Replace( "1: " & letra & "\n2: " & arquivoSemExtensao & "\n3: " & arquivo & "\n4: " & ultimapasta & "\n5: " & localizacao ,"\n",Chr(13)) )
 
-rem ############################ NOME DO PROJETO ############################
-project = arr(3)
-outros = arr(5)
+rem BIBLIOTECA VBS
+Set Shell = CreateObject("Shell.Application")
 
-rem →→→ COMO USAR
-rem o nome do arquivo do '.vbs' e o paramentro que sera passado ao '2_SRIPT.BAT' so e necessario criar uma copia e definir o nome
+rem ---------------------------------------------------------------------------------------
 
-Set WshShell = CreateObject("WScript.Shell")
+rem BIBLIOTECA VBS
+rem Set WshShell = CreateObject("WScript.Shell")
 
 rem PEGAR VARIAVEL DE AMBIENTE
-fileProjetos = WshShell.ExpandEnvironmentStrings("%fileProjetos%")
-fileWindows = WshShell.ExpandEnvironmentStrings("%fileWindows%")
+rem fileProjetos = WshShell.ExpandEnvironmentStrings("%fileProjetos%")
+rem fileWindows = WshShell.ExpandEnvironmentStrings("%fileWindows%")
 
 rem MUDAR LOCAL DO TERMINAL
-WshShell.CurrentDirectory = fileProjetos + "\" + project
+rem WshShell.CurrentDirectory = fileProjetos
+rem WshShell.CurrentDirectory = letra + ":\" + "ARQUIVOS\PROJETOS"
 
-rem ############################ ABRIR ARQUIVO COM PARAMETROS ############################
-file = fileWindows + "\BAT\RUN_PORTABLE\2_BACKGROUND.exe"
-par1 = localizacao + "\2_SCRIPT.bat"
-par2 = arquivoSemExtensao
-par3 = "PAR_VAR_3"
-If WScript.Arguments.Count > 0 Then par3 = Wscript.Arguments.Item(0) End If
-par4 = "PAR_VAR_4"
-If WScript.Arguments.Count > 1 Then par4 = Wscript.Arguments.Item(1) End If
-par5 = "PAR_VAR_5"
-If WScript.Arguments.Count > 2 Then par5 = Wscript.Arguments.Item(2) End If
-aspas = """"
-fileAndPars = aspas & file & aspas & " " & aspas & par1 & aspas & " " & aspas & par2 & aspas & " " & aspas & par3 & aspas & " " & aspas & par4 & aspas & " " & aspas & par5 & aspas
-WshShell.Run(fileAndPars)
+rem ---------------------------------------------------------------------------------------
+
+rem EXECUTAR COMANDO
+commFile = letra + ":\" + localizacao + "\2_SCRIPT.bat"
+commPars = Array( arquivoSemExtensao )
+comm = """" & commFile & """"
+For i = 0 To UBound(commPars): comm = comm & " """ & commPars(i) & """": Next
+comm = chr(34) & comm & chr(34)
+
+rem ADM [NAO]
+rem Shell.ShellExecute "cmd", "/c " & comm, , , 0
+rem ADM [SIM]
+Shell.ShellExecute "cmd", "/c " & comm, , "runas", 0
 
 rem ENCERRAR SCRIPT
 WScript.Quit
-
-
-
-
-
-
 
 
 
