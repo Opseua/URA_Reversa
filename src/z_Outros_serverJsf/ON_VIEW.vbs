@@ -1,14 +1,14 @@
-rem IDENTIFICAR O ARQUIVO E A LOCALIZACAO COMPLETA (sem o nome do arquivo)
+rem IDENTIFICAR O LETRA, LOCALIZACAO, ARQUIVO, PASTA, ETC
 Set pathCommand = CreateObject("Scripting.FileSystemObject")
-localizacao = pathCommand.GetParentFolderName(WScript.ScriptFullName)
-arquivo = pathCommand.GetFileName(WScript.ScriptFullName)
-arquivoSemExtensao = ( Replace( arquivo , ".vbs" , "" ) )
-arr = Split( localizacao , "\" )
-ultimapasta = arr( UBound(arr) )
-letra = ( Replace( arr(0) , ":" , "" ) )
-localizacao = ( Replace( localizacao , letra + ":\" , "" ) )
+letra = Left(WScript.ScriptFullName, 1)                                              rem RESULTADO: 'D'
+localizacao = pathCommand.GetParentFolderName(WScript.ScriptFullName)                rem RESULTADO: 'ARQUIVOS\PROJETOS\Sniffer_Python\src\z_Outros_server\OFF.vbs'
+arr = Split(localizacao, "\" )
+pastaAtual = arr( UBound(arr) )                                                      rem RESULTADO: 'z_Outros_server'
+localizacaoPastaAnterior = Replace( localizacao, "\" & pastaAtual , "" )             rem RESULTADO: 'ARQUIVOS\PROJETOS\Sniffer_Python\src'
+arquivo = pathCommand.GetFileName(WScript.ScriptFullName)                            rem RESULTADO: 'arquivoNome.vbs'
+arquivoSemExtensao = Replace( arquivo , ".vbs" , "" )                                rem RESULTADO: 'arquivoNome'
 
-rem MsgBox ( Replace( "1: " & letra & "\n2: " & arquivoSemExtensao & "\n3: " & arquivo & "\n4: " & ultimapasta & "\n5: " & localizacao ,"\n",Chr(13)) )
+rem MsgBox ( Replace( "1: " & letra & "\\n2: " & localizacao & "\\n3: " & pastaAtual & "\\n4: " & localizacaoPastaAnterior & "\\n5: " & arquivo & "\\n6: " & arquivoSemExtensao , "\\n" , Chr(13) ) )
 
 rem BIBLIOTECA VBS
 Set Shell = CreateObject("Shell.Application")
@@ -24,12 +24,12 @@ rem fileWindows = WshShell.ExpandEnvironmentStrings("%fileWindows%")
 
 rem MUDAR LOCAL DO TERMINAL
 rem WshShell.CurrentDirectory = fileProjetos
-rem WshShell.CurrentDirectory = letra + ":\" + "ARQUIVOS\PROJETOS"
+rem WshShell.CurrentDirectory = letra & ":\" & "ARQUIVOS\PROJETOS"
 
 rem ---------------------------------------------------------------------------------------
 
 rem EXECUTAR COMANDO
-commFile = letra + ":\" + localizacao + "\2_SCRIPT.bat"
+commFile = localizacao & "\2_SCRIPT.bat"
 commPars = Array( arquivoSemExtensao )
 comm = """" & commFile & """"
 For i = 0 To UBound(commPars): comm = comm & " """ & commPars(i) & """": Next
@@ -42,6 +42,5 @@ Shell.ShellExecute "cmd", "/c " & comm, , "runas", 0
 
 rem ENCERRAR SCRIPT
 WScript.Quit
-
 
 

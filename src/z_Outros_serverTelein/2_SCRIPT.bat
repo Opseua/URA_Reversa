@@ -4,7 +4,7 @@ set "letra=%letra:~0,1%" & set "local=%local:~0,-1%" & set "arquivo=%~nx0" & set
 set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1"
 
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
-if "!arg1!"=="" ( !fileMsg! "[!local!\!arquivo!]\n\nNao usar o BAT/BACKGROUND" & exit )
+if "!arg1!"=="" ( !fileMsg! "[!local!\!arquivo!]\\n\\nNao usar o BAT/BACKGROUND" & exit )
 
 rem set "start=ERRO" & set "adm=ERRO" & NET SESSION > nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
 
@@ -16,7 +16,7 @@ rem ****************************************************************************
 rem MODE →→→ 'CMD' (RESTART [SIM]) / 'LEGACY' (RESTART [NAO]) # PROJECT | OUTROSADD | ARQUIVO SCRIPT
 for /f "tokens=1,2,3,4,5,6 delims=\" %%a in ("!local!") do ( set "project=%%d" & set "outrosAdd=%%f" ) & set "replace="
 set "outrosAdd=!outrosAdd:z_Outros_=%replace%!" & set "scriptType=ERRO" & set "ret=NADA"
-set "mode=CMD" & set "programExe=node" & set "root=!fileProjetos!" & set "fileScript=!root!\!project!\src\!outrosAdd!" & cd\ & !letra!: & cd !root!\!project!
+set "mode=CMD" & set "programExe=node" & set "fileScript=!fileProjetos!\!project!\src\!outrosAdd!"
 rem #### ↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑ ##########################################################
 
 rem CHECAR SE ESTA RODANDO
@@ -31,7 +31,7 @@ rem if "!ret!"=="TRUE" ( )
 
 rem  (NAO SUBIR OS 'if'!!!)
 if "!mode!"=="CMD" ( set "scriptType=processCmdKeep" ) else ( if "!mode!"=="LEGACY" ( set "scriptType=processCmdKeep" ) )
-if "!scriptType!"=="ERRO" ( !fileMsg! "[!local!\!arquivo!]\n\n'mode' deve ser\n'CMD', 'LEGACY'" & exit )
+if "!scriptType!"=="ERRO" ( !fileMsg! "[!local!\!arquivo!]\\n\\n'mode' deve ser\n'CMD', 'LEGACY'" & exit )
 rem MANTER O '"%ret%"' NO FINAL EM AMBOS OS CASOS (QUANDO CHECA SE ESTA RODANDO POR AQUI OU PELO PROPRIO 'processCmdKeep')!!!
 endlocal & call "%fileChrome_Extension%\src\scripts\BAT\%scriptType%.bat" "%arg1%_WINTP2" "%project%@%outrosAdd%" "%fileScript%" "%mode%" "%programExe%" "%ret%" & setlocal enabledelayedexpansion
 set "ret=%ret2%"
@@ -42,6 +42,5 @@ if "%~2"=="FORCE_STOP" ( exit )
 
 exit
 exit
-
 
 
