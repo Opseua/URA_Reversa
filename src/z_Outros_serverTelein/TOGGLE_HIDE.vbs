@@ -1,10 +1,10 @@
 rem IDENTIFICAR O LETRA, LOCALIZACAO, ARQUIVO, PASTA, ETC
 Set pathCommand = CreateObject("Scripting.FileSystemObject")
-letra = Left(WScript.ScriptFullName, 1)                                              rem RESULTADO: 'D'
+rem letra = Left(WScript.ScriptFullName, 1)                                              rem RESULTADO: 'D'
 localizacao = pathCommand.GetParentFolderName(WScript.ScriptFullName)                rem RESULTADO: 'ARQUIVOS\PROJETOS\Sniffer_Python\src\z_Outros_server\OFF.vbs'
-arr = Split(localizacao, "\" )
-pastaAtual = arr( UBound(arr) )                                                      rem RESULTADO: 'z_Outros_server'
-localizacaoPastaAnterior = Replace( localizacao, "\" & pastaAtual , "" )             rem RESULTADO: 'ARQUIVOS\PROJETOS\Sniffer_Python\src'
+rem arr = Split(localizacao, "\" )
+rem pastaAtual = arr( UBound(arr) )                                                      rem RESULTADO: 'z_Outros_server'
+rem localizacaoPastaAnterior = Replace( localizacao, "\" & pastaAtual , "" )             rem RESULTADO: 'ARQUIVOS\PROJETOS\Sniffer_Python\src'
 arquivo = pathCommand.GetFileName(WScript.ScriptFullName)                            rem RESULTADO: 'arquivoNome.vbs'
 arquivoSemExtensao = Replace( arquivo , ".vbs" , "" )                                rem RESULTADO: 'arquivoNome'
 

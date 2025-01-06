@@ -4,7 +4,7 @@ set "letra=%letra:~0,1%" & set "local=%local:~0,-1%" & set "arquivo=%~nx0" & set
 set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1"
 
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
-if "!arg1!"=="" ( !fileMsg! "[!local!\!arquivo!]\\n\\nNao usar o BAT/BACKGROUND" & exit )
+if "!arg1!" == "" ( !fileMsg! "[!local!\!arquivo!]\\n\\nNao usar o BAT/BACKGROUND" & exit )
 
 rem set "start=ERRO" & set "adm=ERRO" & NET SESSION > nul 2>&1 & if !errorlevel! neq 0 ( set "adm=NAO" ) else ( set "adm=SIM" )
 
