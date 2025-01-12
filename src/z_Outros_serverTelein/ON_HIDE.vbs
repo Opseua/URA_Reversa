@@ -1,9 +1,9 @@
 rem IDENTIFICAR O LETRA, LOCALIZACAO, ARQUIVO, PASTA, ETC
 Set pathCommand = CreateObject("Scripting.FileSystemObject")
 rem letra = Left(WScript.ScriptFullName, 1)                                              rem RESULTADO: 'D'
-localizacao = pathCommand.GetParentFolderName(WScript.ScriptFullName)                rem RESULTADO: 'ARQUIVOS\PROJETOS\Sniffer_Python\src\z_Outros_server\OFF.vbs'
+localizacao = pathCommand.GetParentFolderName(WScript.ScriptFullName)                rem RESULTADO: 'ARQUIVOS\PROJETOS\Sniffer_Python\src\z_OUTROS_server\OFF.vbs'
 rem arr = Split(localizacao, "\" )
-rem pastaAtual = arr( UBound(arr) )                                                      rem RESULTADO: 'z_Outros_server'
+rem pastaAtual = arr( UBound(arr) )                                                      rem RESULTADO: 'z_OUTROS_server'
 rem localizacaoPastaAnterior = Replace( localizacao, "\" & pastaAtual , "" )             rem RESULTADO: 'ARQUIVOS\PROJETOS\Sniffer_Python\src'
 arquivo = pathCommand.GetFileName(WScript.ScriptFullName)                            rem RESULTADO: 'arquivoNome.vbs'
 arquivoSemExtensao = Replace( arquivo , ".vbs" , "" )                                rem RESULTADO: 'arquivoNome'
@@ -31,6 +31,8 @@ rem ----------------------------------------------------------------------------
 rem EXECUTAR COMANDO
 commFile = localizacao & "\2_SCRIPT.bat"
 commPars = Array( arquivoSemExtensao )
+rem ADICIONAR NA ARRAY OS PARAMETROS PASSADOS
+If WScript.Arguments.Count > 0 Then: Dim i, l: For i = 0 To WScript.Arguments.Count - 1: l = UBound(commPars) + 2: ReDim Preserve commPars(l - 1): commPars(UBound(commPars)) = WScript.Arguments(i): Next: End If
 comm = """" & commFile & """"
 For i = 0 To UBound(commPars): comm = comm & " """ & commPars(i) & """": Next
 comm = chr(34) & comm & chr(34)

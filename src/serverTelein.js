@@ -131,7 +131,7 @@ async function serverRun(inf = {}) {
                                         e, 'action': 'send',
                                         'id': id,
                                         'tab': tab,
-                                        'range': `${colInf}**`,
+                                        'range': `${colInf}*`,
                                         'values': [[`${sheetSendNew}`,],],
                                     };
                                     retGoogleSheets = await googleSheets(infGoogleSheets);

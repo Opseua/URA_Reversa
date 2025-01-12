@@ -29,3 +29,5 @@ gloWin['leadGet'] = (inf) => { let fun = (!eng) ? funImport : funGeneric; return
 gloWin['leads'] = (inf) => { let fun = (!eng) ? funImport : funGeneric; return fun({ 'path': './leads.js', 'inf': inf, }); };
 gloWin['leadsJsf'] = (inf) => { let fun = (!eng) ? funImport : funGeneric; return fun({ 'path': './leadsJsf.js', 'inf': inf, }); };
 gloWin['login'] = (inf) => { let fun = (!eng) ? funImport : funGeneric; return fun({ 'path': './login.js', 'inf': inf, }); };
+
+
