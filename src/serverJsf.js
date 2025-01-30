@@ -49,7 +49,7 @@ async function serverRun(inf = {}) {
 
                     // SÓ RODAR SE O RETORNO DE leads FOR ARRAY
                     if (Array.isArray(retLeads)) {
-                        logConsole({ e, ee, 'write': true, 'msg': `ENVIANDO PARA A PLANILHA ${retLeads.length} LEADS`, });
+                        logConsole({ e, ee, 'write': true, 'msg': `${retLeads.length === 0 ? 'NENHUM LEAD PENDENTE' : `ENVIANDO ${retLeads.length} LEAD(s) PARA PARA A PLANILHA`}`, });
                         await new Promise(resolve => { setTimeout(resolve, 3 * 1000); });
 
                         // PEGAR INF | ALTERAR STATUS | MANDAR PARA PLANILHA
