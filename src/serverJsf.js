@@ -6,15 +6,14 @@ async function serverRun(inf = {}) {
     try {
         logConsole({ e, ee, 'write': true, 'msg': `**************** SERVER **************** [${startupFun(startup, new Date())}]`, });
 
-        let infGoogleSheets, retGoogleSheets, err, time;
+        let retGoogleSheets, err, time;
 
         // DADOS GLOBAIS DA PLANILHA E FAZER O PARSE
-        gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO';
-        let range = 'A2', id = gO.inf.id, tab = gO.inf.tab;
+        gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO'; let range = 'A2', id = gO.inf.id, tab = gO.inf.tab;
         retGoogleSheets = await googleSheets({ e, 'action': 'get', 'id': id, 'tab': tab, 'range': range, }); if (!retGoogleSheets.ret) {
             err = `$ Erro ao pegar-enviar dados para planilha`; logConsole({ e, ee, 'write': true, 'msg': `${err}`, });
             await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets, }); return retGoogleSheets;
-        } else { retGoogleSheets = retGoogleSheets.res[0][0]; }
+        } else { retGoogleSheets = retGoogleSheets.res[0][0]; };
         gO.inf['json'] = JSON.parse(retGoogleSheets); let colInf = inf && inf.col ? inf.col : gO.inf.json['colUra']; let autInf = inf && inf.autJsf ? inf.autJsf : gO.inf.json['autUraJsf'];
         let conSplInf = inf && inf.conSpl ? inf.conSpl : gO.inf.json['conSpl']; let loginInf = inf && inf.loginJsf ? inf.loginJsf : gO.inf.json['loginJsf'];
         let passwordInf = inf && inf.passwordJsf ? inf.passwordJsf : gO.inf.json['passwordJsf'];
@@ -23,28 +22,21 @@ async function serverRun(inf = {}) {
         for (let [index, value,] of autInf.entries()) { if (value.name === 'PHPSESSID') { autInf = `PHPSESSID=${value.value}`; break; } }
 
         async function keepRunning() {
-            // time = dateHour().res;
-            // retGoogleSheets = await googleSheets({ e, 'action': 'send', 'id': `1wEiSgZHeaUjM6Gl1Y67CZZZ7UTsDweQhRYKqaTu3_I8`, 'tab': `INDICAR_AUTOMATICO`, 'range': `A130`, 'values': [[`${time.tim} | Rodando: serverJsf`,],], });
-            // if (!retGoogleSheets.ret) {
-            //     err = `$ Erro ao pegar-enviar dados para planilha`; logConsole({ e, ee, 'write': true, 'msg': `${err}`, });
-            //     infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets, }; await log(infLog); return retGoogleSheets;
-            // }
+            // let rGS = await googleSheets({ e, action: 'send', id: `1wEiSgZHeaUjM6Gl1Y67CZZZ7UTsDweQhRYKqaTu3_I8`, tab: `INDICAR_AUTOMATICO`, range: `A130`, values: [[`${dateHour().res.tim} | Rodando: serverJsf`,],], });
+            // if (!rGS.ret) { err = `$ Erro ao pegar-enviar dados para planilha`; logConsole({ e, ee, 'write': true, 'msg': `${err}`, }); await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': rGS, }); }
         }
 
         let qtd = 0, stop = false; while (!stop) {
             qtd++; time = dateHour().res; logConsole({ e, ee, 'write': true, 'msg': `## COMEÇANDO LOOP: ${qtd} ##`, });
 
-            // MANTER O STATUS 'RODANDO' NA PLANILHA
-            keepRunning();
+            keepRunning(); // MANTER O STATUS 'RODANDO' NA PLANILHA
 
             // SEG <> SAB | [??:00] <> [??:00]
             if (['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB',].includes(time.dayNam) && (Number(time.hou) > Number(scriptHour[0]) - 1 && Number(time.hou) < Number(scriptHour[1]))) {
 
                 // PEGAR NOVOS LEADS
                 let retLeads = await leadsJsf({ e, 'aut': autInf, 'login': loginInf, 'password': passwordInf, });
-                if (!retLeads.ret) {
-                    err = `% [server] FALSE: retLeads`; logConsole({ e, ee, 'write': true, 'msg': `${err}`, }); await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads, });
-                } else {
+                if (!retLeads.ret) { err = `% [server] FALSE: retLeads`; logConsole({ e, ee, 'write': true, 'msg': `${err}`, }); await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads, }); } else {
                     retLeads = retLeads.res;
 
                     // SÓ RODAR SE O RETORNO DE leads FOR ARRAY
@@ -54,8 +46,7 @@ async function serverRun(inf = {}) {
 
                         // PEGAR INF | ALTERAR STATUS | MANDAR PARA PLANILHA
                         for (let [index, value,] of retLeads.entries()) {
-                            let dateNow = `${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`; time = dateHour().res;
-                            let sheetSend = [[
+                            let dateNow = `${time.day}/${time.mon} ${time.hou}:${time.min}:${time.sec}`; time = dateHour().res; let sheetSend = [[
                                 value.leadId, // LEAD ID
                                 dateNow, // DATA DA CONSULTA
                                 `(JSF) ${value.mailing}`,
@@ -66,30 +57,26 @@ async function serverRun(inf = {}) {
                                 value.email,
                                 value.razaoSocial,
                                 `http://177.87.122.53/${value.leadId}`,
-                            ],];
-                            let sheetSendNew = sheetSend[0].join(conSplInf); let lastLead = `${value.leadId}${conSplInf}${value.cnpj}${conSplInf}${value.tel}`;
+                            ],]; let sheetSendNew = sheetSend[0].join(conSplInf); let lastLead = `${value.leadId}${conSplInf}${value.cnpj}${conSplInf}${value.tel}`;
 
 
-                            // console.log(`${lastLead}`, '|', sheetSendNew);
+                            console.log(`${lastLead}`, '|', sheetSendNew);
                             // process.exit();
 
 
                             // ### MANDAR PARA PLANILHA [LEAD]
-                            infGoogleSheets = { e, 'action': 'send', 'id': id, 'tab': tab, 'range': `${colInf}*`, 'values': [[`${sheetSendNew}`,],], };
-                            retGoogleSheets = await googleSheets(infGoogleSheets); if (!retGoogleSheets.ret) {
+                            retGoogleSheets = await googleSheets({ e, 'action': 'send', 'id': id, 'tab': tab, 'range': `${colInf}*`, 'values': [[`${sheetSendNew}`,],], }); if (!retGoogleSheets.ret) {
                                 err = `% [server] FALSE: retGoogleSheets`; logConsole({ e, ee, 'write': true, 'msg': `${err}`, });
                                 await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets, }); return retGoogleSheets;
-                            }; logConsole({ e, ee, 'write': true, 'msg': `[${(index + 1).toString().padStart(2, '0')}] ID: ${sheetSend[0][0]} | TEL: ${sheetSend[0][5]} | SHEET OK`, });
+                            }; logConsole({ e, ee, 'write': true, 'msg': `[${(retLeads.length - index).toString().padStart(2, '0')}] ID: ${sheetSend[0][0]} | TEL: ${sheetSend[0][5]} | SHEET OK`, });
 
                             // ### REGISTRAR NA PLANILHA [ÚLTIMO LEAD]
-                            infGoogleSheets = { e, 'action': 'send', 'id': id, 'tab': tab, 'range': `A74`, 'values': [[`${lastLead}`,],], };
-                            retGoogleSheets = await googleSheets(infGoogleSheets); if (!retGoogleSheets.ret) {
+                            retGoogleSheets = await googleSheets({ e, 'action': 'send', 'id': id, 'tab': tab, 'range': `A74`, 'values': [[`${lastLead}`,],], }); if (!retGoogleSheets.ret) {
                                 err = `% [server] FALSE: retGoogleSheets`; logConsole({ e, ee, 'write': true, 'msg': `${err}`, });
                                 await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets, }); return retGoogleSheets;
                             };
 
-                            // MANTER O STATUS 'RODANDO' NA PLANILHA
-                            keepRunning();
+                            keepRunning(); // MANTER O STATUS 'RODANDO' NA PLANILHA
 
                             await new Promise(resolve => { setTimeout(resolve, 5 * 1000); }); // SEGUNDOS
                         }
