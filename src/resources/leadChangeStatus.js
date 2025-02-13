@@ -36,7 +36,7 @@ async function leadChangeStatus(inf = {}) {
 
         if (!retApi.ret || !retApi.res.body.includes('Retorno realizado por')) {
             err = `% [leadChangeStatus] FALSE: retApi 1`;
-            logConsole({ e, ee, 'write': true, 'msg': `${err}`, });
+            logConsole({ e, ee, 'msg': `${err}`, });
             infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, };
             await log(infLog);
             // REAUTENTICAR
@@ -45,7 +45,7 @@ async function leadChangeStatus(inf = {}) {
             retLogin = await login(infLogin);
             if (!retLogin.ret) {
                 err = `% [leadChangeStatus] FALSE: retLogin 1`;
-                logConsole({ e, ee, 'write': true, 'msg': `${err}`, });
+                logConsole({ e, ee, 'msg': `${err}`, });
                 infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin, };
                 await log(infLog);
                 return retApi;
@@ -64,13 +64,13 @@ async function leadChangeStatus(inf = {}) {
                 if (!retApi.ret || !retApi.res.body.includes('Retorno realizado por')) {
                     if (retApi.res && retApi.res.body.includes('para acessar as funcionalidades')) {
                         err = `% [leadChangeStatus] sem permissão para acessar as funcionalidades`;
-                        logConsole({ e, ee, 'write': true, 'msg': `${err}`, });
+                        logConsole({ e, ee, 'msg': `${err}`, });
                         infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, };
                         await log(infLog);
                         return ret;
                     } else {
                         err = `% [leadChangeStatus] FALSE: retLogin 2`;
-                        logConsole({ e, ee, 'write': true, 'msg': `${err}`, });
+                        logConsole({ e, ee, 'msg': `${err}`, });
                         infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, };
                         await log(infLog);
                         return ret;
