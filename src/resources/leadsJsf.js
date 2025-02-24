@@ -18,7 +18,7 @@ async function leadsJsf(inf = {}) {
         // DADOS GLOBAIS DA PLANILHA E FAZER O PARSE
         gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO';
         let range = 'A2', id = gO.inf.id, tab = gO.inf.tab;
-        retGoogleSheets = await googleSheets({ e, 'action': 'get', 'id': id, 'tab': tab, 'range': range, });
+        retGoogleSheets = await googleSheets({ e, 'action': 'get', id, tab, range, });
         if (!retGoogleSheets.ret) {
             err = `$ Erro ao pegar-enviar dados para planilha`; logConsole({ e, ee, 'msg': `${err}`, }); await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets, });
             return retGoogleSheets;
@@ -32,7 +32,7 @@ async function leadsJsf(inf = {}) {
         let timeSta = dateHour(`-${(86400 * 5)}`).res; let timeEnd = dateHour().res; let url = `http://177.87.122.53/azcall/relatorio/relTbu.php?dt_inicial=${timeSta.day}/${timeSta.mon}/2025%200:00&dt_final=${timeEnd.day}/${timeEnd.mon}/2025%2023:59&telefone=&telefonetype=1&nome=&camp=&digito=1&nometype=1&Camp[]=&&pagina=1&button4=pesquisar`;
 
         // API [LISTA DE LEADS]
-        retApi = await api({ e, 'method': 'GET', 'url': url, 'headers': { 'Cookie': aut, }, });
+        retApi = await api({ e, 'method': 'GET', url, 'headers': { 'Cookie': aut, }, });
 
         if (!retApi.ret || !retApi.res.body.includes('Campanha')) {
             err = `% [leads] FALSE: retApi 1`; // logConsole({ e, ee, 'msg': `${err}` })
@@ -111,7 +111,7 @@ async function leadsJsf(inf = {}) {
         ret['ret'] = true;
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

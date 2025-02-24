@@ -38,9 +38,9 @@ async function leads(inf = {}) {
             let infLogin, retLogin;
             infLogin = {
                 e,
-                'aut': aut,
+                aut,
                 'login': loginOk,
-                'password': password,
+                password,
                 'interface': interfaceOk,
                 'id_interface': idInterfaceOk,
                 'subatual': subatualOk,
@@ -161,7 +161,7 @@ async function leads(inf = {}) {
         ret['ret'] = true;
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

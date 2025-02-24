@@ -10,7 +10,7 @@ async function serverRun(inf = {}) {
 
         // DADOS GLOBAIS DA PLANILHA E FAZER O PARSE
         gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO'; let range = 'A2', id = gO.inf.id, tab = gO.inf.tab;
-        retGoogleSheets = await googleSheets({ e, 'action': 'get', 'id': id, 'tab': tab, 'range': range, }); if (!retGoogleSheets.ret) {
+        retGoogleSheets = await googleSheets({ e, 'action': 'get', id, tab, range, }); if (!retGoogleSheets.ret) {
             err = `$ Erro ao pegar-enviar dados para planilha`; logConsole({ e, ee, 'msg': `${err}`, });
             await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets, }); return retGoogleSheets;
         } else { retGoogleSheets = retGoogleSheets.res[0][0]; };
@@ -27,12 +27,12 @@ async function serverRun(inf = {}) {
         }
 
         let qtd = 0, stop = false; while (!stop) {
-            qtd++; time = dateHour().res; logConsole({ e, ee, 'msg': `## COMEÇANDO LOOP: ${qtd} ##`, });
+            qtd++; time = dateHour().res; logConsole({ e, ee, 'msg': `## COMEÇANDO LOOP: ${qtd} ##`, }); let a = time.dayNam; let b = Number(time.hou); let c = Number(scriptHour[0] - 1); let d = Number(scriptHour[1]);
 
             keepRunning(); // MANTER O STATUS 'RODANDO' NA PLANILHA
 
-            // SEG <> SAB | [??:00] <> [??:00]
-            if (['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB',].includes(time.dayNam) && (Number(time.hou) > Number(scriptHour[0]) - 1 && Number(time.hou) < Number(scriptHour[1]))) {
+            // SEG <> SEX → [09:00] <> [19:00]
+            if ((['SEG', 'TER', 'QUA', 'QUI', 'SEX',].includes(a) && (b > c && b < d)) || (['SAaaa',].includes(a) && (b > c && b < d - 7))) {
 
                 // PEGAR NOVOS LEADS
                 let retLeads = await leadsJsf({ e, 'aut': autInf, 'login': loginInf, 'password': passwordInf, });
@@ -64,14 +64,14 @@ async function serverRun(inf = {}) {
 
 
                             // ### MANDAR PARA PLANILHA [LEAD]
-                            retGoogleSheets = await googleSheets({ e, 'action': 'send', 'id': id, 'tab': tab, 'range': `${colInf}*`, 'values': [[`${sheetSendNew}`,],], }); if (!retGoogleSheets.ret) {
+                            retGoogleSheets = await googleSheets({ e, 'action': 'send', id, tab, 'range': `${colInf}*`, 'values': [[`${sheetSendNew}`,],], }); if (!retGoogleSheets.ret) {
                                 err = `% [server] FALSE: retGoogleSheets`; logConsole({ e, ee, 'msg': `${err}`, });
                                 await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets, }); return retGoogleSheets;
                             }; let text = `${(index + 1).toString().padStart(2, '0')}/${(retLeads.length).toString().padStart(2, '0')}`;
                             logConsole({ e, ee, 'msg': `[${text}] ID: ${sheetSend[0][0]} | TEL: ${sheetSend[0][5]} | SHEET OK`, });
 
                             // ### REGISTRAR NA PLANILHA [LEAD ATUAL (QUE SERÁ O ÚLTIMO)]
-                            retGoogleSheets = await googleSheets({ e, 'action': 'send', 'id': id, 'tab': tab, 'range': `A74`, 'values': [[`${currentLead}`,],], }); if (!retGoogleSheets.ret) {
+                            retGoogleSheets = await googleSheets({ e, 'action': 'send', id, tab, 'range': `A74`, 'values': [[`${currentLead}`,],], }); if (!retGoogleSheets.ret) {
                                 err = `% [server] FALSE: retGoogleSheets`; logConsole({ e, ee, 'msg': `${err}`, });
                                 await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets, }); return retGoogleSheets;
                             };
@@ -92,7 +92,7 @@ async function serverRun(inf = {}) {
             await new Promise(resolve => { setTimeout(resolve, 180 * 1000); }); // SEGUNDOS
         }
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 }
 // TODAS AS FUNÇÕES PRIMÁRIAS DO 'server.js' / 'serverC6.js' / 'serverJsf.js' DEVEM SE CHAMAR 'serverRun'!!!

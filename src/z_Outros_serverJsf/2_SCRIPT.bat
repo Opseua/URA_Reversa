@@ -1,7 +1,7 @@
 @chcp 65001 & @echo off & setlocal enabledelayedexpansion
 set "letra=%~d0" & set "local=%~dp0"
 set "letra=%letra:~0,1%" & set "local=%local:~0,-1%" & set "arquivo=%~nx0" & set "argString=%*"
-set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1"
+set "usuario=%USERNAME%" & set "argTUDO=%~1 %~2 %~3 %~4 %~5" & set "arg1=%~1" & set "arg2=%~2"
 
 rem AVISO PARA USAR O ATALHO COM PARAMENTROS
 if "!arg1!" == "" ( !3_BACKGROUND! /NOCONSOLE "cmd.exe /c !fileMsg! "[!local!\!arquivo!]\\n\\nNENHUM PARAMETRO PASSADO"" & exit )
@@ -31,7 +31,7 @@ rem ESTA RODANDO [SIM]
 rem if "!ret!" == "TRUE" ( )
 
 rem MANTER O '"%ret%"' E 'argString' NO FINAL SEMPRE!!! | 'KEEP' (RESTART [SIM]) / 'LEGACY' (RESTART [NAO])
-endlocal & call "%fileChrome_Extension%\src\scripts\BAT\process.bat" "%arg1%_WINTP2" "%project%" "%outrosAdd%" "KEEP" "%programExe%" "%ret%" & setlocal enabledelayedexpansion
+endlocal & call "%fileChrome_Extension%\src\scripts\BAT\process.bat" "%arg1%_WINTP2" "%project%" "%outrosAdd%" "KEEP" "%programExe%" "%ret%" "%arg2%" & setlocal enabledelayedexpansion
 set "ret=%ret2%" & set "argString=%*"
 rem #####################################################################
 

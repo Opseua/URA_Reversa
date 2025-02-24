@@ -41,7 +41,7 @@ async function leadChangeStatus(inf = {}) {
             await log(infLog);
             // REAUTENTICAR
             let infLogin, retLogin;
-            infLogin = { e, 'aut': aut, };
+            infLogin = { e, aut, };
             retLogin = await login(infLogin);
             if (!retLogin.ret) {
                 err = `% [leadChangeStatus] FALSE: retLogin 1`;
@@ -84,14 +84,14 @@ async function leadChangeStatus(inf = {}) {
         }
 
         ret['res'] = {
-            'leadId': leadId,
+            leadId,
             'status': statusOption[statusOk],
         };
         ret['msg'] = `LEAD CHANGE STATUS: OK`;
         ret['ret'] = true;
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

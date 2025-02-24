@@ -23,7 +23,7 @@ async function leadGet(inf = {}) {
             await log(infLog);
             // REAUTENTICAR
             let infLogin, retLogin;
-            infLogin = { e, 'aut': aut, };
+            infLogin = { e, aut, };
             retLogin = await login(infLogin);
             if (!retLogin.ret) {
                 err = `% [leadGet] FALSE: retLogin`;
@@ -166,17 +166,17 @@ async function leadGet(inf = {}) {
         }
 
         ret['res'] = {
-            'tel': tel,
-            'cnpj': cnpj,
-            'razaoSocial': razaoSocial,
-            'email': email,
-            'administrador': administrador,
+            tel,
+            cnpj,
+            razaoSocial,
+            email,
+            administrador,
         };
         ret['msg'] = `LEAD GET: OK`;
         ret['ret'] = true;
 
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 
     return { ...({ 'ret': ret.ret, }), ...(ret.msg && { 'msg': ret.msg, }), ...(ret.res && { 'res': ret.res, }), };

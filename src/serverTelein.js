@@ -11,18 +11,11 @@ async function serverRun(inf = {}) {
         // DADOS GLOBAIS DA PLANILHA E FAZER O PARSE
         gO.inf['id'] = '1UzSX3jUbmGxVT4UbrVIB70na3jJ5qYhsypUeDQsXmjc'; gO.inf['tab'] = 'INDICAR_AUTOMATICO';
         let range = 'A2', id = gO.inf.id, tab = gO.inf.tab;
-        infGoogleSheets = {
-            e, 'action': 'get',
-            'id': id,
-            'tab': tab,
-            'range': range,
-        };
-        retGoogleSheets = await googleSheets(infGoogleSheets);
+        retGoogleSheets = await googleSheets({ e, 'action': 'get', id, tab, range, });
         if (!retGoogleSheets.ret) {
             err = `$ Erro ao pegar-enviar dados para planilha`;
             logConsole({ e, ee, 'msg': `${err}`, });
-            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets, };
-            await log(infLog);
+            await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets, });
             return retGoogleSheets;
         } else {
             retGoogleSheets = retGoogleSheets.res[0][0];
@@ -74,8 +67,7 @@ async function serverRun(inf = {}) {
                 if (!retLeads.ret) {
                     err = `% [server] FALSE: retLeads`;
                     logConsole({ e, ee, 'msg': `${err}`, });
-                    infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads, };
-                    await log(infLog);
+                    await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads, });
                 } else {
                     retLeads = retLeads.res;
 
@@ -86,22 +78,17 @@ async function serverRun(inf = {}) {
                         // PEGAR INF | ALTERAR STATUS | MANDAR PARA PLANILHA
                         for (let [index, value,] of retLeads.entries()) {
                             // ### PEGAR INF
-                            let infLeadGet, retLeadGet;
-                            infLeadGet = { e, 'aut': autInf, 'leadId': value.leadId, };
-                            retLeadGet = await leadGet(infLeadGet);
+                            let retLeadGet = await leadGet({ e, 'aut': autInf, 'leadId': value.leadId, });
                             if (!retLeadGet.ret) {
                                 err = `% [server] FALSE: retLeadGet`;
                                 logConsole({ e, ee, 'msg': `${err}`, });
-                                infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadGet, };
-                                await log(infLog);
+                                await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeadGet, });
                             } else {
                                 retLeadGet = retLeadGet.res;
                                 // logConsole({ e, ee, 'msg': `LEAD ID: ${value.leadId} | TELEFONE: ${retLeadGet.tel}` });
 
                                 // ###  ALTERAR STATUS
-                                let infLeadChangeStatus, retLeadChangeStatus;
-                                infLeadChangeStatus = { e, 'aut': autInf, 'leadId': value.leadId, 'status': '1', }; // '4' → Inapto | '1' → Venda Realizada
-                                retLeadChangeStatus = await leadChangeStatus(infLeadChangeStatus);
+                                let retLeadChangeStatus = await leadChangeStatus({ e, 'aut': autInf, 'leadId': value.leadId, 'status': '1', }); // '4' → Inapto | '1' → Venda Realizada
                                 if (!retLeadChangeStatus.ret) {
                                     // if (!retLeadGet) { // →  TESTE
                                     err = `% [server] FALSE: retLeadChangeStatus`;
@@ -129,8 +116,8 @@ async function serverRun(inf = {}) {
 
                                     infGoogleSheets = {
                                         e, 'action': 'send',
-                                        'id': id,
-                                        'tab': tab,
+                                        id,
+                                        tab,
                                         'range': `${colInf}*`,
                                         'values': [[`${sheetSendNew}`,],],
                                     };
@@ -159,7 +146,7 @@ async function serverRun(inf = {}) {
             await new Promise(resolve => { setTimeout(resolve, 300000); }); // [60000] 1 MINUTO [300000] 5 MINUTOS
         }
     } catch (catchErr) {
-        let retRegexE = await regexE({ 'inf': inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
+        let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
     };
 }
 // TODAS AS FUNÇÕES PRIMÁRIAS DO 'server.js' / 'serverC6.js' / 'serverJsf.js' DEVEM SE CHAMAR 'serverRun'!!!
