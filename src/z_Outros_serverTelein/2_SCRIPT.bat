@@ -21,7 +21,7 @@ if not "!argString!" == "!argString:TRUE=!" ( set "ret=TRUE" & goto IGNORE_CHECK
 
 rem CHECAR SE ESTA RODANDO
 tasklist /fi "ImageName eq !programExe!!project!_!outrosAdd!.exe" /fo csv 2> nul | find /I "!programExe!!project!_!outrosAdd!.exe" > nul
-if "%ERRORLEVEL%" == "0" ( set "ret=TRUE" ) else ( set "ret=FALSE" )
+if "%errorlevel%" == "0" ( set "ret=TRUE" ) else ( set "ret=FALSE" )
 :IGNORE_CHECK_IS_RUNNING
 
 rem ESTA RODANDO [NAO]

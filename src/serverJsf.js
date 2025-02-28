@@ -1,4 +1,4 @@
-function startupFun(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m = a % 1000; let f = m.toString().padStart(3, '0'); return `${s}.${f}`; }; let startup = new Date();
+function startupFun(b, c) { let a = c - b; let s = Math.floor(a / 1000); let m = a % 1000; let f = m.toString().padStart(3, '0'); return `${s}.${f}`; } let startup = new Date();
 await import('./resources/@export.js'); let e = import.meta.url, ee = e;
 
 async function serverRun(inf = {}) {
@@ -13,13 +13,13 @@ async function serverRun(inf = {}) {
         retGoogleSheets = await googleSheets({ e, 'action': 'get', id, tab, range, }); if (!retGoogleSheets.ret) {
             err = `$ Erro ao pegar-enviar dados para planilha`; logConsole({ e, ee, 'msg': `${err}`, });
             await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets, }); return retGoogleSheets;
-        } else { retGoogleSheets = retGoogleSheets.res[0][0]; };
+        } else { retGoogleSheets = retGoogleSheets.res[0][0]; }
         gO.inf['json'] = JSON.parse(retGoogleSheets); let colInf = inf && inf.col ? inf.col : gO.inf.json['colUra']; let autInf = inf && inf.autJsf ? inf.autJsf : gO.inf.json['autUraJsf'];
         let conSplInf = inf && inf.conSpl ? inf.conSpl : gO.inf.json['conSpl']; let loginInf = inf && inf.loginJsf ? inf.loginJsf : gO.inf.json['loginJsf'];
         let passwordInf = inf && inf.passwordJsf ? inf.passwordJsf : gO.inf.json['passwordJsf'];
         let scriptHour = inf && inf.scriptHourJsf ? inf.scriptHourJsf.split('|') : gO.inf.json['scriptHourURA_ReversaJsf'].split('|');
 
-        for (let [index, value,] of autInf.entries()) { if (value.name === 'PHPSESSID') { autInf = `PHPSESSID=${value.value}`; break; } };
+        for (let [index, value,] of autInf.entries()) { if (value.name === 'PHPSESSID') { autInf = `PHPSESSID=${value.value}`; break; } }
 
         async function keepRunning() {
             // let rGS = await googleSheets({ e, action: 'send', id: `1wEiSgZHeaUjM6Gl1Y67CZZZ7UTsDweQhRYKqaTu3_I8`, tab: `INDICAR_AUTOMATICO`, range: `A130`, values: [[`${dateHour().res.tim} | Rodando: serverJsf`,],], });
@@ -27,14 +27,14 @@ async function serverRun(inf = {}) {
         }
 
         let qtd = 0, stop = false; while (!stop) {
-            qtd++; time = dateHour().res; logConsole({ e, ee, 'msg': `## COMEÇANDO LOOP: ${qtd} ##`, }); let a = time.dayNam; let b = Number(time.hou); let c = Number(scriptHour[0] - 1); let d = Number(scriptHour[1]);
+            time = dateHour().res; let a = time.dayNam; let b = Number(time.hou); let c = Number(scriptHour[0] - 1); let d = Number(scriptHour[1]); qtd++; logConsole({ e, ee, 'msg': `## COMEÇANDO LOOP: ${qtd} ##`, });
 
             keepRunning(); // MANTER O STATUS 'RODANDO' NA PLANILHA
 
-            // SEG <> SEX → [09:00] <> [19:00]
-            if ((['SEG', 'TER', 'QUA', 'QUI', 'SEX',].includes(a) && (b > c && b < d)) || (['SAaaa',].includes(a) && (b > c && b < d - 7))) {
-
-                // PEGAR NOVOS LEADS
+            if (!((['SEG', 'TER', 'QUA', 'QUI', 'SEX',].includes(a) && (b > c && b < d)) || (['SAaaa',].includes(a) && (b > c && b < d - 7)))) {
+                logConsole({ e, ee, 'msg': `## FORA DO DIA E HORÁRIO (${scriptHour[0]}:00 <> ${scriptHour[1]}:00) ##`, });
+            } else {
+                // (SEG <> SEX → [09:00] <> [19:00]) PEGAR NOVOS LEADS
                 let retLeads = await leadsJsf({ e, 'aut': autInf, 'login': loginInf, 'password': passwordInf, });
                 if (!retLeads.ret) { err = `% [server] FALSE: retLeads`; logConsole({ e, ee, 'msg': `${err}`, }); await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLeads, }); } else {
                     retLeads = retLeads.res;
@@ -67,14 +67,14 @@ async function serverRun(inf = {}) {
                             retGoogleSheets = await googleSheets({ e, 'action': 'send', id, tab, 'range': `${colInf}*`, 'values': [[`${sheetSendNew}`,],], }); if (!retGoogleSheets.ret) {
                                 err = `% [server] FALSE: retGoogleSheets`; logConsole({ e, ee, 'msg': `${err}`, });
                                 await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets, }); return retGoogleSheets;
-                            }; let text = `${(index + 1).toString().padStart(2, '0')}/${(retLeads.length).toString().padStart(2, '0')}`;
+                            } let text = `${(index + 1).toString().padStart(2, '0')}/${(retLeads.length).toString().padStart(2, '0')}`;
                             logConsole({ e, ee, 'msg': `[${text}] ID: ${sheetSend[0][0]} | TEL: ${sheetSend[0][5]} | SHEET OK`, });
 
                             // ### REGISTRAR NA PLANILHA [LEAD ATUAL (QUE SERÁ O ÚLTIMO)]
                             retGoogleSheets = await googleSheets({ e, 'action': 'send', id, tab, 'range': `A74`, 'values': [[`${currentLead}`,],], }); if (!retGoogleSheets.ret) {
                                 err = `% [server] FALSE: retGoogleSheets`; logConsole({ e, ee, 'msg': `${err}`, });
                                 await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets, }); return retGoogleSheets;
-                            };
+                            }
 
                             keepRunning(); // MANTER O STATUS 'RODANDO' NA PLANILHA
 
@@ -84,8 +84,6 @@ async function serverRun(inf = {}) {
                     ret['ret'] = true;
                     ret['msg'] = `SERVER: OK`;
                 }
-            } else {
-                logConsole({ e, ee, 'msg': `## FORA DO DIA E HORÁRIO (${scriptHour[0]}:00 <> ${scriptHour[1]}:00) ##`, });
             }
 
             logConsole({ e, ee, 'msg': `## ESPERANDO DELAY PARA O PRÓXIMO LOOP ##`, });
@@ -93,7 +91,7 @@ async function serverRun(inf = {}) {
         }
     } catch (catchErr) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];
-    };
+    }
 }
 // TODAS AS FUNÇÕES PRIMÁRIAS DO 'server.js' / 'serverC6.js' / 'serverJsf.js' DEVEM SE CHAMAR 'serverRun'!!!
 serverRun();
