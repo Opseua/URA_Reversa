@@ -6,7 +6,7 @@ let e = import.meta.url, ee = e;
 async function leadChangeStatus(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let infApi, retApi, infLog, time, err;
+        let infApi, retApi, infLog, err;
         let aut = inf && inf.aut ? inf.aut : 'aaaa';
         let leadId = inf && inf.leadId ? inf.leadId : `25799086`;
         let statusOption = {
@@ -98,6 +98,6 @@ async function leadChangeStatus(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['leadChangeStatus'] = leadChangeStatus;
+globalThis['leadChangeStatus'] = leadChangeStatus;
 
 

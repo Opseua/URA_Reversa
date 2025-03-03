@@ -81,6 +81,6 @@ async function login(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['login'] = login;
+globalThis['login'] = login;
 
 

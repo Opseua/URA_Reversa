@@ -12,7 +12,7 @@ let e = import.meta.url, ee = e;
 async function leadsJsf(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        let retApi, retRegex, err, time = dateHour().res, retGoogleSheets;
+        let retApi, retRegex, err, retGoogleSheets;
         let aut = inf && inf.autJsf ? inf.autJsf : 'aaaa';
 
         // DADOS GLOBAIS DA PLANILHA E FAZER O PARSE
@@ -118,6 +118,6 @@ async function leadsJsf(inf = {}) {
 }
 
 // CHROME | NODEJS
-(eng ? window : global)['leadsJsf'] = leadsJsf;
+globalThis['leadsJsf'] = leadsJsf;
 
 
