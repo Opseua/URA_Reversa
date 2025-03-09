@@ -59,7 +59,7 @@ async function serverRun(inf = {}) {
                             ],]; let sheetSendNew = sheetSend[0].join(conSplInf); let currentLead = `${value.leadId}${conSplInf}${value.cnpj}${conSplInf}${value.tel}`;
 
 
-                            // console.log(`${currentLead}\n`); process.exit();
+                            // console.log(`${currentLead}\n`); crashCode();
 
 
                             // ### MANDAR PARA PLANILHA [LEAD]

@@ -15,20 +15,11 @@ await getPath({ 'e': new Error(), devChildren, });
 // console.log(`devMaster: ${gW.devMaster}\ndevSlave: ${gW.devSlave}\ndevChildren: ${gW.devChildren}`); console.log(`devSend:\n${gW.devSend}`);
 // console.log(`devGet:\n${gW.devGet[0]}\n${gW.devGet[1]}`); console.log('conf:', gW.conf); console.log('root:', gW.root); console.log('functions:', gW.functions); console.log('project:', gW.project);
 
-// PEGAR O NOME DO ARQUIVO(SEM EXTENSÃO)
-function funFile(txt) { return txt.match(/([^\\/]+)(?=\.[^\\.]+$)/)[0]; }
-
-// IMPORTAR FUNÇÕES DINAMICAMENTE QUANDO NECESSÁRIO 
-let qtd1 = 0; async function funImport(infOk) { let { path, inf, } = infOk; qtd1++; let name = funFile(path); if (qtd1 > 30) { console.log('IMPORTANDO...', name); } await import(`${path}`); return await globalThis[name](inf); }
-
-// FUNÇÃO GENÉRICA (QUANDO O ENGINE ESTIVER ERRADO) | ENCAMINHAR PARA DEVICE
-async function funGeneric(infOk) { let { path, inf, } = infOk; let name = funFile(path); let retDevAndFun = await devFun({ 'e': import.meta.url, 'enc': true, 'data': { name, 'par': inf, }, }); return retDevAndFun; }
-
-// FUNÇÕES DESSE PROJETO
-globalThis['leadChangeStatus'] = (inf) => { let fun = (!eng) ? funImport : funGeneric; return fun({ 'path': './leadChangeStatus.js', inf, }); };
-globalThis['leadGet'] = (inf) => { let fun = (!eng) ? funImport : funGeneric; return fun({ 'path': './leadGet.js', inf, }); };
-globalThis['leads'] = (inf) => { let fun = (!eng) ? funImport : funGeneric; return fun({ 'path': './leads.js', inf, }); };
-globalThis['leadsJsf'] = (inf) => { let fun = (!eng) ? funImport : funGeneric; return fun({ 'path': './leadsJsf.js', inf, }); };
-globalThis['login'] = (inf) => { let fun = (!eng) ? funImport : funGeneric; return fun({ 'path': './login.js', inf, }); };
+/* FUNÇÕES DESSE PROJETO */ let project = gW.project;
+globalThis['leadChangeStatus'] = (inf) => { return importFun({ 'importOk': (!eng), 'path': `./src/resources/leadChangeStatus.js`, inf, project, }); };
+globalThis['leadGet'] = (inf) => { return importFun({ 'importOk': (!eng), 'path': `./src/resources/leadGet.js`, inf, project, }); };
+globalThis['leads'] = (inf) => { return importFun({ 'importOk': (!eng), 'path': `./src/resources/leads.js`, inf, project, }); };
+globalThis['leadsJsf'] = (inf) => { return importFun({ 'importOk': (!eng), 'path': `./src/resources/leadsJsf.js`, inf, project, }); };
+globalThis['login'] = (inf) => { return importFun({ 'importOk': (!eng), 'path': `./src/resources/login.js`, inf, project, }); };
 
 
