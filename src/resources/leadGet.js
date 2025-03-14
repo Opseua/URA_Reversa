@@ -22,15 +22,11 @@ async function leadGet(inf = {}) {
             infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, };
             await log(infLog);
             // REAUTENTICAR
-            let infLogin, retLogin;
-            infLogin = { e, aut, };
-            retLogin = await login(infLogin);
+            let infLogin, retLogin; infLogin = { e, aut, }; retLogin = await login(infLogin);
             if (!retLogin.ret) {
                 err = `% [leadGet] FALSE: retLogin`;
                 logConsole({ e, ee, 'msg': `${err}`, });
-                infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin, };
-                await log(infLog);
-                return retApi;
+                infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin, }; await log(infLog); return retApi;
             } else {
                 infApi = {
                     e, 'method': 'GET', 'url': `https://interface.telein.com.br/index.php?link=247&id_contato=${leadId}`,
@@ -40,16 +36,10 @@ async function leadGet(inf = {}) {
                 if (!retApi.ret || !retApi.res.body.includes('tirarverde')) {
                     if (retApi.res && retApi.res.body.includes('para acessar as funcionalidades')) {
                         err = `% [leadGet] sem permissão para acessar as funcionalidades`;
-                        logConsole({ e, ee, 'msg': `${err}`, });
-                        infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, };
-                        await log(infLog);
-                        return ret;
+                        logConsole({ e, ee, 'msg': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, }; await log(infLog); return ret;
                     } else {
                         err = `% [leadGet] FALSE: retAp 2`;
-                        logConsole({ e, ee, 'msg': `${err}`, });
-                        infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, };
-                        await log(infLog);
-                        return ret;
+                        logConsole({ e, ee, 'msg': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, }; await log(infLog); return ret;
                     }
                 } else {
                     retApi = retApi.res.body;
@@ -60,9 +50,7 @@ async function leadGet(inf = {}) {
         }
 
         // ## LOG ## retApi
-        err = `% [leadGet] LOG retApi ${leadId}`;
-        infLog = { e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, };
-        await log(infLog);
+        err = `% [leadGet] LOG retApi ${leadId}`; infLog = { e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, }; await log(infLog);
 
         // PEGAR [TELEFONE]
         infRegex = { e, 'pattern': `Contato:(.*?)</h2>`, 'text': retApi, };
@@ -70,43 +58,27 @@ async function leadGet(inf = {}) {
         if (!retRegex.ret || !retRegex.res['1']) {
             ret['msg'] = `LEAD GET: ERRO | NÃO ACHOU O TELEFONE DO LEAD`;
             err = `% [leadGet] ${ret.msg}`;
-            logConsole({ e, ee, 'msg': `${err}`, });
-            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, };
-            await log(infLog);
-            return ret;
+            logConsole({ e, ee, 'msg': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, }; await log(infLog); return ret;
         }
         let tel = retRegex.res['1'].replace(/[^0-9]/g, '');
 
         // HTML → JSON [TABELA]
-        let infHtmlToJson, retHtmlToJson;
-        infHtmlToJson = {
-            e, 'randomCol': false,
-            'html': retApi,
-        };
+        let infHtmlToJson, retHtmlToJson; infHtmlToJson = { e, 'randomCol': false, 'html': retApi, };
         retHtmlToJson = await htmlToJson(infHtmlToJson);
         if (!retHtmlToJson.ret) {
             err = `% [leadGet] FALSE: retHtmlToJson`;
-            logConsole({ e, ee, 'msg': `${err}`, });
-            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, };
-            await log(infLog);
-            return retApi;
+            logConsole({ e, ee, 'msg': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, }; await log(infLog); return retApi;
         } else { retHtmlToJson = JSON.parse(retHtmlToJson.res.replace(/�/g, '').replace(/Ouvir Gravao/g, 'key').replace(/Baixar/g, 'value')); }
 
         if (!Array.isArray(retHtmlToJson)) {
             ret['msg'] = `LEAD GET: ERRO | NÃO ACHOU A TABELA DO HTML`;
             err = `% [leadGet] ${ret.msg}`;
-            logConsole({ e, ee, 'msg': `${err}`, });
-            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, };
-            await log(infLog);
-            return ret;
+            logConsole({ e, ee, 'msg': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, }; await log(infLog); return ret;
         }
 
         if (!retHtmlToJson.length > 0) {
             err = `% [leadGet] retHtmlToJson ARRAY VAZIA`;
-            logConsole({ e, ee, 'msg': `${err}`, });
-            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, };
-            await log(infLog);
-            return ret;
+            logConsole({ e, ee, 'msg': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, }; await log(infLog); return ret;
         }
 
         // PEGAR [CNPJ]
@@ -115,10 +87,7 @@ async function leadGet(inf = {}) {
             if (typeof value.key === 'string') {
                 let search = ['cnpj',];
                 if (new RegExp(search.join('|'), 'i').test(value.key.toLowerCase())) {
-                    if (value.value.length > 1) {
-                        cnpj = value.value;
-                        break;
-                    }
+                    if (value.value.length > 1) { cnpj = value.value; break; }
                 }
             }
         }
@@ -129,10 +98,7 @@ async function leadGet(inf = {}) {
             if (typeof value.key === 'string') {
                 let search = ['razao', 'razão', 'social',];
                 if (new RegExp(search.join('|'), 'i').test(value.key.toLowerCase())) {
-                    if (value.value.length > 1) {
-                        razaoSocial = value.value;
-                        break;
-                    }
+                    if (value.value.length > 1) { razaoSocial = value.value; break; }
                 }
             }
         }
@@ -143,10 +109,7 @@ async function leadGet(inf = {}) {
             if (typeof value.key === 'string') {
                 let search = ['email', 'e_mail', 'e-mail', 'mail', 'e mail',];
                 if (new RegExp(search.join('|'), 'i').test(value.key.toLowerCase())) {
-                    if (value.value.length > 1) {
-                        email = value.value;
-                        break;
-                    }
+                    if (value.value.length > 1) { email = value.value; break; }
                 }
             }
         }
@@ -157,10 +120,7 @@ async function leadGet(inf = {}) {
             if (typeof value.key === 'string') {
                 let search = ['administrador', 'sócio', 'socio', 'responsável', 'responsavel', 'nome',];
                 if (new RegExp(search.join('|'), 'i').test(value.key.toLowerCase())) {
-                    if (value.value.length > 1 && !value.value.includes('MAIL')) {
-                        administrador = value.value;
-                        break;
-                    }
+                    if (value.value.length > 1 && !value.value.includes('MAIL')) { administrador = value.value; break; }
                 }
             }
         }

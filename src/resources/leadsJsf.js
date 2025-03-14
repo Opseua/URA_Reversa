@@ -36,8 +36,7 @@ async function leadsJsf(inf = {}) {
 
         if (!retApi.ret || !retApi.res.body.includes('Campanha')) {
             err = `% [leads] FALSE: retApi 1`; // logConsole({ e, ee, 'msg': `${err}` })
-            await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, });
-            return ret;
+            await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, }); return ret;
         } else { retApi = retApi.res.body; }
 
         // ## LOG ## retApi
@@ -47,25 +46,22 @@ async function leadsJsf(inf = {}) {
         retRegex = regex({ e, 'pattern': `<table(.*?)</table>`, 'text': retApi, });
         if (!retRegex.ret || !retRegex.res['3']) {
             ret['msg'] = `LEADS JSF: ERRO | NÃO ACHOU A TABELA`; err = `% [leads] ${ret.msg}`; // logConsole({ e, ee, 'msg': `${err}` })
-            await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, });
-            return ret;
+            await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, }); return ret;
         }
         retRegex = `<table${retRegex.res['3']}</table>`;
 
         // HTML → JSON
-        let retHtmlToJson = await htmlToJson({ e, 'mode': '2', 'html': retRegex, });
+        let retHtmlToJson = await htmlToJson({ e, 'mode': '2', 'html': retRegex, 'object': true, });
         if (!retHtmlToJson.ret || retHtmlToJson.res.length < 1) {
             err = `% [leads] FALSE: retHtmlToJson`; // logConsole({ e, ee, 'msg': `${err}` })
-            await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, });
-            return retHtmlToJson;
-        } else { retHtmlToJson = JSON.parse(retHtmlToJson.res); }
+            await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, }); return retHtmlToJson;
+        } else { retHtmlToJson = retHtmlToJson.res; }
 
         // ARRAY COM A LISTA DE LEADS
         let leadsNew = [];
         if (!retHtmlToJson.length > 0) {
             err = `% [leads] retHtmlToJson ARRAY VAZIA`; // logConsole({ e, ee, 'msg': `${err}` })
-            await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, });
-            return ret;
+            await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, }); return ret;
         }
 
         // ## LOG ## retHtmlToJson
@@ -94,17 +90,13 @@ async function leadsJsf(inf = {}) {
                     });
                 }
                 // PERMITIR NOVOS LEADS (MANTER NO FINAL!!!)
-                if (lastLead.includes(`${value.col3}${conSplInf}${value.col4}`)) {
-                    sendLeads = true;
-                }
+                if (lastLead.includes(`${value.col3}${conSplInf}${value.col4}`)) { sendLeads = true; }
             }
         }
         newLeads();
 
         // PEGAR TODOS OS LEADS DA PÁGINA (SE NÃO ENCONTRAR O 'lastLead')
-        if (leadsNew.length === 0 && !sendLeads) {
-            sendLeads = true; newLeads();
-        }
+        if (leadsNew.length === 0 && !sendLeads) { sendLeads = true; newLeads(); }
 
         ret['res'] = leadsNew;
         ret['msg'] = `LEADS: OK`;

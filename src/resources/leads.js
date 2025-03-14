@@ -100,7 +100,7 @@ async function leads(inf = {}) {
 
         // HTML → JSON
         let infHtmlToJson, retHtmlToJson;
-        infHtmlToJson = { e, 'randomCol': true, 'html': retApi, };
+        infHtmlToJson = { e, 'randomCol': true, 'html': retApi, 'object': true, };
         retHtmlToJson = await htmlToJson(infHtmlToJson);
         if (!retHtmlToJson.ret) {
             err = `% [leads] FALSE: retHtmlToJson`;
@@ -109,7 +109,7 @@ async function leads(inf = {}) {
             await log(infLog);
             return retHtmlToJson;
         } else {
-            retHtmlToJson = JSON.parse(retHtmlToJson.res);
+            retHtmlToJson = retHtmlToJson.res;
         }
 
         // infLog = { e, 'folder': 'Registros', 'path': `HTML_JSON.txt`, 'text': retHtmlToJson }
