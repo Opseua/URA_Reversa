@@ -26,7 +26,7 @@ rem ESTA RODANDO [SIM]
 rem if "!ret!" == "TRUE" ( )
 
 rem MANTER O '"%ret%"' E 'argString' NO FINAL SEMPRE!!! | 'KEEP' (RESTART [SIM]) / 'LEGACY' (RESTART [NAO])
-endlocal & call "%fileChrome_Extension%\src\scripts\BAT\process.bat" "%arg1%_WINTP2" "%project%" "%outrosAdd%" "KEEP" "%programExe%" "%ret%" "%arg2%" & setlocal enabledelayedexpansion
+endlocal & call "%fileChrome_Extension%\src\scripts\BAT\process.bat" "%arg1%_WINTP2_" "%project%" "%outrosAdd%" "KEEP" "%programExe%" "%ret%" "%arg2%" & setlocal enabledelayedexpansion
 set "ret=%ret2%" & set "argString=%*"
 rem #####################################################################
 
