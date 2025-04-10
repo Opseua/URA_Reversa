@@ -6,7 +6,7 @@ let e = import.meta.url, ee = e;
 async function login(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        logConsole({ e, ee, 'msg': `ANTES DE AUTENTICAR`, });
+        logConsole({ e, ee, 'txt': `ANTES DE AUTENTICAR`, });
 
         let infApi, retApi, infLog, err;
         let aut = inf && inf.aut ? inf.aut : 'aaaa';
@@ -31,7 +31,7 @@ async function login(inf = {}) {
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('escolher.php')) {
             err = `% [login] FALSE: retApi 1`;
-            logConsole({ e, ee, 'msg': `${err}`, });
+            logConsole({ e, ee, 'txt': `${err}`, });
             infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, };
             await log(infLog);
             ret['msg'] = `LOGIN: ERRO | AO FAZER LOGIN`;
@@ -61,7 +61,7 @@ async function login(inf = {}) {
         retApi = await api(infApi);
         if (!retApi.ret || retApi.res.code !== 200) {
             err = `% [login] FALSE: retApi 2`;
-            logConsole({ e, ee, 'msg': `${err}`, });
+            logConsole({ e, ee, 'txt': `${err}`, });
             infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, };
             await log(infLog);
             ret['msg'] = `LOGIN: ERRO | AO PEGAR E SELECIONAR O USUÁRIO`;
@@ -70,8 +70,8 @@ async function login(inf = {}) {
         ret['msg'] = `LOGIN: OK`;
         ret['ret'] = true;
 
-        logConsole({ e, ee, 'msg': `ESPERANDO 15 SEGUNDOS APÓS O LOGIN`, });
-        await new Promise(resolve => { setTimeout(resolve, 15000); });
+        logConsole({ e, ee, 'txt': `ESPERANDO 15 SEGUNDOS APÓS O LOGIN`, });
+        await new Promise(r => { setTimeout(r, 15000); });
 
     } catch (catchErr) {
         let retRegexE = await regexE({ inf, 'e': catchErr, }); ret['msg'] = retRegexE.res; ret['ret'] = false; delete ret['res'];

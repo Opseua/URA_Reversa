@@ -20,7 +20,7 @@ async function leadsJsf(inf = {}) {
         let range = 'A2', id = gO.inf.id, tab = gO.inf.tab;
         retGoogleSheets = await googleSheets({ e, 'action': 'get', id, tab, range, });
         if (!retGoogleSheets.ret) {
-            err = `$ Erro ao pegar-enviar dados para planilha`; logConsole({ e, ee, 'msg': `${err}`, }); await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets, });
+            err = `$ Erro ao pegar-enviar dados para planilha`; logConsole({ e, ee, 'txt': `${err}`, }); await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGoogleSheets, });
             return retGoogleSheets;
         } else { retGoogleSheets = retGoogleSheets.res[0][0]; }
         gO.inf['json'] = JSON.parse(retGoogleSheets);
@@ -35,7 +35,7 @@ async function leadsJsf(inf = {}) {
         retApi = await api({ e, 'method': 'GET', url, 'headers': { 'Cookie': aut, }, });
 
         if (!retApi.ret || !retApi.res.body.includes('Campanha')) {
-            err = `% [leads] FALSE: retApi 1`; // logConsole({ e, ee, 'msg': `${err}` })
+            err = `% [leads] FALSE: retApi 1`; // logConsole({ e, ee, 'txt': `${err}` })
             await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, }); return ret;
         } else { retApi = retApi.res.body; }
 
@@ -45,7 +45,7 @@ async function leadsJsf(inf = {}) {
         // PEGAR A TABELA
         retRegex = regex({ e, 'pattern': `<table(.*?)</table>`, 'text': retApi, });
         if (!retRegex.ret || !retRegex.res['3']) {
-            ret['msg'] = `LEADS JSF: ERRO | NÃO ACHOU A TABELA`; err = `% [leads] ${ret.msg}`; // logConsole({ e, ee, 'msg': `${err}` })
+            ret['msg'] = `LEADS JSF: ERRO | NÃO ACHOU A TABELA`; err = `% [leads] ${ret.msg}`; // logConsole({ e, ee, 'txt': `${err}` })
             await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, }); return ret;
         }
         retRegex = `<table${retRegex.res['3']}</table>`;
@@ -53,14 +53,14 @@ async function leadsJsf(inf = {}) {
         // HTML → JSON
         let retHtmlToJson = await htmlToJson({ e, 'mode': '2', 'html': retRegex, 'object': true, });
         if (!retHtmlToJson.ret || retHtmlToJson.res.length < 1) {
-            err = `% [leads] FALSE: retHtmlToJson`; // logConsole({ e, ee, 'msg': `${err}` })
+            err = `% [leads] FALSE: retHtmlToJson`; // logConsole({ e, ee, 'txt': `${err}` })
             await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, }); return retHtmlToJson;
         } else { retHtmlToJson = retHtmlToJson.res; }
 
         // ARRAY COM A LISTA DE LEADS
         let leadsNew = [];
         if (!retHtmlToJson.length > 0) {
-            err = `% [leads] retHtmlToJson ARRAY VAZIA`; // logConsole({ e, ee, 'msg': `${err}` })
+            err = `% [leads] retHtmlToJson ARRAY VAZIA`; // logConsole({ e, ee, 'txt': `${err}` })
             await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, }); return ret;
         }
 

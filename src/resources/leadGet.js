@@ -18,14 +18,14 @@ async function leadGet(inf = {}) {
         retApi = await api(infApi);
         if (!retApi.ret || !retApi.res.body.includes('Tecla Digitada')) {
             err = `% [leadGet] FALSE: retApi 1`;
-            logConsole({ e, ee, 'msg': `${err}`, });
+            logConsole({ e, ee, 'txt': `${err}`, });
             infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, };
             await log(infLog);
             // REAUTENTICAR
             let infLogin, retLogin; infLogin = { e, aut, }; retLogin = await login(infLogin);
             if (!retLogin.ret) {
                 err = `% [leadGet] FALSE: retLogin`;
-                logConsole({ e, ee, 'msg': `${err}`, });
+                logConsole({ e, ee, 'txt': `${err}`, });
                 infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retLogin, }; await log(infLog); return retApi;
             } else {
                 infApi = {
@@ -36,10 +36,10 @@ async function leadGet(inf = {}) {
                 if (!retApi.ret || !retApi.res.body.includes('tirarverde')) {
                     if (retApi.res && retApi.res.body.includes('para acessar as funcionalidades')) {
                         err = `% [leadGet] sem permissão para acessar as funcionalidades`;
-                        logConsole({ e, ee, 'msg': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, }; await log(infLog); return ret;
+                        logConsole({ e, ee, 'txt': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, }; await log(infLog); return ret;
                     } else {
                         err = `% [leadGet] FALSE: retAp 2`;
-                        logConsole({ e, ee, 'msg': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, }; await log(infLog); return ret;
+                        logConsole({ e, ee, 'txt': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, }; await log(infLog); return ret;
                     }
                 } else {
                     retApi = retApi.res.body;
@@ -58,7 +58,7 @@ async function leadGet(inf = {}) {
         if (!retRegex.ret || !retRegex.res['1']) {
             ret['msg'] = `LEAD GET: ERRO | NÃO ACHOU O TELEFONE DO LEAD`;
             err = `% [leadGet] ${ret.msg}`;
-            logConsole({ e, ee, 'msg': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, }; await log(infLog); return ret;
+            logConsole({ e, ee, 'txt': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retApi, }; await log(infLog); return ret;
         }
         let tel = retRegex.res['1'].replace(/[^0-9]/g, '');
 
@@ -67,18 +67,18 @@ async function leadGet(inf = {}) {
         retHtmlToJson = await htmlToJson(infHtmlToJson);
         if (!retHtmlToJson.ret) {
             err = `% [leadGet] FALSE: retHtmlToJson`;
-            logConsole({ e, ee, 'msg': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, }; await log(infLog); return retApi;
+            logConsole({ e, ee, 'txt': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, }; await log(infLog); return retApi;
         } else { retHtmlToJson = JSON.parse(retHtmlToJson.res.replace(/�/g, '').replace(/Ouvir Gravao/g, 'key').replace(/Baixar/g, 'value')); }
 
         if (!Array.isArray(retHtmlToJson)) {
             ret['msg'] = `LEAD GET: ERRO | NÃO ACHOU A TABELA DO HTML`;
             err = `% [leadGet] ${ret.msg}`;
-            logConsole({ e, ee, 'msg': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, }; await log(infLog); return ret;
+            logConsole({ e, ee, 'txt': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, }; await log(infLog); return ret;
         }
 
         if (!retHtmlToJson.length > 0) {
             err = `% [leadGet] retHtmlToJson ARRAY VAZIA`;
-            logConsole({ e, ee, 'msg': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, }; await log(infLog); return ret;
+            logConsole({ e, ee, 'txt': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, }; await log(infLog); return ret;
         }
 
         // PEGAR [CNPJ]
