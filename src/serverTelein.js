@@ -3,7 +3,7 @@ let startup = new Date(); globalThis['sP'] = import.meta.url; await import('./re
 async function serverRun(inf = {}) {
     let ret = { 'ret': false, }; e = inf && inf.e ? inf.e : e;
     try {
-        logConsole({ e, ee, 'txt': `**************** SERVER **************** [${startupTime(startup, new Date())}]`, });
+        await logConsole({ e, ee, 'txt': `**************** SERVER **************** [${startupTime(startup, new Date())}]`, });
 
         let infLog, infGoogleSheets, retGoogleSheets, err, time;
 
