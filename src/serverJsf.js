@@ -23,7 +23,7 @@ async function serverRun(inf = {}) {
 
             keepRunning(); // MANTER O STATUS 'RODANDO' NA PLANILHA
 
-            if (!((['SEG', 'TER', 'QUA', 'QUI', 'SEX',].includes(a) && (b > c && b < d)) || (['SAaaa',].includes(a) && (b > c && b < d - 7)))) {
+            if (!((['SEG', 'TER', 'QUA', 'QUI', 'SEX', 'SAB',].includes(a) && (b > c && b < d)))) {
                 logConsole({ e, ee, 'txt': `## FORA DO DIA E HORÁRIO (${scriptHour[0]}:00 <> ${scriptHour[1]}:00) ##`, }); outHour = true;
             } else {
                 // (SEG <> SEX → [09:00] <> [19:00]) PEGAR NOVOS LEADS
@@ -52,6 +52,9 @@ async function serverRun(inf = {}) {
                                 await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGooShee, }); return retGooShee;
                             } let text = `${(index + 1).toString().padStart(2, '0')}/${(retLeads.length).toString().padStart(2, '0')}`;
                             logConsole({ e, ee, 'txt': `[${text}] ID: ${value.leadId} | TEL: ${value.tel} | SHEET OK`, });
+
+                            // ### MANDAR PARA PLANILHA DE LIMPEZA
+                            await googleSheets({ e, 'action': 'addLines', 'id': '19ta_pkl5VIurrhhEg598oOZAE11HIS4PMJx8uowXCJY', 'tab': 'AUTOMATICO', 'values': [[`${value.cnpj}`,],], });
 
                             // ### REGISTRAR NA PLANILHA [LEAD ATUAL (QUE SERÁ O ÚLTIMO)]
                             lastLead = `${value.cnpj}_${value.tel}`; retGooShee = await googleSheets({ e, 'action': 'send', id, tab, 'range': lastLeadRange, 'values': [[`${lastLead}`,],], }); if (!retGooShee.ret) {
