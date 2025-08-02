@@ -54,7 +54,7 @@ async function serverRun(inf = {}) {
                             logConsole({ e, ee, 'txt': `[${text}] ID: ${value.leadId} | TEL: ${value.tel} | SHEET OK`, });
 
                             // ### MANDAR PARA PLANILHA DE LIMPEZA
-                            await googleSheets({ e, 'action': 'addLines', 'id': '19ta_pkl5VIurrhhEg598oOZAE11HIS4PMJx8uowXCJY', 'tab': 'AUTOMATICO', 'values': [[`${value.cnpj}`,],], });
+                            await googleSheets({ e, 'action': 'addLines', 'id': '1wEiSgZHeaUjM6Gl1Y67CZZZ7UTsDweQhRYKqaTu3_I8', 'tab': 'LIMPEZA_AUTOMATICO', 'values': [[`${value.cnpj}`,],], });
 
                             // ### REGISTRAR NA PLANILHA [LEAD ATUAL (QUE SERÁ O ÚLTIMO)]
                             lastLead = `${value.cnpj}_${value.tel}`; retGooShee = await googleSheets({ e, 'action': 'send', id, tab, 'range': lastLeadRange, 'values': [[`${lastLead}`,],], }); if (!retGooShee.ret) {
