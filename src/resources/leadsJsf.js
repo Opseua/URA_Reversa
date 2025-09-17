@@ -35,25 +35,25 @@ async function leadsJsf(inf = {}) {
         } retRegex = `<table${retRegex.res['3']}</table>`;
 
         // HTML → JSON
-        let retHtmlToJson = await htmlToJson({ e, 'mode': '2', 'html': retRegex, 'object': true, }); if (!retHtmlToJson.ret || retHtmlToJson.res.length < 1) {
-            err = `% [leads] FALSE: retHtmlToJson`; // logConsole({ e, ee, 'txt': `${err}` })
-            await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, }); return retHtmlToJson;
-        } else { retHtmlToJson = retHtmlToJson.res; }
+        let retTableHtmlToJson = await tableHtmlToJson({ e, 'mode': '2', 'html': retRegex, 'object': true, }); if (!retTableHtmlToJson.ret || retTableHtmlToJson.res.length < 1) {
+            err = `% [leads] FALSE: retTableHtmlToJson`; // logConsole({ e, ee, 'txt': `${err}` })
+            await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retTableHtmlToJson, }); return retTableHtmlToJson;
+        } else { retTableHtmlToJson = retTableHtmlToJson.res; }
 
         // ARRAY COM A LISTA DE LEADS
-        let leadsNew = []; if (!retHtmlToJson.length > 0) {
-            err = `% [leads] retHtmlToJson ARRAY VAZIA`; // logConsole({ e, ee, 'txt': `${err}` })
-            await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, }); return ret;
+        let leadsNew = []; if (!retTableHtmlToJson.length > 0) {
+            err = `% [leads] retTableHtmlToJson ARRAY VAZIA`; // logConsole({ e, ee, 'txt': `${err}` })
+            await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retTableHtmlToJson, }); return ret;
         }
 
-        // ## LOG ## retHtmlToJson
-        err = `% [leads] LOG retHtmlToJson`; await log({ e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, });
+        // ## LOG ## retTableHtmlToJson
+        err = `% [leads] LOG retTableHtmlToJson`; await log({ e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retTableHtmlToJson, });
 
         // PEGAR LEADS
         // lastLead = 'NADA'; // TESTE (PARA FORÇAR ENVIAR TODOS OS LEADS DA PÁGINA)
         let sendLeads = (lastLead === 'NADA');
         function newLeads() {
-            for (let [index, value,] of retHtmlToJson.reverse().entries()) {
+            for (let [index, value,] of retTableHtmlToJson.reverse().entries()) {
                 // PEGAR O LEAD
                 if (sendLeads) {
                     let partes = value.col2.split(' '); let data = partes[0].split('/'); let hora = partes[1].split(':'); let day = parseInt(data[0], 10).toString().padStart(2, '0');

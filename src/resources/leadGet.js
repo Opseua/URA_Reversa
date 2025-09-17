@@ -63,27 +63,27 @@ async function leadGet(inf = {}) {
         let tel = retRegex.res['1'].replace(/[^0-9]/g, '');
 
         // HTML → JSON [TABELA]
-        let infHtmlToJson, retHtmlToJson; infHtmlToJson = { e, 'randomCol': false, 'html': retApi, };
-        retHtmlToJson = await htmlToJson(infHtmlToJson);
-        if (!retHtmlToJson.ret) {
-            err = `% [leadGet] FALSE: retHtmlToJson`;
-            logConsole({ e, ee, 'txt': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, }; await log(infLog); return retApi;
-        } else { retHtmlToJson = JSON.parse(retHtmlToJson.res.replace(/�/g, '').replace(/Ouvir Gravao/g, 'key').replace(/Baixar/g, 'value')); }
+        let infTableHtmlToJson, retTableHtmlToJson; infTableHtmlToJson = { e, 'randomCol': false, 'html': retApi, };
+        retTableHtmlToJson = await tableHtmlToJson(infTableHtmlToJson);
+        if (!retTableHtmlToJson.ret) {
+            err = `% [leadGet] FALSE: retTableHtmlToJson`;
+            logConsole({ e, ee, 'txt': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retTableHtmlToJson, }; await log(infLog); return retApi;
+        } else { retTableHtmlToJson = JSON.parse(retTableHtmlToJson.res.replace(/�/g, '').replace(/Ouvir Gravao/g, 'key').replace(/Baixar/g, 'value')); }
 
-        if (!Array.isArray(retHtmlToJson)) {
+        if (!Array.isArray(retTableHtmlToJson)) {
             ret['msg'] = `LEAD GET: ERRO | NÃO ACHOU A TABELA DO HTML`;
             err = `% [leadGet] ${ret.msg}`;
-            logConsole({ e, ee, 'txt': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, }; await log(infLog); return ret;
+            logConsole({ e, ee, 'txt': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retTableHtmlToJson, }; await log(infLog); return ret;
         }
 
-        if (!retHtmlToJson.length > 0) {
-            err = `% [leadGet] retHtmlToJson ARRAY VAZIA`;
-            logConsole({ e, ee, 'txt': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, }; await log(infLog); return ret;
+        if (!retTableHtmlToJson.length > 0) {
+            err = `% [leadGet] retTableHtmlToJson ARRAY VAZIA`;
+            logConsole({ e, ee, 'txt': `${err}`, }); infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retTableHtmlToJson, }; await log(infLog); return ret;
         }
 
         // PEGAR [CNPJ]
         let cnpj = 'null';
-        for (let [index, value,] of retHtmlToJson.entries()) {
+        for (let [index, value,] of retTableHtmlToJson.entries()) {
             if (typeof value.key === 'string') {
                 let search = ['cnpj',];
                 if (new RegExp(search.join('|'), 'i').test(value.key.toLowerCase())) {
@@ -94,7 +94,7 @@ async function leadGet(inf = {}) {
 
         // PEGAR [RAZAO_SOCIAL]
         let razaoSocial = 'null';
-        for (let [index, value,] of retHtmlToJson.entries()) {
+        for (let [index, value,] of retTableHtmlToJson.entries()) {
             if (typeof value.key === 'string') {
                 let search = ['razao', 'razão', 'social',];
                 if (new RegExp(search.join('|'), 'i').test(value.key.toLowerCase())) {
@@ -105,7 +105,7 @@ async function leadGet(inf = {}) {
 
         // PEGAR [EMAIL]
         let email = 'null';
-        for (let [index, value,] of retHtmlToJson.entries()) {
+        for (let [index, value,] of retTableHtmlToJson.entries()) {
             if (typeof value.key === 'string') {
                 let search = ['email', 'e_mail', 'e-mail', 'mail', 'e mail',];
                 if (new RegExp(search.join('|'), 'i').test(value.key.toLowerCase())) {
@@ -116,7 +116,7 @@ async function leadGet(inf = {}) {
 
         // PEGAR [ADMINISTRADOR]
         let administrador = 'null';
-        for (let [index, value,] of retHtmlToJson.entries()) {
+        for (let [index, value,] of retTableHtmlToJson.entries()) {
             if (typeof value.key === 'string') {
                 let search = ['administrador', 'sócio', 'socio', 'responsável', 'responsavel', 'nome',];
                 if (new RegExp(search.join('|'), 'i').test(value.key.toLowerCase())) {

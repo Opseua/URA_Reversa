@@ -99,38 +99,38 @@ async function leads(inf = {}) {
         let leadId = retRegex.res['5'];
 
         // HTML → JSON
-        let infHtmlToJson, retHtmlToJson;
-        infHtmlToJson = { e, 'randomCol': true, 'html': retApi, 'object': true, };
-        retHtmlToJson = await htmlToJson(infHtmlToJson);
-        if (!retHtmlToJson.ret) {
-            err = `% [leads] FALSE: retHtmlToJson`;
+        let infTableHtmlToJson, retTableHtmlToJson;
+        infTableHtmlToJson = { e, 'randomCol': true, 'html': retApi, 'object': true, };
+        retTableHtmlToJson = await tableHtmlToJson(infTableHtmlToJson);
+        if (!retTableHtmlToJson.ret) {
+            err = `% [leads] FALSE: retTableHtmlToJson`;
             logConsole({ e, ee, 'txt': `${err}`, });
-            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, };
+            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retTableHtmlToJson, };
             await log(infLog);
-            return retHtmlToJson;
+            return retTableHtmlToJson;
         } else {
-            retHtmlToJson = retHtmlToJson.res;
+            retTableHtmlToJson = retTableHtmlToJson.res;
         }
 
-        // infLog = { e, 'folder': 'Registros', 'path': `HTML_JSON.txt`, 'text': retHtmlToJson }
+        // infLog = { e, 'folder': 'Registros', 'path': `HTML_JSON.txt`, 'text': retTableHtmlToJson }
         // await log(infLog);
 
         // ARRAY COM A LISTA DE LEADS
         let leadsNew = [];
-        if (!retHtmlToJson.length > 0) {
-            err = `% [leads] retHtmlToJson ARRAY VAZIA`;
+        if (!retTableHtmlToJson.length > 0) {
+            err = `% [leads] retTableHtmlToJson ARRAY VAZIA`;
             logConsole({ e, ee, 'txt': `${err}`, });
-            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, };
+            infLog = { e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retTableHtmlToJson, };
             await log(infLog);
             return ret;
         }
 
-        // ## LOG ## retHtmlToJson
-        err = `% [leads] LOG retHtmlToJson`;
-        infLog = { e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retHtmlToJson, };
+        // ## LOG ## retTableHtmlToJson
+        err = `% [leads] LOG retTableHtmlToJson`;
+        infLog = { e, 'raw': true, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retTableHtmlToJson, };
         await log(infLog);
 
-        for (let [index, value,] of retHtmlToJson.entries()) {
+        for (let [index, value,] of retTableHtmlToJson.entries()) {
             // ###########################
             if (status.includes(value.colInd4)) {
                 let time = dateHour().res; // 300
