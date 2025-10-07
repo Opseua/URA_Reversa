@@ -13,7 +13,7 @@ async function serverRun(inf = {}) {
         for (let [index, value,] of aut.entries()) { if (value.name === 'PHPSESSID') { aut = `PHPSESSID=${value.value}`; break; } }
 
         async function keepRunning() {
-            // let rGS = await googleSheets({ e, action: 'send', id, tab: `INDICAR_AUTOMATICO`, range: `A130`, values: [[`${dateHour().res.tim} | Rodando: serverJsf`,],], });
+            // let rGS = await googleSheets({ e, 'action': 'send', id, 'tab': `INDICAR_AUTOMATICO`, 'range': `A130`, 'values': [[`${dateHour().res.tim} | Rodando: serverJsf`,],], });
             // if (!rGS.ret) { err = `$ Erro ao pegar-enviar dados para planilha`; logConsole({ e, ee, 'txt': `${err}`, }); await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': rGS, }); }
         }
 
