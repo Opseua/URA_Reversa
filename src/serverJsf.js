@@ -32,6 +32,14 @@ async function serverRun(inf = {}) {
 
                     // SÓ RODAR SE O RETORNO DE leads FOR ARRAY
                     if (Array.isArray(retLeads)) {
+
+
+
+                        // REMOVER DUPLICATAS
+                        let seen = new Set(); retLeads = retLeads.filter(item => { if (seen.has(item.tel)) { return false; } else { seen.add(item.tel); return true; } });
+
+
+
                         logConsole({ e, ee, 'txt': `${retLeads.length === 0 ? 'NENHUM LEAD PENDENTE' : `ENVIANDO ${retLeads.length} LEAD(s) PARA PARA A PLANILHA`}`, }); await new Promise(r => { setTimeout(r, 3 * 1000); });
 
                         // PEGAR INF | ALTERAR STATUS | MANDAR PARA PLANILHA
