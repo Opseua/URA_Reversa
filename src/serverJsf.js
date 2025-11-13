@@ -34,11 +34,23 @@ async function serverRun(inf = {}) {
                     if (Array.isArray(retLeads)) {
 
 
+                        // ************************************************************************************************************************************************************************************
+                        retLeads = [];
+                        // ************************************************************************************************************************************************************************************
+
+
+
+
+
+
+
+
+
+
+
 
                         // REMOVER DUPLICATAS
                         let seen = new Set(); retLeads = retLeads.filter(item => { if (seen.has(item.tel)) { return false; } else { seen.add(item.tel); return true; } });
-
-
 
                         logConsole({ e, ee, 'txt': `${retLeads.length === 0 ? 'NENHUM LEAD PENDENTE' : `ENVIANDO ${retLeads.length} LEAD(s) PARA PARA A PLANILHA`}`, }); await new Promise(r => { setTimeout(r, 3 * 1000); });
 
@@ -54,11 +66,11 @@ async function serverRun(inf = {}) {
                             ],];
 
                             // ### MANDAR PARA PLANILHA [LEAD]
-                            retGooShee = await googleSheets({ e, 'action': 'addLines', id, 'tab': 'URA_REVERSA', 'values': sheetSend, }); if (!retGooShee.ret) {
-                                err = `% [server] FALSE: retGoogleSheets`; logConsole({ e, ee, 'txt': `${err}`, });
-                                await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGooShee, }); return retGooShee;
-                            } let text = `${(index + 1).toString().padStart(2, '0')}/${(retLeads.length).toString().padStart(2, '0')}`;
-                            logConsole({ e, ee, 'txt': `[${text}] ID: ${value.leadId} | TEL: ${value.tel} | SHEET OK`, });
+                            // retGooShee = await googleSheets({ e, 'action': 'addLines', id, 'tab': 'URA_REVERSA', 'values': sheetSend, }); if (!retGooShee.ret) {
+                            //     err = `% [server] FALSE: retGoogleSheets`; logConsole({ e, ee, 'txt': `${err}`, });
+                            //     await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGooShee, }); return retGooShee;
+                            // } let text = `${(index + 1).toString().padStart(2, '0')}/${(retLeads.length).toString().padStart(2, '0')}`;
+                            // logConsole({ e, ee, 'txt': `[${text}] ID: ${value.leadId} | TEL: ${value.tel} | SHEET OK`, });
 
                             // ### MANDAR PARA PLANILHA DE LIMPEZA
                             await googleSheets({ e, 'action': 'addLines', 'id': '1wEiSgZHeaUjM6Gl1Y67CZZZ7UTsDweQhRYKqaTu3_I8', 'tab': 'LIMPEZA_AUTOMATICO', 'values': [[`${value.cnpj}`,],], });
@@ -68,6 +80,14 @@ async function serverRun(inf = {}) {
                                 err = `% [server] FALSE: retGoogleSheets`; logConsole({ e, ee, 'txt': `${err}`, });
                                 await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGooShee, }); return retGooShee;
                             }
+
+                            // MANDAR PARA O WEBHOOK
+                            let sheetSendWebhook = sheetSend[0]; let infApi = {
+                                e, 'method': 'POST', 'url': `https://estrelar-n8n.muugtk.easypanel.host/webhook/90201846-2cda-4e17-a664-9d22679ef851`, 'headers': { 'Content-Type': 'application/json', }, 'body': {
+                                    'origem': sheetSendWebhook[0], 'dataLead': sheetSendWebhook[1], 'cnpj': sheetSendWebhook[2], 'telefone': sheetSendWebhook[3],
+                                    'razaoSocial': sheetSendWebhook[4], 'email': sheetSendWebhook[5],
+                                },
+                            }; await api(infApi);
 
                             keepRunning(); // MANTER O STATUS 'RODANDO' NA PLANILHA
 
