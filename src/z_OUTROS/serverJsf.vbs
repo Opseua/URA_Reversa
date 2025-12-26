@@ -28,6 +28,9 @@ rem PARAMETROS MANUAIS [ADICIONADO NO INICIO DA ARRAY] (COMENTAR PARA DESATIVAR)
 ReDim Preserve commPars(UBound(commPars) + 1): commPars(UBound(commPars)) = local & "\2_SCRIPT.bat"
 ReDim Preserve commPars(UBound(commPars) + 1): commPars(UBound(commPars)) = arquivo
 
+rem ENCERRAR programExe SE NENHUM PARAMETRO FOR PASSADO (NAO REMOVER!!!) PARA FORCAR A PARADA DANDO DOIS CLIQUES NO ARQUIVO .vbs
+If (qtdPars = 0) Then: ReDim Preserve commPars(UBound(commPars) + 1): commPars(UBound(commPars)) = "OFF FORCE_STOP": ReDim Preserve commPars(UBound(commPars) + 1): End If
+
 rem ADICIONAR TODOS OS PARAMETROS NA ARRAY | CRIAR COMANDO DE LINHA COM PARAMETROS ENTRE ASPAS DUPLAS
 If qtdPars > 0 Then: Dim i: For i = 0 To qtdPars - 1: ReDim Preserve commPars(UBound(commPars) + 1): commPars(UBound(commPars)) = WScript.Arguments(i): Next: End If
 comm = "": For i = 0 To UBound(commPars): If i > 0 Then comm = comm & " " End If: comm = comm & Chr(34) & commPars(i) & Chr(34): Next: comm = Chr(34) & comm & Chr(34)
