@@ -101,7 +101,7 @@ async function serverRun(inf = {}) {
             }
 
             // MANDAR STATUS PARA A PLANILHA
-            retGooShee = await googleSheets({ e, 'action': 'send', id, tab, range, 'values': [[`${Math.floor(Date.now() / 1000)} | ${outHour ? 'Fora do dia e horário' : `Novos leads: ${retLeads.length}`}`,],], });
+            retGooShee = await googleSheets({ e, 'action': 'send', id, tab, range, 'values': [[`${Math.trunc(Date.now() / 1000)} | ${outHour ? 'Fora do dia e horário' : `Novos leads: ${retLeads.length}`}`,],], });
             if (!retGooShee.ret) {
                 err = `% [server] FALSE: retGoogleSheets`; logConsole({ e, ee, 'txt': `${err}`, });
                 await log({ e, 'folder': 'Registros', 'path': `${err}.txt`, 'text': retGooShee, }); return retGooShee;
